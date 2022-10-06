@@ -25,7 +25,12 @@ enum eSandboxCvar
     SC_cl_rollangle,
     SC_cl_rollspeed,
     SC_viewmodel_lag_scale,
-    SC_viewmodel_lag_speed
+    SC_viewmodel_lag_speed,
+    // since Next Client v2.1.4
+    SC_cl_crosshair_type,
+    SC_cl_crosshair_size,
+    SC_cl_crosshair_color,
+    SC_cl_crosshair_translucent
 }
 
 /**
