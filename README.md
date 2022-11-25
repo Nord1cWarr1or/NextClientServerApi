@@ -3,6 +3,10 @@ NextClientServerApi is an amxmodx plugin that provides an API to interact with [
 
 See API functions in [next_client_api.inc](https://github.com/Next21Team/NextClientServerApi/blob/main/scripting/include/next_client_api.inc).
 
+# Features
+
+- The cvar sandbox. Allows you to set the value of a cvar to the client and locks it to be changed by the client. cvar value on the client is reset to the user's value after disconnecting from the server.
+- Effects for viewmodel. Allows you to set rendering effects for viewmodels, as well as skin and body.
 
 # NextClient specific cvars
 
