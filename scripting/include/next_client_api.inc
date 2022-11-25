@@ -92,3 +92,81 @@ native ncl_sandbox_cvar_end();
  * @noreturn
  */
 native ncl_write_sandbox_cvar(eSandboxCvar:cvar, const value[]);
+
+
+/**
+ * Writes a render mode to a viewmodelfx message.
+ *
+ * @param rendermode One of kRender* constant
+ *
+ * @noreturn
+ */
+native ncl_write_rendermode(rendermode);
+
+/**
+ * Writes a render amount to a viewmodelfx message.
+ *
+ * @param renderamt Render amount (0 to 255)
+ *
+ * @noreturn
+ */
+native ncl_write_renderamt(renderamt);
+
+/**
+ * Writes a render color to a viewmodelfx message.
+ *
+ * @param r The amount of red color (0 to 255)
+ * @param g The amount of green color (0 to 255)
+ * @param b The amount of blue color (0 to 255)
+ *
+ * @noreturn
+ */
+native ncl_write_rendercolor(r, g, b);
+
+/**
+ * Writes a rendering effect to a viewmodelfx message.
+ *
+ * @param renderfx One of kRenderFx* constants
+ *
+ * @noreturn
+ */
+native ncl_write_renderfx(renderfx);
+
+/**
+ * Writes a viewmodel skin to viewmodelfx message.
+ *
+ * @param renderskin     
+ *
+ * @noreturn
+ */
+native ncl_write_renderskin(renderskin);
+
+/**
+ * Writes a viewmodel body to viewmodelfx message.
+ *
+ * @param renderbody     
+ *
+ * @noreturn
+ */
+native ncl_write_renderbody(renderbody);
+
+/**
+ * Marks the beginning of a viewmodelfx message.
+ *
+ * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player cvars after connecting, call this function in forward ncl_client_api_ready.
+ *
+ * @param id    Client index
+ *
+ * @noreturn
+ */
+native ncl_viewmodelfx_begin(id);
+
+/**
+ * Ends viewmodelfx message that was started with ncl_viewmodelfx_begin().
+ * If the function is called without using ncl_viewmodelfx_begin() error log will be printed.
+ *
+ * @param id    Client index
+ *
+ * @noreturn
+ */
+native ncl_viewmodelfx_end();
