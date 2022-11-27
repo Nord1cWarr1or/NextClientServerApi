@@ -172,3 +172,16 @@ native ncl_viewmodelfx_begin(id);
  * @noreturn
  */
 native ncl_viewmodelfx_end();
+
+/**
+ * This message sets the specified field of view and interpolate time.
+ *
+ * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player cvars after connecting, call this function in forward ncl_client_api_ready.
+*
+ * @param id    Client index
+ * @param fov   FOV angle
+ * @param time  Inertpolate time
+ *
+ * @noreturn
+ */
+native ncl_setfov(id, fov, Float:time);

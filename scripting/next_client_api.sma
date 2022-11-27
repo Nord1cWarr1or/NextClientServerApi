@@ -9,6 +9,7 @@
 
 new g_SandboxCvarMsg;
 new g_ViewModelFxMsg;
+new g_SetFovExMsg;
 
 new bool:g_IsNextClient[33];
 new bool:g_IsClientApiReady[33];
@@ -197,6 +198,18 @@ public native_ncl_viewmodelfx_end(plugin_id, argc)
     message_end();
 }
 
+public native_ncl_setfov(plugin_id, argc)
+{
+    new id = get_param(1);
+    new fov = get_param(2);
+    new Float:lerp_time = get_param_f(3);
+
+    engfunc(EngFunc_MessageBegin, MSG_ONE, g_SetFovExMsg, Float:{0.0,0.0,0.0}, id);
+    write_byte(fov);
+    write_long(lerp_time);
+    message_end();
+}
+
 public plugin_natives()
 {
     register_native("ncl_is_client_api_ready", "native_ncl_is_client_api_ready");
@@ -214,13 +227,16 @@ public plugin_natives()
     register_native("ncl_write_renderbody", "native_ncl_write_renderbody");
     register_native("ncl_viewmodelfx_begin", "native_ncl_viewmodelfx_begin");
     register_native("ncl_viewmodelfx_end", "native_ncl_viewmodelfx_end");
+
+    register_native("ncl_setfov", "native_ncl_setfov");
 }
 
 public plugin_init()
 {
-    register_plugin("Next Client API", "1.0.1", "Next21 Team");
+    register_plugin("Next Client API", "1.0.2", "Next21 Team");
     register_sandbox_message();
     register_viewmodelfx_message();
+    register_fovex_message();
 
     g_ClientApiReadyForward = CreateMultiForward("ncl_client_api_ready", ET_IGNORE, FP_CELL);
 }
@@ -280,4 +296,15 @@ register_viewmodelfx_message()
 
     if (g_ViewModelFxMsg == 0)
         log_error(AMX_ERR_GENERAL, "Can't register ViewModelFx message");
+}
+
+register_fovex_message()
+{
+    g_SetFovExMsg = get_user_msgid("SetFOVEx");
+
+    if (g_SetFovExMsg == 0)
+        g_SetFovExMsg = engfunc(EngFunc_RegUserMsg, "SetFOVEx", -1);
+
+    if (g_SetFovExMsg == 0)
+        log_error(AMX_ERR_GENERAL, "Can't register SetFOVEx message");
 }
