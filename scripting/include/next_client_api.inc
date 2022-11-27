@@ -152,6 +152,8 @@ native ncl_write_renderbody(renderbody);
 
 /**
  * Marks the beginning of a viewmodelfx message.
+ * You can write the message parameters in any order. 
+ * It is also not necessary to specify all the parameters, write down only those you want to change.
  *
  * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player cvars after connecting, call this function in forward ncl_client_api_ready.
  *
