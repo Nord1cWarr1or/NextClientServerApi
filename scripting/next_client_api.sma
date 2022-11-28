@@ -206,7 +206,7 @@ public native_ncl_setfov(plugin_id, argc)
 
     engfunc(EngFunc_MessageBegin, MSG_ONE, g_SetFovExMsg, Float:{0.0,0.0,0.0}, id);
     write_byte(fov);
-    write_long(lerp_time);
+    write_long(_:lerp_time);
     message_end();
 }
 
