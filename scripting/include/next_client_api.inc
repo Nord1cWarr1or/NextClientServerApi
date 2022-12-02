@@ -54,7 +54,7 @@ native bool:ncl_is_client_api_ready(id);
 /**
  * Checks if client is Next Client. 
  *
- * @note Unreliable player identification, use only to check cvars sandbox abailability.
+ * @note Unreliable player identification! Use only to check features availability.
  *
  * @param id    Client index
  *
@@ -85,6 +85,7 @@ native ncl_sandbox_cvar_end();
 
 /**
  * Writes a cvar value to a sandbox cvar message.
+ * To restore the user cvar value and unlock the client's ability to change cvar, pass in a value an empty string.
  *
  * @param cvar  Cvar index from eSandboxCvar
  * @param value Cvar value
@@ -155,7 +156,7 @@ native ncl_write_renderbody(renderbody);
  * You can write the message parameters in any order. 
  * It is also not necessary to specify all the parameters, write down only those you want to change.
  *
- * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player cvars after connecting, call this function in forward ncl_client_api_ready.
+ * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player viewmodelfx after connecting, call this function in forward ncl_client_api_ready.
  *
  * @param id    Client index
  *
@@ -176,7 +177,7 @@ native ncl_viewmodelfx_end();
 /**
  * This message sets the specified field of view and interpolate time.
  *
- * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player cvars after connecting, call this function in forward ncl_client_api_ready.
+ * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player fov after connecting, call this function in forward ncl_client_api_ready.
 *
  * @param id    Client index
  * @param fov   FOV angle
