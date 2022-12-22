@@ -1,5 +1,5 @@
 # Description
-NextClientServerApi is an amxmodx plugin that provides an API to interact with [Counter-Strike 1.6 NextClient](https://client.next21.ru/).
+NextClientServerApi is an amxmodx plugin that provides an API to interact with [Counter-Strike 1.6 NextClient](https://cs16nextclient.com).
 
 See API functions in [next_client_api.inc](https://github.com/Next21Team/NextClientServerApi/blob/main/scripting/include/next_client_api.inc).
 
