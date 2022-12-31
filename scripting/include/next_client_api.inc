@@ -30,7 +30,16 @@ enum eSandboxCvar
     SC_cl_crosshair_type,
     SC_cl_crosshair_size,
     SC_cl_crosshair_color,
-    SC_cl_crosshair_translucent
+    SC_cl_crosshair_translucent,
+    // since Next Client v2.1.8
+    SC_cl_weather,
+}
+
+enum eNclVersion
+{
+    NCLV_NOT_NEXT_CLIENT = 0,
+    NCLV_2_1_7_OR_LOWER,
+    NCLV_2_1_8,
 }
 
 /**
@@ -58,9 +67,9 @@ native bool:ncl_is_client_api_ready(id);
  *
  * @param id    Client index
  *
- * @return      True or false
+ * @return      Next Client version
  */
-native bool:ncl_is_next_client(id);
+native eNclVersion:ncl_is_next_client(id);
 
 /**
  * Marks the beginning of a sandbox cvar message.
@@ -186,3 +195,13 @@ native ncl_viewmodelfx_end();
  * @noreturn
  */
 native ncl_setfov(id, fov, Float:time);
+
+
+native ncl_precache_model(const filepath[], const ncl_filepath[]);
+native ncl_precache_sound(const filepath[], const ncl_filepath[]);
+native ncl_precache_client_only(const save_as_filepath[], const ncl_filepath[]);
+
+stock ncl_precache_hudtxt(const ncl_filepath[])
+{
+    ncl_precache_client_only("sprites/hud.txt", ncl_filepath);
+}

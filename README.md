@@ -28,3 +28,6 @@ In the near future, we will provide a reliable authentication method for NextCli
 | cl_rollspeed | 200 | no limit | no limit | Screen roll speed when strafing or looking (Quake effect) |
 | viewmodel_lag_scale | 0 | no limit | no limit | The value of the lag of the viewmodel from the crosshair (CS:GO effect) |
 | viewmodel_lag_speed | 8 | no limit | no limit | The speed of the viewmodel following the crosshair (CS:GO effect) |
+| fov_horplus  | 8 | no limit | no limit | The speed of the viewmodel following the crosshair (CS:GO effect) |
+| fov_angle | 8 | no limit | no limit | The speed of the viewmodel following the crosshair (CS:GO effect) |
+| fov_lerp | 8 | no limit | no limit | The speed of the viewmodel following the crosshair (CS:GO effect) |
