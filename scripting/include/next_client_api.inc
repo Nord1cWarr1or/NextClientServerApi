@@ -196,10 +196,50 @@ native ncl_viewmodelfx_end();
  */
 native ncl_setfov(id, fov, Float:time);
 
-
+/**
+ * Separate precaching of the model for regular cs 1.6 client and NextClient.
+ * For NextClient: 
+ * - allows to overwrite default models;
+ * - allows to overwrite an existing model when it changed on the server.
+ *
+ * @note Can only be used inside of the plugin_precache() forward.
+ * 
+ * @param filepath       Path to the model file
+ * @param ncl_filepath   Path to the model file which will be preached to NextClient players (will be saved as filepath)
+ *
+ * @return               Unique cache id of the model
+ * @error                If called outside of the plugin_precache() forward, an error is thrown.
+ */
 native ncl_precache_model(const filepath[], const ncl_filepath[]);
+
+/**
+ * Separate precaching of the sound for regular cs 1.6 client and NextClient. 
+ * For NextClient: 
+ * - allows to overwrite default sounds;
+ * - allows to overwrite an existing sound when it changed on the server.
+ *
+ * @note Can only be used inside of the plugin_precache() forward.
+ * 
+ * @param filepath       Path to the sound file
+ * @param ncl_filepath   Path to the sound file which will be preached to NextClient players (will be saved as filepath)
+ *
+ * @return               Unique cache id of the sound
+ * @error                If called outside of the plugin_precache() forward, an error is thrown.
+ */
 native ncl_precache_sound(const filepath[], const ncl_filepath[]);
-native ncl_precache_client_only(const save_as_filepath[], const ncl_filepath[]);
+
+/**
+ * Client only precaching, allows to override default resources, such hud.txt and default sprites.
+ *
+ * @note For security reason at this moment allows to precache only hud.txt and sprites.
+ * 
+ * @param filepath       Saving path on client (regarding the mod directory)
+ * @param ncl_filepath   Downloading path on server (regarding the mod directory)
+ *
+ * @noreturn
+ * @error                If called outside of the plugin_precache() forward, an error is thrown.
+ */
+native ncl_precache_client_only(const filepath[], const ncl_filepath[]);
 
 stock ncl_precache_hudtxt(const ncl_filepath[])
 {
