@@ -14,7 +14,17 @@ set(SRC_DIR src)
 
 add_library(${PROJECT_NAME} SHARED
 	${AMXXMODULE_SDK_RUNTIME_SOURCE_FILE}
+	${SRC_DIR}/api/impl.h
+	${SRC_DIR}/api/impl.cpp
+	${SRC_DIR}/natives/cvar_sandbox.cpp
+	${SRC_DIR}/natives/private_precache.cpp
+	${SRC_DIR}/natives/viewmodelfx.cpp
+	${SRC_DIR}/natives/nextclient.cpp
+	${SRC_DIR}/natives/natives.cpp
 	${SRC_DIR}/main.cpp
+	${SRC_DIR}/utilfuncs.cpp
+
+	${AMXXMODULE_SDK_INCLUDE_PATHS}
 )
 
 add_compile_definitions(HAVE_STDINT_H)
@@ -23,4 +33,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 	${CSSDK_INCLUDE_PATHS}
 	${METAMOD_SDK_INCLUDE_PATHS}
 	${AMXXMODULE_SDK_INCLUDE_PATHS}
+	${SRC_DIR}
 )

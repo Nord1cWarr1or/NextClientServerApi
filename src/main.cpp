@@ -1,5 +1,7 @@
-#include "amxxmodule.h"
+#include "main.h"
 
 void OnAmxxAttach(void) {
-	MF_PrintSrvConsole("Hello from basic module!");
+	MF_PrintSrvConsole("[%s] Successfully loaded, version %s\n", MODULE_NAME, MODULE_VERSION);
+
+	AddNatives_All();
 }
