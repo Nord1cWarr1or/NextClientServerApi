@@ -42,7 +42,7 @@
 #endif // __DATE__
 
 // metamod plugin?
-// #define USE_METAMOD
+#define USE_METAMOD
 
 // use memory manager/tester?
 // note that if you use this, you cannot construct/allocate 
@@ -74,7 +74,7 @@
 /** AMXX attach
  * Do native functions init here (MF_AddNatives)
  */
-//#define FN_AMXX_ATTACH OnAmxxAttach
+#define FN_AMXX_ATTACH OnAmxxAttach
 
 /** AMXX Detach (unload) */
 //#define FN_AMXX_DETACH OnAmxxDetach
