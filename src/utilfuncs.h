@@ -3,5 +3,9 @@
 #include "main.h"
 
 namespace utils {
-	CBasePlayer *UTIL_PlayerByIndex(int playerIndex);
+	CBasePlayer *PlayerByIndex(int playerIndex);
+	int RegUserMsgSafe(const char *pszName, int iSize);
+
+	size_t FileSize(std::string path);
+	bool CRC_File(std::string path, CRC32_t* crc);
 }

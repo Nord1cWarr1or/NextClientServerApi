@@ -8,7 +8,7 @@
 		MF_LogError(amx, AMX_ERR_NATIVE, "%s: invalid player index %i [%s]", __FUNCTION__, params[x], #x); \
 		return FALSE; \
 	} \
-	if(utils::UTIL_PlayerByIndex(params[x]) == NULL) { \
+	if(utils::PlayerByIndex(params[x]) == NULL) { \
 		MF_LogError(amx, AMX_ERR_NATIVE, "%s: disconnected player %i [%s]", __FUNCTION__, params[x], #x); \
 		return FALSE; \
 	} 

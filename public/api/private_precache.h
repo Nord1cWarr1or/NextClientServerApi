@@ -6,7 +6,7 @@ class IPrivatePrecache {
 public:
 	~IPrivatePrecache() { }
 
-	virtual int PrecacheModel(int client, std::string filepath, std::string nclFilepath) = 0;
-	virtual int PrecacheSound(int client, std::string filepath, std::string nclFilepath) = 0;
-	virtual int PrecacheClientOnly(int client, std::string filepath, std::string nclFilepath) = 0;
+	virtual int PrecacheModel(std::string filepath, std::string nclFilepath) = 0;
+	virtual int PrecacheSound(std::string filepath, std::string nclFilepath) = 0;
+	virtual void PrecacheClientOnly(std::string filepath, std::string nclFilepath) = 0;
 };
