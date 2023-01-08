@@ -20,6 +20,8 @@ add_library(${PROJECT_NAME} SHARED
 	${SRC_DIR}/api/cvar_sandbox.cpp
 	${SRC_DIR}/api/private_precache.h
 	${SRC_DIR}/api/private_precache.cpp
+	${SRC_DIR}/api/viewmodelfx.h
+	${SRC_DIR}/api/viewmodelfx.cpp
 	${SRC_DIR}/natives/cvar_sandbox.cpp
 	${SRC_DIR}/natives/private_precache.cpp
 	${SRC_DIR}/natives/viewmodelfx.cpp

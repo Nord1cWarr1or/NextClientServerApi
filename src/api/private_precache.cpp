@@ -15,7 +15,7 @@ CPrivatePrecache::CPrivatePrecache() {
 
 int CPrivatePrecache::PrecacheModel(std::string filepath, std::string nclFilepath) {
 	this->AppendResource(filepath, nclFilepath, true);
-	return PRECACHE_SOUND(filepath.c_str());
+	return PRECACHE_MODEL(filepath.c_str());
 }
 
 int CPrivatePrecache::PrecacheSound(std::string filepath, std::string nclFilepath) {
@@ -31,6 +31,8 @@ void CPrivatePrecache::OnClientConnect(int client) {
 	if (!this->isResourceListWritten) {
 		this->WriteResourceListToDisk();
 	}
+
+	// Add nextclient v2.1.8+ check
 
 	MESSAGE_BEGIN(MSG_ONE, SVC_STUFFTEXT, NULL, INDEXENT(client));
 	WRITE_STRING(this->payloadResourceListLocation.c_str());

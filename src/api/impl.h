@@ -5,12 +5,14 @@
 
 #include "cvar_sandbox.h"
 #include "private_precache.h"
+#include "viewmodelfx.h"
 
 #include <unordered_map>
 #include <memory>
 
 class CCvarSandbox;
 class CPrivatePrecache;
+class CViewmodelFX;
 
 class CNextClientApi : public INextClientAPI,
 					   public IEventPlayerPostThink,
@@ -32,6 +34,7 @@ class CNextClientApi : public INextClientAPI,
 	
 	std::auto_ptr<CCvarSandbox> apiCvarSandbox;
 	std::auto_ptr<CPrivatePrecache> apiPrivatePrecache;
+	std::auto_ptr<CViewmodelFX> apiViewmodelFX;
 public:
 	CNextClientApi();
 

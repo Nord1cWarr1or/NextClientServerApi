@@ -13,7 +13,7 @@ CNextClientApi::CNextClientApi() {
 }
 
 IViewmodelFX* CNextClientApi::ViewmodelFX() {
-	return nullptr;
+	return this->apiViewmodelFX.get();
 }
 
 IPrivatePrecache* CNextClientApi::PrivatePrecache() {
