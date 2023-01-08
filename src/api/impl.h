@@ -17,7 +17,8 @@ class CViewmodelFX;
 class CNextClientApi : public INextClientAPI,
 					   public IEventPlayerPostThink,
 					   public IEventClientConnect,
-					   public IEventClientDisconnect {
+					   public IEventClientDisconnect,
+					   public IEventServerActivated {
 	int forwardApiReady;
 	int messageSetFOVEx;
 
@@ -49,6 +50,7 @@ public:
 	void OnPlayerPostThink(int client);
 	void OnClientDisconnect(int client);
 	void OnClientConnect(int client);
+	void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax);
 };
 
 void NAPI_Install();

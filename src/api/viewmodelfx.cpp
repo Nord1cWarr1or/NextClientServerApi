@@ -71,12 +71,15 @@ void CViewmodelFX::StateReset(VFX state) {
 }
 
 bool CViewmodelFX::StateIsSet(VFX state) {
-	return (this->bitStateSet & (1 << state)) && (this->bitStateReset & ~(1 << state));
+	return (this->bitStateSet & (1 << state));
 }
 
 void CViewmodelFX::Begin(int client) {
 	memset(&this->stateVFX, 0, sizeof(VFXState));
+
 	this->client = client;
+	this->bitStateSet = 0;
+	this->bitStateReset = 0;
 }
 
 void CViewmodelFX::End() {
@@ -104,11 +107,11 @@ void CViewmodelFX::End() {
 		WRITE_BYTE(color->b);
 	}
 
-	if (this->StateIsSet(VMFX_BODY))
-		WRITE_BYTE(this->stateVFX.body);
-
 	if (this->StateIsSet(VMFX_SKIN))
-		WRITE_LONG(this->stateVFX.skin);
+		WRITE_BYTE(this->stateVFX.skin);
+
+	if (this->StateIsSet(VMFX_BODY))
+		WRITE_LONG(this->stateVFX.body);
 
 	MESSAGE_END();
 }

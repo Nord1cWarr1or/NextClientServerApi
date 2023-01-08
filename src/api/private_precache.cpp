@@ -43,13 +43,13 @@ bool CPrivatePrecache::AppendResource(std::string filepath, std::string nclFilep
 	if (this->mapResourceList.count(filepath) != 0)
 		return false;
 
-	std::string filepathAbsolute = MF_BuildPathname(filepath.c_str());
+	std::string filepathAbsolute = MF_BuildPathname(nclFilepath.c_str());
 	size_t filesize = utils::FileSize(filepathAbsolute);
 	CRC32_t checksum = 0;
 	utils::CRC_File(filepathAbsolute, &checksum);
 
 	char buffer[128];
-	sprintf_s(buffer, "%d:%s:%s:%d:%d",
+	sprintf_s(buffer, "%d:%s:%s:%x:%d",
 		replace, filepath.c_str(), nclFilepath.c_str(), checksum, filesize);
 
 	this->mapResourceList[filepath] = buffer;
@@ -66,7 +66,7 @@ bool CPrivatePrecache::WriteResourceListToDisk() {
 		return false;
 
 	for (auto entry : this->mapResourceList) {
-		file << entry.first << std::endl;
+		file << entry.second << std::endl;
 	}
 
 	file.close();

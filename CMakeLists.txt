@@ -14,6 +14,7 @@ set(SRC_DIR src)
 
 add_library(${PROJECT_NAME} SHARED
 	${AMXXMODULE_SDK_RUNTIME_SOURCE_FILE}
+	${SRC_DIR}/api/events.h
 	${SRC_DIR}/api/impl.h
 	${SRC_DIR}/api/impl.cpp
 	${SRC_DIR}/api/cvar_sandbox.h

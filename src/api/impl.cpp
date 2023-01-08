@@ -1,15 +1,19 @@
 #include "impl.h"
 
 CNextClientApi::CNextClientApi() {
-	this->forwardApiReady = MF_RegisterForward("ncl_client_api_ready", ET_IGNORE, FP_CELL, FP_DONE);
 	this->messageSetFOVEx = utils::RegUserMsgSafe("SetFOVEx", -1);
-
+	
 	this->apiCvarSandbox.reset(new CCvarSandbox);
 	this->apiPrivatePrecache.reset(new CPrivatePrecache);
+	this->apiViewmodelFX.reset(new CViewmodelFX);
+}
 
-	for (int i = 0; i <= gpGlobals->maxClients; i++) {
+void CNextClientApi::OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) {
+	for (int i = 0; i <= clientMax; i++) {
 		this->playerData[i] = PlayerData();
 	}
+
+	this->forwardApiReady = MF_RegisterForward("ncl_client_api_ready", ET_IGNORE, FP_CELL, FP_DONE);
 }
 
 IViewmodelFX* CNextClientApi::ViewmodelFX() {
@@ -41,7 +45,7 @@ void CNextClientApi::OnPlayerPostThink(int client) {
 		return;
 
 	auto data = &this->playerData[client];
-	if (!data->isApiReady) {
+	if (!data->isApiReady && data->clientVersion != NOT_NEXTCLIENT) {
 		data->isApiReady = true;
 
 		MF_ExecuteForward(this->forwardApiReady, client);
@@ -59,6 +63,19 @@ void CNextClientApi::OnClientDisconnect(int client) {
 
 void CNextClientApi::OnClientConnect(int client) {
 	this->apiPrivatePrecache->OnClientConnect(client);
+
+	if (this->playerData.count(client) == 0)
+		return;
+
+	auto data = &this->playerData[client];
+	auto value = INFOKEY_VALUE(GET_INFOKEYBUFFER(INDEXENT(client)), "_ncl");
+
+	if (value[0] == '1') {
+		if (value[1] == '8')
+			data->clientVersion = V_2_1_8;
+		else
+			data->clientVersion = V_2_1_7_OR_LOWER;
+	}
 }
 
 void CNextClientApi::ClientSetFOV(int client, int fov, float lerpTime) {

@@ -2,8 +2,8 @@
 
 #include "utilfuncs.h"
 #include <fstream>
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace utils {
 CBasePlayer* PlayerByIndex(int playerIndex) {
@@ -30,15 +30,23 @@ size_t FileSize(std::string path) {
 
 bool CRC_File(std::string path, CRC32_t* crc) {
 	ifstream file(path, ifstream::binary);
-	std::vector<char> buffer(1024);
+
+	CRC32_INIT(crc);
+
+	char buffer[1024];
+	long long readed;
 
 	while (file.good()) {
-		/*
-		file.read(buffer.data(), buffer.size());
-		CRC32_PROCESS_BUFFER(crc, buffer.data(), file.gcount());
-		*/
-		CRC32_PROCESS_BYTE(crc, file.get());
+		readed = file.rdbuf()->sgetn(buffer, 1024);
+		if (readed != 1024)
+			file.setstate(ifstream::eofbit | ifstream::failbit);
+		else
+			file.setstate(ifstream::goodbit);
+
+		CRC32_PROCESS_BUFFER(crc, buffer, readed);
 	}
+
+	*crc = CRC32_FINAL(*crc);
 
 	return !file.fail();
 }
