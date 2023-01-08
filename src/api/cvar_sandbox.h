@@ -5,6 +5,7 @@
 
 class CCvarSandbox : public ICvarSandbox {
 	int messageSandboxCvar;
+	bool isMessageBuilding = false;
 
 public:
 	CCvarSandbox();

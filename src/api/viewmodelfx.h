@@ -10,6 +10,8 @@ class CViewmodelFX : public IViewmodelFX {
 	int bitStateSet = 0;
 	int bitStateReset = 0;
 
+	bool isMessageBuilding = false;
+
 	enum VFX {
 		VMFX_RENDERMODE,
 		VMFX_RENDERAMT,

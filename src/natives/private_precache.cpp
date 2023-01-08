@@ -1,6 +1,6 @@
 #include "natives.h"
 
-cell AMX_NATIVE_CALL NativeCall_PrivatePrecache_PrecacheModel(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_precache_model(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_filepath,
@@ -12,10 +12,11 @@ cell AMX_NATIVE_CALL NativeCall_PrivatePrecache_PrecacheModel(AMX* amx, cell* pa
 
 	NAPI()->PrivatePrecache()->PrecacheModel(filepath, nclFilepath);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
-cell AMX_NATIVE_CALL NativeCall_PrivatePrecache_PrecacheSound(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_precache_sound(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_filepath,
@@ -27,10 +28,11 @@ cell AMX_NATIVE_CALL NativeCall_PrivatePrecache_PrecacheSound(AMX* amx, cell* pa
 	
 	NAPI()->PrivatePrecache()->PrecacheSound(filepath, nclFilepath);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
-cell AMX_NATIVE_CALL NativeCall_PrivatePrecache_PrecacheClientOnly(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_precache_client_only(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_filepath,
@@ -42,13 +44,14 @@ cell AMX_NATIVE_CALL NativeCall_PrivatePrecache_PrecacheClientOnly(AMX* amx, cel
 	
 	NAPI()->PrivatePrecache()->PrecacheClientOnly(filepath, nclFilepath);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
 AMX_NATIVE_INFO nativeInfoPrivatePrecache[] = {
-	{ "ncl_precache_model", NativeCall_PrivatePrecache_PrecacheModel },
-	{ "ncl_precache_sound", NativeCall_PrivatePrecache_PrecacheSound },
-	{ "ncl_precache_client_only", NativeCall_PrivatePrecache_PrecacheClientOnly },
+	{ "ncl_precache_model", ncl_precache_model },
+	{ "ncl_precache_sound", ncl_precache_sound },
+	{ "ncl_precache_client_only", ncl_precache_client_only },
 
 	{ nullptr, nullptr }
 };

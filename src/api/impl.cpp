@@ -2,7 +2,7 @@
 
 CNextClientApi::CNextClientApi() {
 	this->messageSetFOVEx = utils::RegUserMsgSafe("SetFOVEx", -1);
-	
+
 	this->apiCvarSandbox.reset(new CCvarSandbox);
 	this->apiPrivatePrecache.reset(new CPrivatePrecache);
 	this->apiViewmodelFX.reset(new CViewmodelFX);
@@ -83,6 +83,20 @@ void CNextClientApi::ClientSetFOV(int client, int fov, float lerpTime) {
 	WRITE_BYTE(fov & 0xFF);
 	WRITE_LONG(lerpTime);
 	MESSAGE_END();
+}
+
+void CNextClientApi::SetError(std::string text) {
+	this->messageError = text;
+}
+
+bool CNextClientApi::ReadAndClearError(std::string& text) {
+	if (this->messageError.length() == 0)
+		return false;
+
+	text = this->messageError;
+	this->messageError.clear();
+
+	return true;
 }
 
 CNextClientApi* implNextClientApi = nullptr;

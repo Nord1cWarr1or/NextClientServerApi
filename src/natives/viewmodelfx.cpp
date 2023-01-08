@@ -1,6 +1,6 @@
 #include "natives.h"
 
-cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_Begin(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_viewmodelfx_begin(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_index
@@ -9,16 +9,18 @@ cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_Begin(AMX* amx, cell* params) {
 
 	NAPI()->ViewmodelFX()->Begin(params[arg_index]);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
-cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_End(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_viewmodelfx_end(AMX* amx, cell* params) {
 	NAPI()->ViewmodelFX()->End();
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
-cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteRenderMode(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_write_rendermode(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_rendermode
@@ -26,10 +28,11 @@ cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteRenderMode(AMX* amx, cell* para
 
 	NAPI()->ViewmodelFX()->WriteRenderMode(params[arg_rendermode]);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
-cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteRenderAmt(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_write_renderamt(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_renderamt
@@ -37,10 +40,11 @@ cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteRenderAmt(AMX* amx, cell* param
 
 	NAPI()->ViewmodelFX()->WriteRenderAmt(params[arg_renderamt]);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
-cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteRenderFX(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_write_renderfx(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_renderfx
@@ -48,10 +52,11 @@ cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteRenderFX(AMX* amx, cell* params
 
 	NAPI()->ViewmodelFX()->WriteRenderFX(params[arg_renderfx]);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
-cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteSkin(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_write_renderskin(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_skin
@@ -59,10 +64,11 @@ cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteSkin(AMX* amx, cell* params) {
 
 	NAPI()->ViewmodelFX()->WriteSkin(params[arg_skin]);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
-cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteBody(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_write_renderbody(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_body
@@ -70,10 +76,11 @@ cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteBody(AMX* amx, cell* params) {
 
 	NAPI()->ViewmodelFX()->WriteBody(params[arg_body]);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
-cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteRenderColor(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_write_rendercolor(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_r,
@@ -83,18 +90,19 @@ cell AMX_NATIVE_CALL NativeCall_ViewmodelFX_WriteRenderColor(AMX* amx, cell* par
 
 	NAPI()->ViewmodelFX()->WriteRenderColor(params[arg_r], params[arg_g], params[arg_b]);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
 AMX_NATIVE_INFO nativeInfoViewmodelFX[] = {
-	{ "ncl_viewmodelfx_begin", NativeCall_ViewmodelFX_Begin },
-	{ "ncl_viewmodelfx_end", NativeCall_ViewmodelFX_End },
-	{ "ncl_write_rendermode", NativeCall_ViewmodelFX_WriteRenderMode },
-	{ "ncl_write_renderamt", NativeCall_ViewmodelFX_WriteRenderAmt },
-	{ "ncl_write_renderfx", NativeCall_ViewmodelFX_WriteRenderFX },
-	{ "ncl_write_renderskin", NativeCall_ViewmodelFX_WriteSkin },
-	{ "ncl_write_renderbody", NativeCall_ViewmodelFX_WriteBody },
-	{ "ncl_write_rendercolor", NativeCall_ViewmodelFX_WriteRenderColor },
+	{ "ncl_viewmodelfx_begin", ncl_viewmodelfx_begin },
+	{ "ncl_viewmodelfx_end", ncl_viewmodelfx_end },
+	{ "ncl_write_rendermode", ncl_write_rendermode },
+	{ "ncl_write_renderamt", ncl_write_renderamt },
+	{ "ncl_write_renderfx", ncl_write_renderfx },
+	{ "ncl_write_renderskin", ncl_write_renderskin },
+	{ "ncl_write_renderbody", ncl_write_renderbody },
+	{ "ncl_write_rendercolor", ncl_write_rendercolor },
 
 	{ nullptr, nullptr }
 };

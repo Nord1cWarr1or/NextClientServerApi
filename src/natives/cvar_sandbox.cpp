@@ -1,6 +1,6 @@
 #include "natives.h"
 
-cell AMX_NATIVE_CALL NativeCall_CvarSandbox_Begin(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_sandbox_cvar_begin(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_index
@@ -10,16 +10,18 @@ cell AMX_NATIVE_CALL NativeCall_CvarSandbox_Begin(AMX* amx, cell* params) {
 	int client = params[arg_index];
 	NAPI()->CvarSandbox()->Begin(client);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
-cell AMX_NATIVE_CALL NativeCall_CvarSandbox_End(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_sandbox_cvar_end(AMX* amx, cell* params) {
 	NAPI()->CvarSandbox()->End();
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
-cell AMX_NATIVE_CALL NativeCall_CvarSandbox_WriteCvar(AMX* amx, cell* params) {
+cell AMX_NATIVE_CALL ncl_write_sandbox_cvar(AMX* amx, cell* params) {
 	enum args_e {
 		arg_count,
 		arg_cvar,
@@ -31,13 +33,14 @@ cell AMX_NATIVE_CALL NativeCall_CvarSandbox_WriteCvar(AMX* amx, cell* params) {
 
 	NAPI()->CvarSandbox()->WriteCvar(cvar, value);
 
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 
 AMX_NATIVE_INFO nativeInfoCvarSandbox[] = {
-	{ "ncl_sandbox_cvar_begin", NativeCall_CvarSandbox_Begin },
-	{ "ncl_sandbox_cvar_end", NativeCall_CvarSandbox_End },
-	{ "ncl_write_sandbox_cvar", NativeCall_CvarSandbox_WriteCvar },
+	{ "ncl_sandbox_cvar_begin", ncl_sandbox_cvar_begin },
+	{ "ncl_sandbox_cvar_end", ncl_sandbox_cvar_end },
+	{ "ncl_write_sandbox_cvar", ncl_write_sandbox_cvar },
 
 	{ nullptr, nullptr }
 };

@@ -32,7 +32,8 @@ void CPrivatePrecache::OnClientConnect(int client) {
 		this->WriteResourceListToDisk();
 	}
 
-	// Add nextclient v2.1.8+ check
+	// Nextclient v2.1.7 and lower is ignoring the stufftext below
+	// idk about build 4554 clients
 
 	MESSAGE_BEGIN(MSG_ONE, SVC_STUFFTEXT, NULL, INDEXENT(client));
 	WRITE_STRING(this->payloadResourceListLocation.c_str());

@@ -6,6 +6,8 @@ CViewmodelFX::CViewmodelFX() {
 }
 
 void CViewmodelFX::WriteRenderMode(int rendermode) {
+	NAPI_ASSERT(this->isMessageBuilding, "Writing value with no started message");
+
 	if (rendermode == -1)
 		this->StateReset(VMFX_RENDERMODE);
 	else {
@@ -15,6 +17,8 @@ void CViewmodelFX::WriteRenderMode(int rendermode) {
 }
 
 void CViewmodelFX::WriteRenderAmt(int renderamt) {
+	NAPI_ASSERT(this->isMessageBuilding, "Writing value with no started message");
+
 	if (renderamt == -1)
 		this->StateReset(VMFX_RENDERAMT);
 	else {
@@ -24,6 +28,8 @@ void CViewmodelFX::WriteRenderAmt(int renderamt) {
 }
 
 void CViewmodelFX::WriteRenderColor(int r, int g, int b) {
+	NAPI_ASSERT(this->isMessageBuilding, "Writing value with no started message");
+
 	if (r == -1)
 		this->StateReset(VMFX_RENDERCOLOR);
 	else {
@@ -36,6 +42,8 @@ void CViewmodelFX::WriteRenderColor(int r, int g, int b) {
 }
 
 void CViewmodelFX::WriteRenderFX(int renderfx) {
+	NAPI_ASSERT(this->isMessageBuilding, "Writing value with no started message");
+
 	if (renderfx == -1)
 		this->StateReset(VMFX_RENDERFX);
 	else {
@@ -45,6 +53,8 @@ void CViewmodelFX::WriteRenderFX(int renderfx) {
 }
 
 void CViewmodelFX::WriteSkin(int skin) {
+	NAPI_ASSERT(this->isMessageBuilding, "Writing value with no started message");
+
 	if (skin == -1)
 		this->StateReset(VMFX_SKIN);
 	else {
@@ -54,6 +64,8 @@ void CViewmodelFX::WriteSkin(int skin) {
 }
 
 void CViewmodelFX::WriteBody(int body) {
+	NAPI_ASSERT(this->isMessageBuilding, "Writing value with no started message");
+
 	if (body == -1)
 		this->StateReset(VMFX_BODY);
 	else {
@@ -75,14 +87,19 @@ bool CViewmodelFX::StateIsSet(VFX state) {
 }
 
 void CViewmodelFX::Begin(int client) {
+	NAPI_ASSERT(!this->isMessageBuilding, "Repeating of message beggining");
+
 	memset(&this->stateVFX, 0, sizeof(VFXState));
 
 	this->client = client;
 	this->bitStateSet = 0;
 	this->bitStateReset = 0;
+	this->isMessageBuilding = true;
 }
 
 void CViewmodelFX::End() {
+	NAPI_ASSERT(this->isMessageBuilding, "Ending with no started message");
+
 	MESSAGE_BEGIN(MSG_ONE, this->messageViewmodelFX, NULL, INDEXENT(this->client));
 
 	if (this->bitStateReset)
@@ -114,4 +131,6 @@ void CViewmodelFX::End() {
 		WRITE_LONG(this->stateVFX.body);
 
 	MESSAGE_END();
+
+	this->isMessageBuilding = false;
 }
