@@ -1,5 +1,3 @@
-#pragma once
-
 #include "utilfuncs.h"
 #include <fstream>
 #include <string>
@@ -12,9 +10,9 @@ CBasePlayer* PlayerByIndex(int playerIndex) {
 
 int RegUserMsgSafe(const char* pszName, int iSize) {
 	int messageid = GET_USER_MSG_ID(&Plugin_info, pszName, NULL);
-	if (messageid == NULL)
+	if (messageid == 0)
 		messageid = REG_USER_MSG(pszName, -1);
-	if (messageid == NULL)
+	if (messageid == 0)
 		MF_PrintSrvConsole("[%s] Unable to register %s message", MODULE_NAME, pszName);
 
 	return messageid;
