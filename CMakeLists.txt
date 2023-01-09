@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.10.0)
 
 project(nextclientapi_amxx)
 
@@ -45,4 +45,11 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
-set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+
+if(UNIX)
+	set_target_properties(${PROJECT_NAME} PROPERTIES 
+		SUFFIX "_i386.so"
+		COMPILE_FLAGS "-m32" 
+		LINK_FLAGS "-m32"
+	)
+endif(UNIX)
