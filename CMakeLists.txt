@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.0.0)
 
 project(nextclientapi_amxx)
 
-set(CMAKE_STATIC_LIBRARY_PREFIX "")
-
 set(AMXXMODULE_SDK_MODULECONFIG_DIR
 	${CMAKE_SOURCE_DIR}/public
 )
@@ -45,3 +43,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 	${AMXXMODULE_SDK_INCLUDE_PATHS}
 	${SRC_DIR}
 )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
