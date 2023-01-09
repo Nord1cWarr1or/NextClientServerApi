@@ -47,9 +47,9 @@ class CNextClientApi : public INextClientAPI,
 
 	std::unordered_map<int, PlayerData> playerData;
 
-	std::auto_ptr<CCvarSandbox> apiCvarSandbox;
-	std::auto_ptr<CPrivatePrecache> apiPrivatePrecache;
-	std::auto_ptr<CViewmodelFX> apiViewmodelFX;
+	std::unique_ptr<CCvarSandbox> apiCvarSandbox;
+	std::unique_ptr<CPrivatePrecache> apiPrivatePrecache;
+	std::unique_ptr<CViewmodelFX> apiViewmodelFX;
 
 	std::string messageError = "";
 

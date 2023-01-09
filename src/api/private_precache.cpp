@@ -50,7 +50,7 @@ bool CPrivatePrecache::AppendResource(std::string filepath, std::string nclFilep
 	utils::CRC_File(filepathAbsolute, &checksum);
 
 	char buffer[128];
-	sprintf_s(buffer, "%d:%s:%s:%x:%d",
+	sprintf(buffer, "%d:%s:%s:%x:%d",
 		replace, filepath.c_str(), nclFilepath.c_str(), checksum, filesize);
 
 	this->mapResourceList[filepath] = buffer;

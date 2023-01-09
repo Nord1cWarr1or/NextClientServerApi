@@ -35,7 +35,7 @@ add_library(${PROJECT_NAME} SHARED
 	${AMXXMODULE_SDK_INCLUDE_PATHS}
 )
 
-add_compile_definitions(HAVE_STDINT_H)
+add_definitions(-DHAVE_STDINT_H)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
 	${CSSDK_INCLUDE_PATHS}
