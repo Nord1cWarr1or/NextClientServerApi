@@ -13,7 +13,7 @@ int RegUserMsgSafe(const char* pszName, int iSize) {
 	if (messageid == 0)
 		messageid = REG_USER_MSG(pszName, -1);
 	if (messageid == 0)
-		MF_PrintSrvConsole("[%s] Unable to register %s message", MODULE_NAME, pszName);
+		MF_Log("Unable to register %s message", pszName);
 
 	return messageid;
 }

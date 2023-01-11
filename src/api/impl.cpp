@@ -6,6 +6,7 @@ CNextClientApi::CNextClientApi() {
 	this->apiCvarSandbox.reset(new CCvarSandbox);
 	this->apiPrivatePrecache.reset(new CPrivatePrecache);
 	this->apiViewmodelFX.reset(new CViewmodelFX);
+	this->apiVerificator.reset(new CVerificator);
 }
 
 void CNextClientApi::OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) {
@@ -13,7 +14,11 @@ void CNextClientApi::OnServerActivated(edict_t* pEdictList, int edictCount, int 
 		this->playerData[i] = PlayerData();
 	}
 
-	this->forwardApiReady = MF_RegisterForward("ncl_client_api_ready", ET_IGNORE, FP_CELL, FP_DONE);
+	if(!this->forwardApiReady)
+		this->forwardApiReady = MF_RegisterForward("ncl_client_api_ready", ET_IGNORE, FP_CELL, FP_DONE);
+
+	this->apiVerificator->OnServerActivated(pEdictList, edictCount, clientMax);
+	this->apiVerificator->ParsePublicKeys();
 }
 
 IViewmodelFX* CNextClientApi::ViewmodelFX() {
@@ -52,22 +57,16 @@ void CNextClientApi::OnPlayerPostThink(int client) {
 	}
 }
 
-void CNextClientApi::OnClientDisconnect(int client) {
+void CNextClientApi::OnClientConnect(int client) {
+	this->apiPrivatePrecache->OnClientConnect(client);
+	this->apiVerificator->OnClientConnect(client);
+
 	if (this->playerData.count(client) == 0)
 		return;
 
 	auto data = &this->playerData[client];
 	data->clientVersion = NOT_NEXTCLIENT;
 	data->isApiReady = false;
-}
-
-void CNextClientApi::OnClientConnect(int client) {
-	this->apiPrivatePrecache->OnClientConnect(client);
-
-	if (this->playerData.count(client) == 0)
-		return;
-
-	auto data = &this->playerData[client];
 	auto value = INFOKEY_VALUE(GET_INFOKEYBUFFER(INDEXENT(client)), "_ncl");
 
 	if (value[0] == '1') {
@@ -78,7 +77,20 @@ void CNextClientApi::OnClientConnect(int client) {
 	}
 }
 
-void CNextClientApi::OnHandleNCLMessage(edict_t* client) {
+void CNextClientApi::OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode) {
+	auto verificator = this->apiVerificator.get();
+
+	verificator->HandleNCLMVerificationRequest(client);
+
+	switch(opcode) {
+		case VERIFICATION_REQUEST:
+			verificator->HandleNCLMVerificationRequest(client);
+			break;
+
+		case VERIFICATION_RESPONSE:
+			verificator->HandleNCLMVerificationResponse(client);
+			break;
+	}
 }
 
 void CNextClientApi::ClientSetFOV(int client, int fov, float lerpTime) {

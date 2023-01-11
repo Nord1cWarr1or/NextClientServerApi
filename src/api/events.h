@@ -1,6 +1,7 @@
 #pragma once
 
 #include "amxxmodule.h"
+#include "api/nextclient.h"
 
 class IEventPlayerPostThink {
 public:
@@ -24,5 +25,5 @@ public:
 
 class IEventHandleNCLMessage {
 public:
-	virtual void OnHandleNCLMessage(edict_t* client) = 0;
+	virtual void OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode) = 0;
 };

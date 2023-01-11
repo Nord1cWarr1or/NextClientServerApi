@@ -8,10 +8,6 @@ void PlayerPostThink(edict_t* pEntity) {
 	_NAPIController()->OnPlayerPostThink(ENTINDEX(pEntity));
 }
 
-void ClientDisconnect(edict_t* pEntity) {
-	_NAPIController()->OnClientDisconnect(ENTINDEX(pEntity));
-}
-
 BOOL ClientConnect(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128]) {
 	_NAPIController()->OnClientConnect(ENTINDEX(pEntity));
 
@@ -24,7 +20,8 @@ void SV_HandleClientMessage(IRehldsHook_HandleNetCommand* hookchain, IGameClient
 		int* readcount = g_RehldsFuncs->GetMsgReadCount();
 
 		if (*(uint32_t*)(netMessage->data + *readcount) == NCLM_C2S_HEADER) {
-			_NAPIController()->OnHandleNCLMessage(apiClient->GetEdict());
+			auto opcode = static_cast<NCLM_C2S>(MSG_ReadByte());
+			_NAPIController()->OnHandleNCLMessage(apiClient->GetEdict(), opcode);
 			*readcount = netMessage->cursize;
 			return;
 		}

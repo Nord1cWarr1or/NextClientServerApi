@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.10.0)
+cmake_minimum_required(VERSION 3.16)
 
 project(nextclientapi_amxx)
+
+set(CMAKE_CXX_STANDARD 11)
 
 if(UNIX)
 	set(NAPI_TARGET_PROPS
