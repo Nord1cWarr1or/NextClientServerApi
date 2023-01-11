@@ -54,9 +54,9 @@ CBaseEntity
 
 #ifndef CBASE_DLLEXPORT
 #ifdef _WIN32
-#define CBASE_DLLEXPORT _declspec( dllexport )
+#define CBASE_DLLEXPORT _declspec( dllexport ) EXT_FUNC
 #else
-#define CBASE_DLLEXPORT __attribute__ ((visibility("default")))
+#define CBASE_DLLEXPORT __attribute__ ((visibility("default"))) EXT_FUNC
 #endif
 #endif
 
@@ -182,7 +182,7 @@ public:
 	virtual void	AddPointsToTeam( int score, BOOL bAllowNegativeScore ) {}
 	virtual BOOL	AddPlayerItem( CBasePlayerItem *pItem ) { return 0; }
 	virtual BOOL	RemovePlayerItem( CBasePlayerItem *pItem ) { return 0; }
-	virtual int 	GiveAmmo( int iAmount, const char *szName, int iMax ) { return -1; };
+	virtual int 	GiveAmmo( int iAmount, char *szName, int iMax ) { return -1; };
 	virtual float	GetDelay( void ) { return 0; }
 	virtual int		IsMoving( void ) { return pev->velocity != g_vecZero; }
 	virtual void	OverrideReset( void ) {}
@@ -222,13 +222,13 @@ public:
 	virtual void Blocked( CBaseEntity *pOther ) { if (m_pfnBlocked) (this->*m_pfnBlocked)( pOther ); };
 
 	// allow engine to allocate instance data
-    void *operator new( size_t stAllocateBlock, entvars_t *pev )
+	void *operator new( size_t stAllocateBlock, entvars_t *pev )
 	{
 		return (void *)ALLOC_PRIVATE(ENT(pev), stAllocateBlock);
 	};
 
 	// don't use this.
-#if defined(_MSC_VER) && _MSC_VER >= 1200 // only build this code if MSVC++ 6.0 or higher
+#if _MSC_VER >= 1200 // only build this code if MSVC++ 6.0 or higher
 	void operator delete(void *pMem, entvars_t *pev)
 	{
 		pev->flags |= FL_KILLME;
@@ -326,7 +326,7 @@ public:
 
 
 	//
-	static CBaseEntity *Create( const char *szName, const Vector &vecOrigin, const Vector &vecAngles, edict_t *pentOwner = NULL );
+	static CBaseEntity *Create( char *szName, const Vector &vecOrigin, const Vector &vecAngles, edict_t *pentOwner = NULL );
 
 	virtual BOOL FBecomeProne( void ) {return FALSE;};
 	edict_t *edict() { return ENT( pev ); };
@@ -671,7 +671,7 @@ class CSound;
 #include "basemonster.h"
 
 
-const char *ButtonSound( int sound );				// get string of button sound number
+char *ButtonSound( int sound );				// get string of button sound number
 
 
 //

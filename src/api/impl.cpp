@@ -78,6 +78,9 @@ void CNextClientApi::OnClientConnect(int client) {
 	}
 }
 
+void CNextClientApi::OnHandleNCLMessage(edict_t* client) {
+}
+
 void CNextClientApi::ClientSetFOV(int client, int fov, float lerpTime) {
 	MESSAGE_BEGIN(MSG_ONE, this->messageSetFOVEx, NULL, INDEXENT(client));
 	WRITE_BYTE(fov & 0xFF);

@@ -26,25 +26,11 @@
 #endif
 
 // Silence certain warnings
-#ifdef _MSC_VER
-	#pragma warning(disable : 4244)		// int or float down-conversion
-	#pragma warning(disable : 4305)		// int or float data truncation
-	#pragma warning(disable : 4201)		// nameless struct/union
-	#pragma warning(disable : 4514)		// unreferenced inline function removed
-	#pragma warning(disable : 4100)		// unreferenced formal parameter
-
-	#if _MSC_VER >= 1400
-		#ifndef _CRT_SECURE_NO_DEPRECATE
-			#define _CRT_SECURE_NO_DEPRECATE
-		#endif
-
-		#ifndef _CRT_SECURE_NO_WARNINGS
-			#define _CRT_SECURE_NO_WARNINGS
-		#endif
-
-		#pragma warning(disable: 4996) // deprecated functions
-	#endif
-#endif
+#pragma warning(disable : 4244)		// int or float down-conversion
+#pragma warning(disable : 4305)		// int or float data truncation
+#pragma warning(disable : 4201)		// nameless struct/union
+#pragma warning(disable : 4514)		// unreferenced inline function removed
+#pragma warning(disable : 4100)		// unreferenced formal parameter
 
 #include "archtypes.h"     // DAL
 
@@ -55,18 +41,20 @@
 #define NOSERVICE
 #define NOMCX
 #define NOIME
+#include "winsani_in.h"
 #include "windows.h"
+#include "winsani_out.h"
 #else // _WIN32
-#ifndef FALSE
-#define FALSE 0
-#endif
 #ifndef TRUE
+#define FALSE 0
 #define TRUE (!FALSE)
-#endif
+#endif //TRUE
 typedef uint32 ULONG;
 typedef unsigned char BYTE;
 typedef int BOOL;
+#ifndef MAX_PATH
 #define MAX_PATH PATH_MAX
+#endif // MAX_PATH
 #include <limits.h>
 #include <stdarg.h>
 #include <string.h> // memset 
@@ -75,8 +63,6 @@ typedef int BOOL;
 #endif
 #ifndef max
 #define max(a,b)  (((a) > (b)) ? (a) : (b))
-#endif
-#ifndef _vsnprintf
 #define _vsnprintf(a,b,c,d) vsnprintf(a,b,c,d)
 #endif
 #endif //_WIN32

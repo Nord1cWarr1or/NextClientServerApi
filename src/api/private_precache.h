@@ -6,6 +6,8 @@
 #include <string>
 #include <unordered_map>
 
+#define SVC_STUFFTEXT		9
+
 class CPrivatePrecache : public IPrivatePrecache,
 						 public IEventClientConnect {
 	std::string filepathResourceListAbsolute;

@@ -13,6 +13,10 @@ set(CSSDK_INCLUDE_PATHS
     ${CSSDK_INCLUDE_PATHS}
 	PARENT_SCOPE)
 
+set(CSSDK_RUNTIME_SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/public/interface.cpp
+	PARENT_SCOPE)
+
 add_library(${PROJECT_NAME} STATIC
 	public/interface.cpp
 )

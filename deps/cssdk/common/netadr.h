@@ -12,13 +12,11 @@
 *   without written permission from Valve LLC.
 *
 ****/
-// netadr.h
+
 #ifndef NETADR_H
 #define NETADR_H
 #ifdef _WIN32
-#ifndef __MINGW32__
 #pragma once
-#endif /* not __MINGW32__ */
 #endif
 
 typedef enum
@@ -33,10 +31,10 @@ typedef enum
 
 typedef struct netadr_s
 {
-	netadrtype_t	type;
-	unsigned char	ip[4];
-	unsigned char	ipx[10];
-	unsigned short	port;
+	netadrtype_t type;
+	unsigned char ip[4];
+	unsigned char ipx[10];
+	unsigned short port;
 } netadr_t;
 
 #endif // NETADR_H

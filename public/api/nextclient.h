@@ -1,5 +1,6 @@
 #pragma once
 
+#include "const.h"
 #include "cvar_sandbox.h"
 #include "private_precache.h"
 #include "viewmodelfx.h"

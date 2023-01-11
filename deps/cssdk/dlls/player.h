@@ -100,7 +100,6 @@ public:
 	int		m_iObserverWeapon;	// weapon of current tracked target
 	int		m_iObserverLastMode;// last used observer mode
 	int		IsObserver() { return pev->iuser1; };
-
 	int					random_seed;    // See that is shared between client & server for shared weapons code
 
 	int					m_iPlayerSound;// the index of the sound list slot reserved for this player
@@ -275,7 +274,7 @@ public:
 	void GiveNamedItem( const char *szName );
 	void EnableControl(BOOL fControl);
 
-	int  GiveAmmo( int iAmount, const char *szName, int iMax );
+	int  GiveAmmo( int iAmount, char *szName, int iMax );
 	void SendAmmoUpdate(void);
 
 	void WaterMove( void );
@@ -283,7 +282,7 @@ public:
 	void PlayerUse( void );
 
 	void CheckSuitUpdate();
-	void SetSuitUpdate(const char *name, int fgroup, int iNoRepeat);
+	void SetSuitUpdate(char *name, int fgroup, int iNoRepeat);
 	void UpdateGeigerCounter( void );
 	void CheckTimeBasedDamage( void );
 
@@ -305,7 +304,7 @@ public:
 	void SetCustomDecalFrames( int nFrames );
 	int GetCustomDecalFrames( void );
 
-	void TabulateAmmo( void );
+	void CBasePlayer::TabulateAmmo( void );
 
 	float m_flStartCharge;
 	float m_flAmmoStartCharge;

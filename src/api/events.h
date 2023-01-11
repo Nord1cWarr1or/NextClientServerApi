@@ -21,3 +21,8 @@ class IEventServerActivated {
 public:
 	virtual void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) = 0;
 };
+
+class IEventHandleNCLMessage {
+public:
+	virtual void OnHandleNCLMessage(edict_t* client) = 0;
+};

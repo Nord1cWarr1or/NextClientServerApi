@@ -77,9 +77,7 @@ typedef int EOFFSET;
 typedef int BOOL;
 
 // In case this ever changes
-#ifndef M_PI
 #define M_PI			3.14159265358979323846
-#endif
 
 // Keeps clutter down a bit, when declaring external entity/global method prototypes
 #define DECLARE_GLOBAL_METHOD(MethodName)  extern void UTIL_DLLEXPORT MethodName( void )
@@ -87,9 +85,9 @@ typedef int BOOL;
 
 #ifndef UTIL_DLLEXPORT
 #ifdef _WIN32
-#define UTIL_DLLEXPORT _declspec( dllexport )
+#define UTIL_DLLEXPORT _declspec( dllexport ) EXT_FUNC
 #else
-#define UTIL_DLLEXPORT __attribute__ ((visibility("default")))
+#define UTIL_DLLEXPORT __attribute__ ((visibility("default"))) EXT_FUNC
 #endif
 #endif
 
@@ -115,7 +113,7 @@ inline edict_t *ENT(EOFFSET eoffset)			{ return (*g_engfuncs.pfnPEntityOfEntOffs
 inline EOFFSET OFFSET(EOFFSET eoffset)			{ return eoffset; }
 inline EOFFSET OFFSET(const edict_t *pent)	
 { 
-#ifdef _DEBUG
+#if _DEBUG
 	if ( !pent )
 		ALERT( at_error, "Bad ent in OFFSET()\n" );
 #endif
@@ -123,7 +121,7 @@ inline EOFFSET OFFSET(const edict_t *pent)
 }
 inline EOFFSET OFFSET(entvars_t *pev)				
 { 
-#ifdef _DEBUG
+#if _DEBUG
 	if ( !pev )
 		ALERT( at_error, "Bad pev in OFFSET()\n" );
 #endif
@@ -253,7 +251,7 @@ typedef enum { ignore_monsters=1, dont_ignore_monsters=0, missile=2 } IGNORE_MON
 typedef enum { ignore_glass=1, dont_ignore_glass=0 } IGNORE_GLASS;
 extern void			UTIL_TraceLine			(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr);
 extern void			UTIL_TraceLine			(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr);
-typedef enum { point_hull=0, human_hull=1, large_hull=2, head_hull=3 } HULL_TYPE;
+typedef enum { point_hull=0, human_hull=1, large_hull=2, head_hull=3 } __HLSDK_HULL_TYPE;
 extern void			UTIL_TraceHull			(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, int hullNumber, edict_t *pentIgnore, TraceResult *ptr);
 extern TraceResult	UTIL_GetGlobalTrace		(void);
 extern void			UTIL_TraceModel			(const Vector &vecStart, const Vector &vecEnd, int hullNumber, edict_t *pentModel, TraceResult *ptr);
@@ -278,7 +276,7 @@ extern float		UTIL_Approach( float target, float value, float speed );
 extern float		UTIL_ApproachAngle( float target, float value, float speed );
 extern float		UTIL_AngleDistance( float next, float cur );
 
-extern char			*UTIL_VarArgs( const char *format, ... );
+extern char			*UTIL_VarArgs( char *format, ... );
 extern void			UTIL_Remove( CBaseEntity *pEntity );
 extern BOOL			UTIL_IsValidEntity( edict_t *pent );
 extern BOOL			UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 );
@@ -338,7 +336,8 @@ extern char *UTIL_dtos3( int d );
 extern char *UTIL_dtos4( int d );
 
 // Writes message to console with timestamp and FragLog header.
-extern void			UTIL_LogPrintf( const char *fmt, ... );
+extern void			UTIL_LogPrintf( char *fmt, ... );
+extern void			UTIL_ServerPrintf( const char *fmt, ... );
 
 // Sorta like FInViewCone, but for nonmonsters. 
 extern float UTIL_DotPoints ( const Vector &vecSrc, const Vector &vecCheck, const Vector &vecDir );
@@ -425,7 +424,6 @@ extern DLL_GLOBAL int			g_Language;
 #define VEC_DUCK_HULL_MAX	Vector( 16,  16,  18)
 #define VEC_DUCK_VIEW		Vector( 0, 0, 12 )
 
-#define SVC_STUFFTEXT		9
 #define SVC_TEMPENTITY		23
 #define SVC_INTERMISSION	30
 #define SVC_CDTRACK			32
@@ -514,7 +512,7 @@ void EMIT_GROUPID_SUIT(edict_t *entity, int isentenceg);
 void EMIT_GROUPNAME_SUIT(edict_t *entity, const char *groupname);
 
 #define PRECACHE_SOUND_ARRAY( a ) \
-	{ for (int i = 0; i < static_cast<int>(ARRAYSIZE( a )); i++ ) PRECACHE_SOUND((char *) a [i]); }
+	{ for (int i = 0; i < ARRAYSIZE( a ); i++ ) PRECACHE_SOUND((char *) a [i]); }
 
 #define EMIT_SOUND_ARRAY_DYN( chan, array ) \
 	EMIT_SOUND_DYN ( ENT(pev), chan , array [ RANDOM_LONG(0,ARRAYSIZE( array )-1) ], 1.0, ATTN_NORM, 0, RANDOM_LONG(95,105) ); 

@@ -70,7 +70,6 @@ bool CPrivatePrecache::WriteResourceListToDisk() {
 		file << entry.second << std::endl;
 	}
 
-	file.close();
 	this->isResourceListWritten = true;
 
 	return true;

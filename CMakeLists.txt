@@ -42,9 +42,12 @@ add_library(${PROJECT_NAME} SHARED
 	${SRC_DIR}/main.h
 	${SRC_DIR}/main.cpp
 	${SRC_DIR}/utilfuncs.cpp
+	${SRC_DIR}/rehlds_api.h
+	${SRC_DIR}/rehlds_api.cpp
 
 	${AMXXMODULE_SDK_INCLUDE_PATHS}
 	${AMXXMODULE_SDK_RUNTIME_SOURCE_FILE}
+	${CSSDK_RUNTIME_SOURCE_FILES}
 )
 
 add_definitions(-DHAVE_STDINT_H)

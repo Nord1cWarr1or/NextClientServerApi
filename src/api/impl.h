@@ -32,7 +32,8 @@ class CNextClientApi : public INextClientAPI,
 					   public IEventPlayerPostThink,
 					   public IEventClientConnect,
 					   public IEventClientDisconnect,
-					   public IEventServerActivated {
+					   public IEventServerActivated,
+					   public IEventHandleNCLMessage {
 	int forwardApiReady;
 	int messageSetFOVEx;
 
@@ -68,6 +69,7 @@ public:
 	void OnClientDisconnect(int client);
 	void OnClientConnect(int client);
 	void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax);
+	void OnHandleNCLMessage(edict_t* client);
 
 	void SetError(std::string text);
 	bool ReadAndClearError(std::string& text);

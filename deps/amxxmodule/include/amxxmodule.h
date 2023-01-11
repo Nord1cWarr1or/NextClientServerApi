@@ -13,6 +13,7 @@
 #include <stddef.h> // size_t
 // metamod include files
 #ifdef USE_METAMOD
+#include <osconfig.h>
 #include <extdll.h>
 #include <meta_api.h>
 #include "osdep.h"

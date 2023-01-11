@@ -5,3 +5,4 @@
 #include "api/impl.h"
 #include "utilfuncs.h"
 #include "natives/natives.h"
+#include "rehlds_api.h"

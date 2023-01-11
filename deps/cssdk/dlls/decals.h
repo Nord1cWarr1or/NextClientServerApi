@@ -64,9 +64,18 @@ enum decal_e
 	DECAL_MOMMASPLAT,
 };
 
-typedef struct 
+typedef struct
 {
-	const char	*name;
+	char *name;
+	short entityIndex;
+	byte depth;
+	byte flags;
+	vec3_t position;
+} DECALLIST;
+
+typedef struct
+{
+	char	*name;
 	int		index;
 } DLL_DECALLIST;
 

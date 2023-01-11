@@ -12,8 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef EIFACE_H
-#define EIFACE_H
+#pragma once
 
 #include "archtypes.h"     // DAL
 
@@ -38,42 +37,42 @@
 
 /*
 #ifdef _WIN32
-#define DLLEXPORT __stdcall
+#define DLLEXPORT __stdcall EXT_FUNC
 #else
-#define DLLEXPORT  __attribute__ ((visibility("default")))
+#define DLLEXPORT  __attribute__ ((visibility("default"))) EXT_FUNC
 #endif
 */
 
-typedef enum
-	{
+enum ALERT_TYPE
+{
 	at_notice,
 	at_console,		// same as at_notice, but forces a ConPrintf, not a message box
 	at_aiconsole,	// same as at_console, but only shown if developer level is 2!
 	at_warning,
 	at_error,
 	at_logged		// Server print to console ( only in multiplayer games ).
-	} ALERT_TYPE;
+};
 
 // 4-22-98  JOHN: added for use in pfnClientPrintf
-typedef enum
-	{
+enum PRINT_TYPE
+{
 	print_console,
 	print_center,
 	print_chat,
-	} PRINT_TYPE;
+};
 
 // For integrity checking of content on clients
-typedef enum
+enum FORCE_TYPE
 {
 	force_exactfile,					// File on client must exactly match server's file
 	force_model_samebounds,				// For model files only, the geometry must fit in the same bbox
 	force_model_specifybounds,			// For model files only, the geometry must fit in the specified bbox
 	force_model_specifybounds_if_avail,	// For Steam model files only, the geometry must fit in the specified bbox (if the file is available)
-} FORCE_TYPE;
+};
 
 // Returned by TraceLine
-typedef struct
-	{
+struct TraceResult
+{
 	int		fAllSolid;			// if true, plane is not valid
 	int		fStartSolid;		// if true, the initial point was in a solid area
 	int		fInOpen;
@@ -84,7 +83,7 @@ typedef struct
 	vec3_t	vecPlaneNormal;		// surface normal at impact
 	edict_t	*pHit;				// entity the surface is on
 	int		iHitgroup;			// 0 == generic, non zero is specific body part
-	} TraceResult;
+};
 
 // CD audio status
 typedef struct 
@@ -208,7 +207,7 @@ typedef struct enginefuncs_s
 	void        (*pfnGetGameDir)            (char *szGetGameDir);
 	void		(*pfnCvar_RegisterVariable) (cvar_t *variable);
 	void        (*pfnFadeClientVolume)      (const edict_t *pEdict, int fadePercent, int fadeOutSeconds, int holdTime, int fadeInSeconds);
-	void        (*pfnSetClientMaxspeed)     (const edict_t *pEdict, float fNewMaxspeed);
+	void        (*pfnSetClientMaxspeed)     (edict_t *pEdict, float fNewMaxspeed);
 	edict_t *	(*pfnCreateFakeClient)		(const char *netname);	// returns NULL if fake client can't be created
 	void		(*pfnRunPlayerMove)			(edict_t *fakeclient, const float *viewangles, float forwardmove, float sidemove, float upmove, unsigned short buttons, byte impulse, byte msec );
 	int			(*pfnNumberOfEntities)		(void);
@@ -230,13 +229,13 @@ typedef struct enginefuncs_s
 	const char *(*pfnGetPhysicsKeyValue)	( const edict_t *pClient, const char *key );
 	void		(*pfnSetPhysicsKeyValue)	( const edict_t *pClient, const char *key, const char *value );
 	const char *(*pfnGetPhysicsInfoString)	( const edict_t *pClient );
-	unsigned short (*pfnPrecacheEvent)		( int type, const char* psz );
+	unsigned short (*pfnPrecacheEvent)		( int type, const char*psz );
 	void		(*pfnPlaybackEvent)			( int flags, const edict_t *pInvoker, unsigned short eventindex, float delay, float *origin, float *angles, float fparam1, float fparam2, int iparam1, int iparam2, int bparam1, int bparam2 );
 
 	unsigned char *(*pfnSetFatPVS)			( float *org );
 	unsigned char *(*pfnSetFatPAS)			( float *org );
 
-	int			(*pfnCheckVisibility )		( const edict_t *entity, unsigned char *pset );
+	int			(*pfnCheckVisibility )		( edict_t *entity, unsigned char *pset );
 
 	void		(*pfnDeltaSetField)			( struct delta_s *pFields, const char *fieldname );
 	void		(*pfnDeltaUnsetField)		( struct delta_s *pFields, const char *fieldname );
@@ -291,10 +290,16 @@ typedef struct enginefuncs_s
 	int			(*pfnGetTimesTutorMessageShown)			(int mid);
 	void		(*pfnProcessTutorMessageDecayBuffer)	(int *buffer, int bufferLength);
 	void		(*pfnConstructTutorMessageDecayBuffer)	(int *buffer, int bufferLength);
-	void		(*pfnResetTutorMessageDecayData)	( void );
-	void		(*pfnQueryClientCvarValue)				( const edict_t *player, const char *cvarName );
-	void		(*pfnQueryClientCvarValue2)		( const edict_t *player, const char *cvarName, int requestID );
-	int		(*pfnCheckParm)				( const char *pchCmdLineToken, char **ppnext );
+	void		(*pfnResetTutorMessageDecayData)		( void );
+
+	// Added 2005/08/11 (no SDK update):
+	void(*pfnQueryClientCvarValue)		(const edict_t *player, const char *cvarName);
+
+	// Added 2005/11/21 (no SDK update):
+	void(*pfnQueryClientCvarValue2)		(const edict_t *player, const char *cvarName, int requestID);
+
+	// Added 2009/06/19 (no SDK update):
+	int(*pfnEngCheckParm)				(const char *pchCmdLineToken, char **ppnext);
 } enginefuncs_t;
 
 
@@ -303,10 +308,10 @@ typedef struct enginefuncs_s
 // Passed to pfnKeyValue
 typedef struct KeyValueData_s
 {
-	const char *szClassName;	// in: entity classname
-	const char *szKeyName;		// in: name of key
-	const char *szValue;		// in: value of key
-	int32	fHandled;		// out: DLL sets to true if key-value pair was understood
+	char		*szClassName;	// in: entity classname
+	char		*szKeyName;		// in: name of key
+	char		*szValue;		// in: value of key
+	qboolean	fHandled;		// out: DLL sets to true if key-value pair was understood
 } KeyValueData;
 
 
@@ -314,7 +319,7 @@ typedef struct
 {
 	char		mapName[ 32 ];
 	char		landmarkName[ 32 ];
-	edict_t	*pentLandmark;
+	edict_t		*pentLandmark;
 	vec3_t		vecLandmarkOrigin;
 } LEVELLIST;
 #define MAX_LEVEL_CONNECTIONS	16		// These are encoded in the lower 16bits of ENTITYTABLE->flags
@@ -393,7 +398,7 @@ typedef enum _fieldtypes
 	FIELD_TYPECOUNT,		// MUST BE LAST
 } FIELDTYPE;
 
-#if !defined(offsetof) && !defined(GNUC)
+#if !defined(offsetof)  && !defined(GNUC)
 #define offsetof(s,m)	(size_t)&(((s *)0)->m)
 #endif
 
@@ -410,15 +415,15 @@ typedef enum _fieldtypes
 typedef struct 
 {
 	FIELDTYPE		fieldType;
-	const char			*fieldName;
+	char			*fieldName;
 	int				fieldOffset;
 	short			fieldSize;
 	short			flags;
 } TYPEDESCRIPTION;
 
-// Fix warning in MSVC8
-#undef ARRAYSIZE
+#ifndef ARRAYSIZE
 #define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
+#endif
 
 typedef struct 
 {
@@ -475,7 +480,7 @@ typedef struct
 
 	void			(*pfnPM_Move) ( struct playermove_s *ppmove, qboolean server );
 	void			(*pfnPM_Init) ( struct playermove_s *ppmove );
-	char			(*pfnPM_FindTextureType)( const char *name );
+	char			(*pfnPM_FindTextureType)( char *name );
 	void			(*pfnSetupVisibility)( struct edict_s *pViewEntity, struct edict_s *pClient, unsigned char **pvs, unsigned char **pas );
 	void			(*pfnUpdateClientData) ( const struct edict_s *ent, int sendweapons, struct clientdata_s *cd );
 	int				(*pfnAddToFullPack)( struct entity_state_s *state, int e, edict_t *ent, edict_t *host, int hostflags, int player, unsigned char *pSet );
@@ -488,7 +493,7 @@ typedef struct
 
 	// Return 1 if the packet is valid.  Set response_buffer_size if you want to send a response packet.  Incoming, it holds the max
 	//  size of the response_buffer, so you must zero it out if you choose not to respond.
-	int				(*pfnConnectionlessPacket )	( const struct netadr_s *net_from, const char *args, char *response_buffer, int *response_buffer_size );
+	int				(*pfnConnectionlessPacket )	( const struct netadr_s *net_from_, const char *args, char *response_buffer, int *response_buffer_size );
 
 	// Enumerates player hulls.  Returns 0 if the hull number doesn't exist, 1 otherwise
 	int				(*pfnGetHullBounds)	( int hullnumber, float *mins, float *maxs );
@@ -522,12 +527,10 @@ typedef struct
 	void			(*pfnCvarValue)( const edict_t *pEnt, const char *value );
     void            (*pfnCvarValue2)( const edict_t *pEnt, int requestID, const char *cvarName, const char *value );
 } NEW_DLL_FUNCTIONS;
-typedef int	(*NEW_DLL_FUNCTIONS_FN)( NEW_DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion );
+typedef int(*NEW_DLL_FUNCTIONS_FN)(NEW_DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion);
 
 // Pointers will be null if the game DLL doesn't support this API.
 extern NEW_DLL_FUNCTIONS	gNewDLLFunctions;
 
-typedef int	(*APIFUNCTION)( DLL_FUNCTIONS *pFunctionTable, int interfaceVersion );
-typedef int	(*APIFUNCTION2)( DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion );
-
-#endif /* EIFACE_H */
+typedef int(*APIFUNCTION)(DLL_FUNCTIONS *pFunctionTable, int interfaceVersion);
+typedef int(*APIFUNCTION2)(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion);
