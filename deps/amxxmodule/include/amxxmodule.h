@@ -124,9 +124,9 @@ struct amxx_module_info_s
 /* calling convention for all interface functions and callback functions */
 #if !defined AMXAPI
   #if defined STDECL
-    #define AMXAPI      __stdcall
+    #define AMXAPI      STDCALL
   #elif defined CDECL
-    #define AMXAPI      __cdecl
+    #define AMXAPI      CDECL
   #else
     #define AMXAPI
   #endif
