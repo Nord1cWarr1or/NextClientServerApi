@@ -8,10 +8,9 @@ IRehldsServerStatic* g_RehldsSvs;
 
 bool RehldsApi_Init()
 {
-	if (!IS_DEDICATED_SERVER())
-	{
-		return false;
-	}
+    if (!IS_DEDICATED_SERVER())
+        return false;
+
 
 #ifdef WIN32
 	CSysModule* engineModule = Sys_LoadModule("swds.dll");
@@ -30,7 +29,10 @@ bool RehldsApi_Init()
 	g_RehldsApi = (IRehldsApi*)ifaceFactory(VREHLDS_HLDS_API_VERSION, &retCode);
 
 	if (!g_RehldsApi)
-		return false;
+    {
+        MF_PrintSrvConsole("[%s]: ReHLDS API not found\n", Plugin_info.logtag);
+        return false;
+    }
 
 	int majorVersion = g_RehldsApi->GetMajorVersion();
 	int minorVersion = g_RehldsApi->GetMinorVersion();

@@ -30,16 +30,17 @@ void SV_HandleClientMessage(IRehldsHook_HandleNetCommand* hookchain, IGameClient
 	hookchain->callNext(apiClient, opcode);
 }
 
-void OnAmxxAttach(void) {
-	MF_PrintSrvConsole("[%s] Successfully loaded, version %s\n", MODULE_NAME, MODULE_VERSION);
+void OnAmxxAttach() {
+    if (!RehldsApi_Init())
+        return;
 
-	RehldsApi_Init();
 	NAPI_Install();
 	AddNatives_All();
 
 	g_RehldsHookchains->HandleNetCommand()->registerHook(SV_HandleClientMessage);
+
+    MF_PrintSrvConsole("[%s] Successfully loaded, version %s\n", MODULE_NAME, MODULE_VERSION);
 }
 
-void OnAmxxDetach(void) {
 	g_RehldsHookchains->HandleNetCommand()->unregisterHook(SV_HandleClientMessage);
 }
