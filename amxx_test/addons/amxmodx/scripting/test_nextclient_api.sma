@@ -9,23 +9,19 @@ new LOG_FILE[] = "test_nextclient_api.log";
 // Uncomment this if you do not want to check the values of the sandbox CVars yourself
 #define AUTO_RESTORE_CVAR_VALUES
 
-// WARNING: This function does not work correctly yet. 
-// #define TEST_PRECACHE_AND_REPLACE_DEFAULT_MODELS
+#define TEST_PRECACHE_AND_REPLACE_DEFAULT_MODELS
 
-// WARNING: This function does not work correctly yet. 
-// #define TEST_PRECACHE_AND_REPLACE_DEFAULT_SOUNDS
+#define TEST_PRECACHE_AND_REPLACE_DEFAULT_SOUNDS
 
 // Test of replace default hud.txt and HUD sprites
 #define TEST_PRECACHE_AND_REPLACE_HUD
 
-// WARNING: This function does not work correctly yet. 
-// #define TEST_PRECACHE_AND_REPLACE_CUSTOM_MODELS
+#define TEST_PRECACHE_AND_REPLACE_CUSTOM_MODELS
 
-// WARNING: This function does not work correctly yet. 
-// #define TEST_PRECACHE_AND_REPLACE_CUSTOM_SOUNDS
+#define TEST_PRECACHE_AND_REPLACE_CUSTOM_SOUNDS
 
 public plugin_init() {
-    register_plugin("Test NCL API", "1.1.0", "Nordic Warrior");
+    register_plugin("Test NCL API", "1.1.1", "Nordic Warrior");
 
     register_clcmd("ncl_is_next_client",            "cmd_ncl_is_next_client",           ADMIN_ALL);
     register_clcmd("ncl_is_client_api_ready",       "cmd_ncl_is_client_api_ready",      ADMIN_ALL);
@@ -289,17 +285,17 @@ public test_ncl_precache_and_replace_default_model() {
 public test_ncl_precache_and_replace_default_sound() {
     log_to_file(LOG_FILE, "~ Testing ncl_precache_sound() for DEFAULT sounds is active.");
 
-    ncl_precache_sound("sound/weapons/glock18-1.wav",   "sound/weapons/test_nextclient/glock18-1.wav"   );
-    ncl_precache_sound("sound/weapons/glock18-2.wav",   "sound/weapons/test_nextclient/glock18-2.wav"   );
-    ncl_precache_sound("sound/weapons/usp_unsil-1.wav", "sound/weapons/test_nextclient/usp_unsil-1.wav" );
-    ncl_precache_sound("sound/weapons/usp_unsil-2.wav", "sound/weapons/test_nextclient/usp_unsil-2.wav" );
-    ncl_precache_sound("sound/weapons/usp1.wav",        "sound/weapons/test_nextclient/usp1.wav"        );
-    ncl_precache_sound("sound/weapons/usp2.wav",        "sound/weapons/test_nextclient/usp2.wav"        );
+    ncl_precache_sound("weapons/glock18-1.wav",   "weapons/test_nextclient/glock18-1.wav"   );
+    ncl_precache_sound("weapons/glock18-2.wav",   "weapons/test_nextclient/glock18-2.wav"   );
+    ncl_precache_sound("weapons/usp_unsil-1.wav", "weapons/test_nextclient/usp_unsil-1.wav" );
+    ncl_precache_sound("weapons/usp_unsil-2.wav", "weapons/test_nextclient/usp_unsil-2.wav" );
+    ncl_precache_sound("weapons/usp1.wav",        "weapons/test_nextclient/usp1.wav"        );
+    ncl_precache_sound("weapons/usp2.wav",        "weapons/test_nextclient/usp2.wav"        );
 
-    ncl_precache_sound("sound/player/pl_step1.wav", "sound/player/test_nextclient/pl_step1.wav" );
-    ncl_precache_sound("sound/player/pl_step2.wav", "sound/player/test_nextclient/pl_step2.wav" );
-    ncl_precache_sound("sound/player/pl_step3.wav", "sound/player/test_nextclient/pl_step3.wav" );
-    ncl_precache_sound("sound/player/pl_step4.wav", "sound/player/test_nextclient/pl_step4.wav" );
+    ncl_precache_sound("player/pl_step1.wav", "player/test_nextclient/pl_step1.wav" );
+    ncl_precache_sound("player/pl_step2.wav", "player/test_nextclient/pl_step2.wav" );
+    ncl_precache_sound("player/pl_step3.wav", "player/test_nextclient/pl_step3.wav" );
+    ncl_precache_sound("player/pl_step4.wav", "player/test_nextclient/pl_step4.wav" );
 }
 
 /* <=======> */
@@ -394,7 +390,7 @@ stock get_CoordPointInDirView(const index, const Float:dist, Float:output[3]) {
 public test_ncl_precache_and_replace_custom_sound() {
     log_to_file(LOG_FILE, "~ Testing ncl_precache_sound() for CUSTOM sounds is active.");
     
-    ncl_precache_sound("test_nextclient/sound_for_all.wav", "sound/test_nextclient/sound_for_nextclient.wav");
+    ncl_precache_sound("test_nextclient/sound_for_all.wav", "test_nextclient/sound_for_nextclient.wav");
 
     set_task(1.0, "sendSound", .flags = "b");
 }
