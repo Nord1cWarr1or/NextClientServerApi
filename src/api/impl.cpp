@@ -39,7 +39,7 @@ bool CNextClientApi::ClientIsReady(int client) {
 	return this->playerData[client].isApiReady;
 }
 
-NextClientVersion CNextClientApi::ClientIsNextClient(int client) {
+NextClientVersion CNextClientApi::GetNextClientVersion(int client) {
 	if (this->playerData.count(client) == 0)
 		return NOT_NEXTCLIENT;
 	return this->playerData[client].clientVersion;

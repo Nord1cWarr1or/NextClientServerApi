@@ -17,6 +17,7 @@ class CPrivatePrecache : public IPrivatePrecache,
 	bool isResourceListWritten = false;
 
 	bool WriteResourceListToDisk();
+    void DeleteResourceListFromDisk();
 	bool AppendResource(std::string filepath, std::string nclFilepath, bool replace);
 
 public:

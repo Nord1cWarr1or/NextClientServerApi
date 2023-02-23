@@ -10,10 +10,10 @@ cell AMX_NATIVE_CALL ncl_precache_model(AMX* amx, cell* params) {
 	std::string filepath = MF_GetAmxString(amx, params[arg_filepath], 0, NULL);
 	std::string nclFilepath = MF_GetAmxString(amx, params[arg_nclFilepath], 1, NULL);
 
-	NAPI()->PrivatePrecache()->PrecacheModel(filepath, nclFilepath);
+	int modelIndex = NAPI()->PrivatePrecache()->PrecacheModel(filepath, nclFilepath);
 
 	ASSERT_NO_NAPI_ERRORS();
-	return TRUE;
+	return modelIndex;
 }
 
 cell AMX_NATIVE_CALL ncl_precache_sound(AMX* amx, cell* params) {
@@ -26,10 +26,10 @@ cell AMX_NATIVE_CALL ncl_precache_sound(AMX* amx, cell* params) {
 	std::string filepath = MF_GetAmxString(amx, params[arg_filepath], 0, NULL);
 	std::string nclFilepath = MF_GetAmxString(amx, params[arg_nclFilepath], 1, NULL);
 	
-	NAPI()->PrivatePrecache()->PrecacheSound(filepath, nclFilepath);
+	int soundIndex = NAPI()->PrivatePrecache()->PrecacheSound(filepath, nclFilepath);
 
 	ASSERT_NO_NAPI_ERRORS();
-	return TRUE;
+	return soundIndex;
 }
 
 cell AMX_NATIVE_CALL ncl_precache_client_only(AMX* amx, cell* params) {

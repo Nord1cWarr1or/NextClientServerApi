@@ -70,7 +70,7 @@ public:
 	ICvarSandbox* CvarSandbox();
 
 	bool ClientIsReady(int client);
-	NextClientVersion ClientIsNextClient(int client);
+	NextClientVersion GetNextClientVersion(int client);
 	void ClientSetFOV(int client, int fov, float lerpTime);
 
 	void OnPlayerPostThink(int client);

@@ -19,7 +19,7 @@ public:
 	virtual IPrivatePrecache* PrivatePrecache() = 0;
 	virtual ICvarSandbox* CvarSandbox() = 0;
 
-	virtual NextClientVersion ClientIsNextClient(int client) = 0;
+	virtual NextClientVersion GetNextClientVersion(int client) = 0;
 	virtual bool ClientIsReady(int client) = 0;
 
 	virtual void ClientSetFOV(int client, int fov, float lerpTime) = 0;

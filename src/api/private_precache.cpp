@@ -11,6 +11,8 @@ CPrivatePrecache::CPrivatePrecache() {
 		+ this->filepathResourceListRelative;
 
 	this->filepathResourceListAbsolute = MF_BuildPathname(this->filepathResourceListRelative.c_str());
+
+    DeleteResourceListFromDisk();
 }
 
 int CPrivatePrecache::PrecacheModel(std::string filepath, std::string nclFilepath) {
@@ -19,7 +21,7 @@ int CPrivatePrecache::PrecacheModel(std::string filepath, std::string nclFilepat
 }
 
 int CPrivatePrecache::PrecacheSound(std::string filepath, std::string nclFilepath) {
-	this->AppendResource(filepath, nclFilepath, true);
+	this->AppendResource("sound/" + filepath, "sound/" + nclFilepath, true);
 	return PRECACHE_SOUND(filepath.c_str());
 }
 
@@ -30,10 +32,11 @@ void CPrivatePrecache::PrecacheClientOnly(std::string filepath, std::string nclF
 void CPrivatePrecache::OnClientConnect(int client) {
 	if (!this->isResourceListWritten) {
 		this->WriteResourceListToDisk();
+        this->isResourceListWritten = true;
 	}
 
-	// Nextclient v2.1.7 and lower is ignoring the stufftext below
-	// idk about build 4554 clients
+    if (NAPI()->GetNextClientVersion(client) < NextClientVersion::V_2_1_8)
+        return;
 
 	MESSAGE_BEGIN(MSG_ONE, SVC_STUFFTEXT, NULL, INDEXENT(client));
 	WRITE_STRING(this->payloadResourceListLocation.c_str());
@@ -49,7 +52,7 @@ bool CPrivatePrecache::AppendResource(std::string filepath, std::string nclFilep
 	CRC32_t checksum = 0;
 	utils::CRC_File(filepathAbsolute, &checksum);
 
-	char buffer[128];
+	char buffer[256];
 	sprintf(buffer, "%d:%s:%s:%x:%d",
 		replace, filepath.c_str(), nclFilepath.c_str(), checksum, filesize);
 
@@ -70,7 +73,10 @@ bool CPrivatePrecache::WriteResourceListToDisk() {
 		file << entry.second << std::endl;
 	}
 
-	this->isResourceListWritten = true;
-
 	return true;
+}
+
+void CPrivatePrecache::DeleteResourceListFromDisk() {
+    std::remove(filepathResourceListAbsolute.c_str());
+    std::remove((filepathResourceListAbsolute + ".ztmp").c_str());
 }

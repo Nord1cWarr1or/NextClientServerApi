@@ -20,7 +20,7 @@ cell AMX_NATIVE_CALL ncl_is_next_client(AMX* amx, cell* params) {
 	};
 	ASSERT_ARG_IS_PLAYER(arg_index);
 
-	cell result = NAPI()->ClientIsNextClient(params[arg_index]);
+	cell result = NAPI()->GetNextClientVersion(params[arg_index]);
 
 	ASSERT_NO_NAPI_ERRORS();
 	return result;
