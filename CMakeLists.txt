@@ -71,3 +71,14 @@ target_link_libraries(${PROJECT_NAME}
 	${OPENSSL_STATIC_LIBS}
 	${NAPI_LINK_LIBS}
 )
+
+# custom build targets
+add_custom_target(BUILD_ALL ALL)
+add_dependencies(BUILD_ALL nextclientapi_amxx)
+
+add_custom_target(INSTALL_ALL
+		COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:nextclientapi_amxx> $ENV{nextclientapi_amxx_COPY_TO_PATH})
+
+add_custom_target(BUILD_AND_INSTALL_ALL ALL)
+add_dependencies(BUILD_AND_INSTALL_ALL BUILD_ALL)
+add_dependencies(BUILD_AND_INSTALL_ALL INSTALL_ALL)
