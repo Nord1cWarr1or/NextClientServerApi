@@ -3,6 +3,15 @@
 #endif
 #define _next_client_api_included
 
+#if AMXX_VERSION_NUM >= 175
+#pragma reqlib nextclientapi
+ #if !defined AMXMODX_NOAUTOLOAD
+  #pragma loadlib nextclientapi
+ #endif
+#else
+#pragma library nextclientapi
+#endif
+
 enum eSandboxCvar
 {
     SC_cl_forwardspeed = 0,
