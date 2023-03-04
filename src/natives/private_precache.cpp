@@ -11,8 +11,8 @@ cell AMX_NATIVE_CALL ncl_precache_model(AMX* amx, cell* params) {
 	std::string nclFilepath = MF_GetAmxString(amx, params[arg_nclFilepath], 1, NULL);
 
 	int modelIndex = NAPI()->PrivatePrecache()->PrecacheModel(filepath, nclFilepath);
-    if (modelIndex == 0)
-        MF_LogError(amx, AMX_ERR_NATIVE, "Can't find file '%s' (is a replacement for '%s')", nclFilepath.c_str(), filepath.c_str());
+	if (modelIndex == 0)
+		MF_LogError(amx, AMX_ERR_NATIVE, "Can't find file '%s' (is a replacement for '%s')", nclFilepath.c_str(), filepath.c_str());
 
 	ASSERT_NO_NAPI_ERRORS();
 	return modelIndex;
@@ -29,10 +29,10 @@ cell AMX_NATIVE_CALL ncl_precache_sound(AMX* amx, cell* params) {
 	std::string nclFilepath = MF_GetAmxString(amx, params[arg_nclFilepath], 1, NULL);
 	
 	int soundIndex = NAPI()->PrivatePrecache()->PrecacheSound(filepath, nclFilepath);
-    if (soundIndex == 0)
-        MF_LogError(amx, AMX_ERR_NATIVE, "Can't find file '%s' (is a replacement for '%s')", nclFilepath.c_str(), filepath.c_str());
+	if (soundIndex == 0)
+		MF_LogError(amx, AMX_ERR_NATIVE, "Can't find file '%s' (is a replacement for '%s')", nclFilepath.c_str(), filepath.c_str());
 
-    ASSERT_NO_NAPI_ERRORS();
+	ASSERT_NO_NAPI_ERRORS();
 	return soundIndex;
 }
 
@@ -47,10 +47,10 @@ cell AMX_NATIVE_CALL ncl_precache_client_only(AMX* amx, cell* params) {
 	std::string nclFilepath = MF_GetAmxString(amx, params[arg_nclFilepath], 1, NULL);
 	
 	int result = NAPI()->PrivatePrecache()->PrecacheClientOnly(filepath, nclFilepath);
-    if (result == 0)
-        MF_LogError(amx, AMX_ERR_NATIVE, "Can't find file '%s' (is a replacement for '%s')", nclFilepath.c_str(), filepath.c_str());
+	if (result == 0)
+		MF_LogError(amx, AMX_ERR_NATIVE, "Can't find file '%s' (is a replacement for '%s')", nclFilepath.c_str(), filepath.c_str());
 
-    ASSERT_NO_NAPI_ERRORS();
+	ASSERT_NO_NAPI_ERRORS();
 	return TRUE;
 }
 

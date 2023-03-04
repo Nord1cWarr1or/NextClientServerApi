@@ -17,7 +17,7 @@ class CPrivatePrecache : public IPrivatePrecache,
 	bool isResourceListWritten = false;
 
 	bool WriteResourceListToDisk();
-    void DeleteResourceListFromDisk();
+	void DeleteResourceListFromDisk();
 	bool AppendResource(const std::string& filepath, const std::string& nclFilepath, bool replace);
 
 public:
@@ -25,7 +25,7 @@ public:
 
 	int PrecacheModel(const std::string& filepath, const std::string& nclFilepath) override;
 	int PrecacheSound(const std::string& filepath, const std::string& nclFilepath) override;
-    bool PrecacheClientOnly(const std::string& filepath, const std::string& nclFilepath) override;
+	bool PrecacheClientOnly(const std::string& filepath, const std::string& nclFilepath) override;
 
 	void OnClientConnect(int client) override;
 };
