@@ -1,75 +1,81 @@
 #include "private_precache.h"
 
 #include <fstream>
-#include <stdio.h>
+#include <cstdio>
 
 CPrivatePrecache::CPrivatePrecache() {
-	this->filepathResourceListRelative = std::string(MF_GetLocalInfo("amxx_datadir", "addons/amxmodx/data"))
-		+ "/ncl_private_precache.txt";
-
-	this->payloadResourceListLocation = std::string("\x02ncl\x07")
-		+ this->filepathResourceListRelative;
-
-	this->filepathResourceListAbsolute = MF_BuildPathname(this->filepathResourceListRelative.c_str());
+	filepathResourceListRelative = std::string(MF_GetLocalInfo("amxx_datadir", "addons/amxmodx/data")) + "/ncl_private_precache.txt";
+	payloadResourceListLocation = std::string("\x02ncl\x07") + filepathResourceListRelative;
+	filepathResourceListAbsolute = MF_BuildPathname(filepathResourceListRelative.c_str());
 
     DeleteResourceListFromDisk();
 }
 
-int CPrivatePrecache::PrecacheModel(std::string filepath, std::string nclFilepath) {
-	this->AppendResource(filepath, nclFilepath, true);
+int CPrivatePrecache::PrecacheModel(const std::string& filepath, const std::string& nclFilepath) {
+	bool result = AppendResource(filepath, nclFilepath, true);
+    if (!result)
+        return 0;
+
 	return PRECACHE_MODEL(filepath.c_str());
 }
 
-int CPrivatePrecache::PrecacheSound(std::string filepath, std::string nclFilepath) {
-	this->AppendResource("sound/" + filepath, "sound/" + nclFilepath, true);
+int CPrivatePrecache::PrecacheSound(const std::string& filepath, const std::string& nclFilepath) {
+    bool result = AppendResource("sound/" + filepath, "sound/" + nclFilepath, true);
+    if (!result)
+        return 0;
+
 	return PRECACHE_SOUND(filepath.c_str());
 }
 
-void CPrivatePrecache::PrecacheClientOnly(std::string filepath, std::string nclFilepath) {
-	this->AppendResource(filepath, nclFilepath, false);
+bool CPrivatePrecache::PrecacheClientOnly(const std::string& filepath, const std::string& nclFilepath) {
+	return AppendResource(filepath, nclFilepath, false);
 }
 
 void CPrivatePrecache::OnClientConnect(int client) {
-	if (!this->isResourceListWritten) {
-		this->WriteResourceListToDisk();
-        this->isResourceListWritten = true;
+	if (!isResourceListWritten) {
+		WriteResourceListToDisk();
+        isResourceListWritten = true;
 	}
 
     if (NAPI()->GetNextClientVersion(client) < NextClientVersion::V_2_1_8)
         return;
 
 	MESSAGE_BEGIN(MSG_ONE, SVC_STUFFTEXT, NULL, INDEXENT(client));
-	WRITE_STRING(this->payloadResourceListLocation.c_str());
+	WRITE_STRING(payloadResourceListLocation.c_str());
 	MESSAGE_END();
 }
 
-bool CPrivatePrecache::AppendResource(std::string filepath, std::string nclFilepath, bool replace) {
-	if (this->mapResourceList.count(filepath) != 0)
+bool CPrivatePrecache::AppendResource(const std::string& filepath, const std::string& nclFilepath, bool replace) {
+	if (mapResourceList.count(filepath) != 0)
 		return false;
 
 	std::string filepathAbsolute = MF_BuildPathname(nclFilepath.c_str());
 	size_t filesize = utils::FileSize(filepathAbsolute);
+    if (filesize == 0)
+        return false;
+
 	CRC32_t checksum = 0;
 	utils::CRC_File(filepathAbsolute, &checksum);
+    if (checksum == 0)
+        return false;
 
 	char buffer[256];
-	sprintf(buffer, "%d:%s:%s:%x:%d",
-		replace, filepath.c_str(), nclFilepath.c_str(), checksum, filesize);
+	sprintf(buffer, "%d:%s:%s:%x:%d", replace, filepath.c_str(), nclFilepath.c_str(), checksum, filesize);
 
-	this->mapResourceList[filepath] = buffer;
+	mapResourceList[filepath] = buffer;
 
 	return true;
 }
 
 bool CPrivatePrecache::WriteResourceListToDisk() {
-	if (!this->mapResourceList.size())
+	if (mapResourceList.empty())
 		return false;
 
-	std::ofstream file(this->filepathResourceListAbsolute);
+	std::ofstream file(filepathResourceListAbsolute);
 	if (!file.is_open())
 		return false;
 
-	for (auto entry : this->mapResourceList) {
+	for (const auto& entry : mapResourceList) {
 		file << entry.second << std::endl;
 	}
 

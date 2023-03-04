@@ -8,13 +8,16 @@ if(UNIX)
 	set(NAPI_TARGET_PROPS
 		SUFFIX "_i386.so"
 		COMPILE_FLAGS "-m32" 
-		LINK_FLAGS "-m32"
+		LINK_FLAGS "-m32 -static-libstdc++ -static-libgcc -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.version"
+		LINK_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/version.version
 	)
 endif()
 
 set(AMXXMODULE_SDK_MODULECONFIG_DIR
 	${CMAKE_SOURCE_DIR}/public
 )
+
+find_package(Threads REQUIRED)
 
 add_subdirectory(deps/amxxmodule)
 add_subdirectory(deps/cssdk)
@@ -70,6 +73,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 target_link_libraries(${PROJECT_NAME} 
 	${OPENSSL_STATIC_LIBS}
 	${NAPI_LINK_LIBS}
+	Threads::Threads
 )
 
 # custom build targets

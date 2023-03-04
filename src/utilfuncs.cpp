@@ -23,7 +23,11 @@ using std::ifstream;
 size_t FileSize(std::string path) {
 	ifstream file(path, ifstream::binary);
 	file.seekg(0, ifstream::end);
-	return file.tellg();
+	size_t size = file.tellg();
+    if (size == -1)
+        return 0;
+
+    return size;
 }
 
 bool CRC_File(std::string path, CRC32_t* crc) {

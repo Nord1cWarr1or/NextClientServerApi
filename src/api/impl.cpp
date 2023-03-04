@@ -58,9 +58,6 @@ void CNextClientApi::OnPlayerPostThink(int client) {
 }
 
 void CNextClientApi::OnClientConnect(int client) {
-	this->apiPrivatePrecache->OnClientConnect(client);
-	this->apiVerificator->OnClientConnect(client);
-
 	if (this->playerData.count(client) == 0)
 		return;
 
@@ -72,9 +69,14 @@ void CNextClientApi::OnClientConnect(int client) {
 	if (value[0] == '1') {
 		if (value[1] == '8')
 			data->clientVersion = V_2_1_8;
+        else if (value[1] == '9')
+            data->clientVersion = V_2_1_9;
 		else
 			data->clientVersion = V_2_1_7_OR_LOWER;
 	}
+
+    this->apiPrivatePrecache->OnClientConnect(client);
+    this->apiVerificator->OnClientConnect(client);
 }
 
 void CNextClientApi::OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode) {
