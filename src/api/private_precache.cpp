@@ -47,7 +47,7 @@ void CPrivatePrecache::OnClientConnect(int client) {
 
 bool CPrivatePrecache::AppendResource(const std::string& filepath, const std::string& nclFilepath, bool replace) {
 	if (mapResourceList.count(filepath) != 0)
-		return false;
+		return true;
 
 	std::string filepathAbsolute = MF_BuildPathname(nclFilepath.c_str());
 	size_t filesize = utils::FileSize(filepathAbsolute);
