@@ -1,7 +1,7 @@
 # Description
 NextClientServerApi is an amxmodx module that provides an API to interact with [Counter-Strike 1.6 NextClient](https://cs16nextclient.com).
 
-See API functions in [next_client_api.inc](https://github.com/Next21Team/NextClientServerApi/blob/main/scripting/include/next_client_api.inc).
+See API functions in [next_client_api.inc](https://github.com/Next21Team/NextClientServerApi/blob/main/addons/amxmodx/scripting/include/next_client_api.inc).
 
 # Features
 
