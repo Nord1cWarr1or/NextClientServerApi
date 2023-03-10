@@ -32,10 +32,13 @@ bool CPrivatePrecache::PrecacheClientOnly(const std::string& filepath, const std
 }
 
 void CPrivatePrecache::OnClientConnect(int client) {
-	if (!isResourceListWritten) {
-		WriteResourceListToDisk();
-		isResourceListWritten = true;
-	}
+	if (!isResourceListWritten)
+    {
+        isResourceListWritten = WriteResourceListToDisk();
+
+        if (!isResourceListWritten)
+            return;
+    }
 
 	if (NAPI()->GetNextClientVersion(client) < NextClientVersion::V_2_1_8)
 		return;
