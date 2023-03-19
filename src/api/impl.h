@@ -41,8 +41,8 @@ class CNextClientApi : public INextClientAPI,
 					   public IEventClientConnect,
 					   public IEventServerActivated,
 					   public IEventHandleNCLMessage {
-	int forwardApiReady;
-	int messageSetFOVEx;
+	int forwardApiReady {};
+	int messageSetFOVEx {};
 
 	struct PlayerData {
 		NextClientVersion clientVersion;
