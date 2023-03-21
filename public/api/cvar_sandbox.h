@@ -33,12 +33,12 @@ enum SandboxCvar {
 	cl_weather,
 };
 
-class ICvarSandbox {
+class ICvarSandbox
+{
 public:
-	~ICvarSandbox() { }
+    virtual ~ICvarSandbox() = default;
 
-	virtual void Begin(int client) = 0;
-	virtual void End() = 0;
-
-	virtual void WriteCvar(SandboxCvar cvar, std::string value) = 0;
+    virtual void Begin(int client) = 0;
+    virtual void End() = 0;
+    virtual void WriteCvar(SandboxCvar cvar, const std::string& value) = 0;
 };

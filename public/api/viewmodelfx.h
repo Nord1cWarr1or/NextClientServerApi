@@ -2,7 +2,7 @@
 
 class IViewmodelFX {
 public:
-	virtual ~IViewmodelFX() { }
+	virtual ~IViewmodelFX() = default;
 
 	virtual void Begin(int client) = 0;
 	virtual void End() = 0;

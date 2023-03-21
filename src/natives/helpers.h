@@ -15,7 +15,7 @@
 
 #define ASSERT_NO_NAPI_ERRORS()                                                         \
 	std::string _errorString;                                                           \
-	if (_NAPIController()->ReadAndClearError(_errorString)) {                           \
+	if (NAPIController()->ReadAndClearError(_errorString)) {                           \
 		MF_LogError(amx, AMX_ERR_NATIVE, "%s: %s", __FUNCTION__, _errorString.c_str()); \
 		return FALSE;                                                                   \
 	}

@@ -5,16 +5,16 @@
 #include "private_precache.h"
 #include "viewmodelfx.h"
 
-enum NextClientVersion {
-	NOT_NEXTCLIENT = 0,
-    V_2_1_7_OR_LOWER,
-    V_2_1_8,
-    V_2_1_9
+enum class NextClientVersion {
+	NOT_NEXTCLIENT   = 0,
+    V_2_1_7_OR_LOWER = 1,
+    V_2_1_8          = 2,
+    V_2_1_9          = 3
 };
 
 class INextClientAPI {
 public:
-	~INextClientAPI() { }
+	virtual ~INextClientAPI() = default;
 
 	virtual IViewmodelFX* ViewmodelFX() = 0;
 	virtual IPrivatePrecache* PrivatePrecache() = 0;

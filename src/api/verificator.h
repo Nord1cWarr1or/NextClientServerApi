@@ -15,30 +15,27 @@
 #define RSA_KEY_LENGTH 256
 
 class CVerificator : public IEventServerActivated,
-					 public IEventClientConnect {
-	std::string dirpathPublicKeys;
-	std::map<std::string, EVP_PKEY*> mapCachedPKeys;
+                     public IEventClientConnect
+{
+    struct PlayerData
+    {
+        std::string client_version;
+        std::string prefered_RSA_key_version;
+        std::vector<byte> payload;
+    };
 
-	struct PlayerData {
-		std::string clientVersion;
-		std::string preferedRSAKeyVersion;
-		std::vector<byte> payload;
+    std::string dirpath_public_keys_;
+    std::map<std::string, EVP_PKEY*> map_cached_pkeys_;
 
-		PlayerData()
-			: clientVersion("")
-			, preferedRSAKeyVersion("")
-			, payload(std::vector<byte>()) {};
-	};
-
-	std::map<int, PlayerData> playerData;
+    std::map<int, PlayerData> player_data_;
 
 public:
-	CVerificator();
+    CVerificator();
 
-	int ParsePublicKeys();
-	void HandleNCLMVerificationRequest(edict_t* client);
-	void HandleNCLMVerificationResponse(edict_t* client);
+    int ParsePublicKeys();
+    void HandleNCLMVerificationRequest(edict_t* client);
+    void HandleNCLMVerificationResponse(edict_t* client);
 
-	void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax);
-	void OnClientConnect(int client);
+    void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) override;
+    void OnClientConnect(int client) override;
 };
