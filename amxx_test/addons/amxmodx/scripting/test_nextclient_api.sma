@@ -20,6 +20,9 @@ new LOG_FILE[] = "test_nextclient_api.log";
 
 #define TEST_PRECACHE_AND_REPLACE_CUSTOM_SOUNDS
 
+new const HUD_SPRITE_KILL[] = "sprites/test_nextclient/hud_sprites/kill.spr"
+new const HUD_SPRITE_BLACK_HOLE[] = "sprites/test_nextclient/hud_sprites/ef_blackhole_loop.spr"
+
 public plugin_init() {
     register_plugin("Test NCL API", "1.1.1", "Nordic Warrior");
 
@@ -31,6 +34,8 @@ public plugin_init() {
     register_clcmd("ncl_test_viewmodelfx_render",   "cmd_ncl_test_viewmodelfx_render",  ADMIN_ALL);
     register_clcmd("ncl_restore_viewmodelfx",       "cmd_ncl_restore_viewmodelfx",      ADMIN_ALL);
     register_clcmd("ncl_setfov",                    "cmd_ncl_setfov",                   ADMIN_ALL);
+    register_clcmd("ncl_hudsprite_set",             "cmd_ncl_hudsprite_set",            ADMIN_ALL);
+    register_clcmd("ncl_hudsprite_clear",           "cmd_ncl_hudsprite_clear",          ADMIN_ALL);
 
     register_clcmd("ncl_restore_cvars_values", "cmd_ncl_restore_cvars_values", ADMIN_ALL);
 }
@@ -236,6 +241,152 @@ public cmd_ncl_setfov(id) {
     return PLUGIN_HANDLED;
 }
 
+public cmd_ncl_hudsprite_set(id) {
+    log_to_file(LOG_FILE, "NATIVE <ncl_send_hud_sprite> testing called by player: %n", id);
+
+    // left-top
+    ncl_send_hud_sprite(
+        .id = id,
+        .channel = 0,
+        .spriteName = HUD_SPRITE_KILL,
+        .spriteColor = _,
+        .alpha = _,
+        .frame = _,
+        .frameRate = _,
+        .inTime = _,
+        .holdTime = 2.0,
+        .outTime = 1.0,
+        .x = 0.0,
+        .y = 0.0,
+        .spriteRect = { 100, 0, 200, 100 },
+        .scaleX = _,
+        .scaleY = _
+    )
+
+    // left-center x-scaled
+    ncl_send_hud_sprite(
+        .id = id,
+        .channel = 1,
+        .spriteName = HUD_SPRITE_KILL,
+        .spriteColor = _,
+        .alpha = _,
+        .frame = _,
+        .frameRate = _,
+        .inTime = 3.0,
+        .holdTime = 3.0,
+        .outTime = 3.0,
+        .x = 0.0,
+        .y = -1.0,
+        .spriteRect = { 100, 0, 200, 100 },
+        .scaleX = 2.0,
+        .scaleY = _
+    )
+
+    // left-bottom y-scaled
+    ncl_send_hud_sprite(
+        .id = id,
+        .channel = 2,
+        .spriteName = HUD_SPRITE_KILL,
+        .spriteColor = _,
+        .alpha = _,
+        .frame = _,
+        .frameRate = _,
+        .inTime = 1.0,
+        .holdTime = _,
+        .outTime = _,
+        .x = 0.0,
+        .y = 1.0,
+        .spriteRect = { 100, 0, 200, 100 },
+        .scaleX = _,
+        .scaleY = 4.0
+    )
+
+    // right-top-red
+    ncl_send_hud_sprite(
+        .id = id,
+        .channel = 3,
+        .spriteName = HUD_SPRITE_KILL,
+        .spriteColor = { 255, 0, 0 },
+        .alpha = _,
+        .frame = _,
+        .frameRate = _,
+        .inTime = 1.0,
+        .holdTime = _,
+        .outTime = _,
+        .x = 1.0,
+        .y = 0.0,
+        .spriteRect = { 100, 0, 200, 100 },
+        .scaleX = _,
+        .scaleY = _
+    )
+
+    // center / auto-size
+    ncl_send_hud_sprite(
+        .id = id,
+        .channel = 4,
+        .spriteName = HUD_SPRITE_BLACK_HOLE,
+        .spriteColor = _,
+        .alpha = _,
+        .frame = _,
+        .frameRate = 2.0,
+        .inTime = _,
+        .holdTime = _,
+        .outTime = _,
+        .x = -1.0,
+        .y = -1.0,
+        .spriteRect = _,
+        .scaleX = _,
+        .scaleY = _
+    )
+
+    // right-bottom + auto-size + alpha
+    ncl_send_hud_sprite(
+        .id = id,
+        .channel = 5,
+        .spriteName = HUD_SPRITE_BLACK_HOLE,
+        .spriteColor = _,
+        .alpha = 127,
+        .frame = _,
+        .frameRate = _,
+        .inTime = 2.0,
+        .holdTime = 2.0,
+        .outTime = 2.0,
+        .x = 1.0,
+        .y = 1.0,
+        .spriteRect = _,
+        .scaleX = _,
+        .scaleY = _
+    )
+
+    // skip 6 channel
+
+    // bottom-center
+    ncl_send_hud_sprite_full_screen(
+        .id = id,
+        .channel = 7,
+        .spriteName = HUD_SPRITE_KILL,
+        .spriteColor = _,
+        .alpha = _,
+        .frame = _,
+        .frameRate = _,
+        .inTime = _,
+        .holdTime = _,
+        .outTime = _
+    )
+
+    return PLUGIN_HANDLED;
+}
+
+public cmd_ncl_hudsprite_clear(id) {
+    log_to_file(LOG_FILE, "NATIVE <ncl_clear_hud_sprite> testing called by player: %n", id);
+
+    for (new i = 0; i < MAX_HUD_SPRITE_CHANNELS; ++i) {
+       ncl_clear_hud_sprite(id, i);
+    }
+
+    return PLUGIN_HANDLED;
+}
+
 public restoreFOV(id) {
     log_to_file(LOG_FILE, "FOV automatically restored to 90 for player: %n", id);
 
@@ -249,6 +400,9 @@ public restoreFOV(id) {
 public plugin_precache() {
     precache_model(TEST_SKIN_MODEL);
     precache_model(TEST_BODY_MODEL);
+
+    precache_model(HUD_SPRITE_KILL)
+    precache_model(HUD_SPRITE_BLACK_HOLE)
 
 #if defined TEST_PRECACHE_AND_REPLACE_DEFAULT_MODELS
     test_ncl_precache_and_replace_default_model();
