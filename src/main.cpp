@@ -1,6 +1,6 @@
 #include "main.h"
 
-void ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
+void ServerActivate_Post(edict_t* pEdictList, int edictCount, int clientMax)
 {
     NAPIController()->OnServerActivated(pEdictList, edictCount, clientMax);
     SET_META_RESULT(MRES_IGNORED);
