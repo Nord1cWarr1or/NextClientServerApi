@@ -248,7 +248,7 @@ public cmd_ncl_hudsprite_set(id) {
     ncl_send_hud_sprite(
         .id = id,
         .channel = 0,
-        .spriteName = HUD_SPRITE_KILL,
+        .spritePath = HUD_SPRITE_KILL,
         .spriteColor = _,
         .alpha = _,
         .frame = _,
@@ -267,7 +267,7 @@ public cmd_ncl_hudsprite_set(id) {
     ncl_send_hud_sprite(
         .id = id,
         .channel = 1,
-        .spriteName = HUD_SPRITE_KILL,
+        .spritePath = HUD_SPRITE_KILL,
         .spriteColor = _,
         .alpha = _,
         .frame = _,
@@ -286,7 +286,7 @@ public cmd_ncl_hudsprite_set(id) {
     ncl_send_hud_sprite(
         .id = id,
         .channel = 2,
-        .spriteName = HUD_SPRITE_KILL,
+        .spritePath = HUD_SPRITE_KILL,
         .spriteColor = _,
         .alpha = _,
         .frame = _,
@@ -305,7 +305,7 @@ public cmd_ncl_hudsprite_set(id) {
     ncl_send_hud_sprite(
         .id = id,
         .channel = 3,
-        .spriteName = HUD_SPRITE_KILL,
+        .spritePath = HUD_SPRITE_KILL,
         .spriteColor = { 255, 0, 0 },
         .alpha = _,
         .frame = _,
@@ -324,7 +324,7 @@ public cmd_ncl_hudsprite_set(id) {
     ncl_send_hud_sprite(
         .id = id,
         .channel = 4,
-        .spriteName = HUD_SPRITE_BLACK_HOLE,
+        .spritePath = HUD_SPRITE_BLACK_HOLE,
         .spriteColor = _,
         .alpha = _,
         .frame = _,
@@ -343,7 +343,7 @@ public cmd_ncl_hudsprite_set(id) {
     ncl_send_hud_sprite(
         .id = id,
         .channel = 5,
-        .spriteName = HUD_SPRITE_BLACK_HOLE,
+        .spritePath = HUD_SPRITE_BLACK_HOLE,
         .spriteColor = _,
         .alpha = 127,
         .frame = _,
@@ -364,7 +364,7 @@ public cmd_ncl_hudsprite_set(id) {
     ncl_send_hud_sprite_full_screen(
         .id = id,
         .channel = 7,
-        .spriteName = HUD_SPRITE_KILL,
+        .spritePath = HUD_SPRITE_KILL,
         .spriteColor = _,
         .alpha = _,
         .frame = _,
