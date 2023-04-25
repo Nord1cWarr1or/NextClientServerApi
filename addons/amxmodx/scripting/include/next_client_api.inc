@@ -196,7 +196,7 @@ native ncl_viewmodelfx_end();
  * This message sets the specified field of view and interpolate time.
  *
  * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player fov after connecting, call this function in forward ncl_client_api_ready.
-*
+ *
  * @param id    Client index
  * @param fov   FOV angle
  * @param time  Inertpolate time
@@ -254,3 +254,103 @@ stock ncl_precache_hudtxt(const ncl_filepath[])
 {
     ncl_precache_client_only("sprites/hud.txt", ncl_filepath);
 }
+
+stock const MAX_HUD_SPRITE_CHANNELS = 8;
+
+const HUD_SPRITE_DEFAULT_ALPHA = 255;
+const HUD_SPRITE_DEFAULT_FRAME = -1;
+const Float:HUD_SPRITE_DEFAULT_FRAME_RATE = 1.0;
+const Float:HUD_SPRITE_DEFAULT_IN_TIME = 0.0;
+const Float:HUD_SPRITE_DEFAULT_HOLD_TIME = 3.0;
+const Float:HUD_SPRITE_DEFAULT_OUT_RATE = 1.0;
+const Float:HUD_SPRITE_DEFAULT_X = -1.0;
+const Float:HUD_SPRITE_DEFAULT_Y = -1.0;
+const Float:HUD_SPRITE_DEFAULT_SCALE_X = 1.0;
+const Float:HUD_SPRITE_DEFAULT_SCALE_Y = 1.0;
+
+/**
+ * Displays a sprite on the client screen.
+ *
+ * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player fov after connecting, call this function in forward ncl_client_api_ready.
+ *
+ * @param id             Client index
+ * @param channel        Channel to use on the client (from 0 to 7)
+ * @param spritePath     Path to the sprite file
+ * @param spriteColor    Red, green, blue components of sprite color (each component from 0 to 255)
+ * @param alpha          Alpha component of sprite color (from 0 to 255)
+ * @param frame          Start frame (-1 for looping)
+ * @param frameRate      Frame rate (1.0 for default behavior)
+ * @param inTime         Time it takes the message to fully appear (fade-in)
+ * @param holdTime       Time the message stays on screen
+ * @param outTime        Time it takes the message to fully disappear (fade-out)
+ * @param x              Horizontal location (from 0.0 to 1.0 or -1.0 for centering)
+ * @param y              Vertical location (from 0.0 to 1.0 or -1.0 for centering)
+ * @param spriteRect     Left, top, right and bottom pixel coordinates of sprite rectangle
+ * @param scaleX         Horizontal scale (from 0.0; 1.0 without scale)
+ * @param scaleY         Vertical scale (from 0.0; 1.0 without scale)
+ *
+ * @return               1 on success, 0 otherwise
+ * @error                If the parameters are invalid, an error is thrown.
+ */
+native ncl_send_hud_sprite(
+    id,
+    channel,
+    const spritePath[],
+    spriteColor[3] = { 255, 255, 255 },
+    alpha = HUD_SPRITE_DEFAULT_ALPHA,
+    frame = HUD_SPRITE_DEFAULT_FRAME,
+    Float:frameRate = HUD_SPRITE_DEFAULT_FRAME_RATE,
+    Float:inTime = HUD_SPRITE_DEFAULT_IN_TIME,
+    Float:holdTime = HUD_SPRITE_DEFAULT_HOLD_TIME,
+    Float:outTime = HUD_SPRITE_DEFAULT_OUT_RATE,
+    Float:x = HUD_SPRITE_DEFAULT_X,
+    Float:y = HUD_SPRITE_DEFAULT_Y,
+    spriteRect[4] = { 0, 0, 0, 0 },
+    Float:scaleX = HUD_SPRITE_DEFAULT_SCALE_X,
+    Float:scaleY = HUD_SPRITE_DEFAULT_SCALE_Y
+);
+
+/**
+ * Displays a sprite on the client full-screen.
+ *
+ * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player fov after connecting, call this function in forward ncl_client_api_ready.
+ *
+ * @param id             Client index
+ * @param channel        Channel to use on the client (from 0 to 7)
+ * @param spritePath     Path to the sprite file
+ * @param spriteColor    Red, green, blue components of sprite color (each component from 0 to 255)
+ * @param alpha          Alpha component of sprite color (from 0 to 255)
+ * @param frame          Start frame (-1 for looping)
+ * @param frameRate      Frame rate (1.0 for default behavior)
+ * @param inTime         Time it takes the message to fully appear (fade-in)
+ * @param holdTime       Time the message stays on screen
+ * @param outTime        Time it takes the message to fully disappear (fade-out)
+ *
+ * @return               1 on success, 0 otherwise
+ * @error                If the parameters are invalid, an error is thrown.
+ */
+native ncl_send_hud_sprite_full_screen(
+    id,
+    channel,
+    const spritePath[],
+    spriteColor[3] = { 255, 255, 255 },
+    alpha = HUD_SPRITE_DEFAULT_ALPHA,
+    frame = HUD_SPRITE_DEFAULT_FRAME,
+    Float:frameRate = HUD_SPRITE_DEFAULT_FRAME_RATE,
+    Float:inTime = HUD_SPRITE_DEFAULT_IN_TIME,
+    Float:holdTime = HUD_SPRITE_DEFAULT_HOLD_TIME,
+    Float:outTime = HUD_SPRITE_DEFAULT_OUT_RATE
+);
+
+/**
+ * Clears the display a sprite on a client screen.
+ *
+ * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player fov after connecting, call this function in forward ncl_client_api_ready.
+ *
+ * @param id        Client index
+ * @param channel   Channel to use on the client (from 0 to 7)
+ *
+ * @return               1 on success, 0 otherwise
+ * @error                If the parameters are invalid, an error is thrown.
+ */
+native ncl_clear_hud_sprite(id, channel);

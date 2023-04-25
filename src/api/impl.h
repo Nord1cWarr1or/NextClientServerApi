@@ -14,10 +14,10 @@
 
 #define THROW_NAPI_ERROR(message) NAPIController()->SetError(message)
 #define THROW_NAPI_ERROR_AND_RETURN(message) \
-	{                                        \
-		THROW_NAPI_ERROR(message);           \
-		return;                              \
-	}
+    {                                        \
+        THROW_NAPI_ERROR(message);           \
+        return;                              \
+    }
 
 #define NAPI_ASSERT(predicate, message)       \
 	if (!(predicate)) {                       \
@@ -26,14 +26,17 @@
 	}
 
 #define NAPI_LOG_ASSERT(predicate, ...) \
-	if (!(predicate)) {                 \
-		MF_Log(__VA_ARGS__);            \
-		return;                         \
-	}
+    if (!(predicate)) {                 \
+        MF_Log(__VA_ARGS__);            \
+        return;                         \
+    }
 
 class CCvarSandbox;
+
 class CPrivatePrecache;
+
 class CViewmodelFX;
+
 class CVerificator;
 
 class CNextClientApi : public INextClientAPI,
@@ -48,6 +51,7 @@ class CNextClientApi : public INextClientAPI,
 
 	int forward_api_ready_{};
 	int message_SetFOVEx_{};
+    int message_HudSprite_{};
 
 	std::unordered_map<int, PlayerData> players_;
 
@@ -59,7 +63,7 @@ class CNextClientApi : public INextClientAPI,
 	std::string message_error_;
 
 public:
-	CNextClientApi();
+    CNextClientApi();
 
 	IViewmodelFX* ViewmodelFX() override;
 	IPrivatePrecache* PrivatePrecache() override;
@@ -68,6 +72,39 @@ public:
 	bool ClientIsReady(int client) override;
 	NextClientVersion GetNextClientVersion(int client) override;
 	void ClientSetFOV(int client, int fov, float lerpTime) override;
+
+    void SendHudSprite(
+        int client,
+        int channel,
+        const char* spritePath,
+        const byte spriteColor[3],
+        byte alpha,
+        int frame,
+        float frameRate,
+        float inTime,
+        float holdTime,
+        float outTime,
+        float x,
+        float y,
+        const int spriteRect[4],
+        float scaleX,
+        float scaleY
+    ) override;
+
+    void SendHudSpriteFullScreen(
+        int client,
+        int channel,
+        const char* spritePath,
+        const byte spriteColor[3],
+        byte alpha,
+        int frame,
+        float frameRate,
+        float inTime,
+        float holdTime,
+        float outTime
+    ) override;
+
+    void ClearHudSprite(int client, int channel) override;
 
 	void OnPlayerPostThink(int client) override;
 	void OnClientConnect(int client) override;

@@ -23,6 +23,7 @@ void CNextClientApi::OnServerActivated(edict_t* pEdictList, int edictCount, int 
     verificator_->ParsePublicKeys();
 
     message_SetFOVEx_ = utils::RegUserMsgSafe("SetFOVEx", -1);
+    message_HudSprite_ = utils::RegUserMsgSafe("HudSprite", -1);
 }
 
 IViewmodelFX* CNextClientApi::ViewmodelFX()
@@ -115,6 +116,85 @@ void CNextClientApi::ClientSetFOV(int client, int fov, float lerpTime)
     MESSAGE_BEGIN(MSG_ONE, message_SetFOVEx_, NULL, INDEXENT(client));
     WRITE_BYTE(fov & 0xFF);
     WRITE_LONG(lerpTime);
+    MESSAGE_END();
+}
+
+void CNextClientApi::SendHudSprite(
+    int client,
+    int channel,
+    const char* spritePath,
+    const byte spriteColor[3],
+    byte alpha,
+    int frame,
+    float frameRate,
+    float inTime,
+    float holdTime,
+    float outTime,
+    float x,
+    float y,
+    const int spriteRect[4],
+    float scaleX,
+    float scaleY
+)
+{
+    MESSAGE_BEGIN(MSG_ONE, message_HudSprite_, nullptr, INDEXENT(client));
+    WRITE_BYTE(channel);
+    WRITE_STRING(spritePath);
+    WRITE_BYTE(0);
+    WRITE_BYTE(spriteColor[0]);
+    WRITE_BYTE(spriteColor[1]);
+    WRITE_BYTE(spriteColor[2]);
+    WRITE_BYTE(alpha);
+    WRITE_SHORT(frame);
+    WRITE_LONG(frameRate);
+    WRITE_LONG(inTime);
+    WRITE_LONG(holdTime);
+    WRITE_LONG(outTime);
+    WRITE_LONG(x);
+    WRITE_LONG(y);
+    WRITE_SHORT(spriteRect[0]);
+    WRITE_SHORT(spriteRect[1]);
+    WRITE_SHORT(spriteRect[2]);
+    WRITE_SHORT(spriteRect[3]);
+    WRITE_LONG(scaleX);
+    WRITE_LONG(scaleY);
+    MESSAGE_END();
+}
+
+void CNextClientApi::SendHudSpriteFullScreen(
+    int client,
+    int channel,
+    const char* spritePath,
+    const byte spriteColor[3],
+    byte alpha,
+    int frame,
+    float frameRate,
+    float inTime,
+    float holdTime,
+    float outTime
+)
+{
+    MESSAGE_BEGIN(MSG_ONE, message_HudSprite_, nullptr, INDEXENT(client));
+    WRITE_BYTE(channel);
+    WRITE_STRING(spritePath);
+    WRITE_BYTE(1);
+    WRITE_BYTE(spriteColor[0]);
+    WRITE_BYTE(spriteColor[1]);
+    WRITE_BYTE(spriteColor[2]);
+    WRITE_BYTE(alpha);
+    WRITE_SHORT(frame);
+    WRITE_LONG(frameRate);
+    WRITE_LONG(inTime);
+    WRITE_LONG(holdTime);
+    WRITE_LONG(outTime);
+    MESSAGE_END();
+}
+
+void CNextClientApi::ClearHudSprite(int client, int channel)
+{
+    MESSAGE_BEGIN(MSG_ONE, message_HudSprite_, nullptr, INDEXENT(client));
+    WRITE_BYTE(channel);
+    WRITE_STRING("");
     MESSAGE_END();
 }
 

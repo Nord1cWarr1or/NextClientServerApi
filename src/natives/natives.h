@@ -5,6 +5,8 @@
 
 #include <string>
 
+constexpr auto MAX_HUD_SPRITES = 8;
+
 void AddNatives_NextClient();
 void AddNatives_CvarSandbox();
 void AddNatives_PrivatePrecache();
