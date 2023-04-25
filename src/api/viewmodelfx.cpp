@@ -1,6 +1,6 @@
 #include "viewmodelfx.h"
 
-CViewmodelFX::CViewmodelFX()
+void CViewmodelFX::OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) 
 {
     message_viewmodelFX_ = utils::RegUserMsgSafe("ViewModelFx", -1);
 }

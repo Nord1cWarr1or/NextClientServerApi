@@ -2,9 +2,6 @@
 
 CNextClientApi::CNextClientApi()
 {
-    message_SetFOVEx_ = utils::RegUserMsgSafe("SetFOVEx", -1);
-    message_HudSprite_ = utils::RegUserMsgSafe("HudSprite", -1);
-
     cvar_sandbox_ = std::make_unique<CCvarSandbox>();
     private_precache_ = std::make_unique<CPrivatePrecache>();
     viewmodel_fx_ = std::make_unique<CViewmodelFX>();
@@ -19,8 +16,14 @@ void CNextClientApi::OnServerActivated(edict_t* pEdictList, int edictCount, int 
     if (!forward_api_ready_)
         forward_api_ready_ = MF_RegisterForward("ncl_client_api_ready", ET_IGNORE, FP_CELL, FP_DONE);
 
+    cvar_sandbox_->OnServerActivated(pEdictList, edictCount, clientMax);
+    viewmodel_fx_->OnServerActivated(pEdictList, edictCount, clientMax);
     verificator_->OnServerActivated(pEdictList, edictCount, clientMax);
+
     verificator_->ParsePublicKeys();
+
+    message_SetFOVEx_ = utils::RegUserMsgSafe("SetFOVEx", -1);
+    message_HudSprite_ = utils::RegUserMsgSafe("HudSprite", -1);
 }
 
 IViewmodelFX* CNextClientApi::ViewmodelFX()

@@ -1,6 +1,6 @@
 #include "cvar_sandbox.h"
 
-CCvarSandbox::CCvarSandbox()
+void CCvarSandbox::OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax)
 {
     message_sandbox_cvar_ = utils::RegUserMsgSafe("SandboxCvar", -1);
 }
