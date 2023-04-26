@@ -7,6 +7,10 @@ See API functions in [next_client_api.inc](https://github.com/Next21Team/NextCli
 
 - The cvar sandbox. Allows you to set the value of a cvar to the client and locks it to be changed by the client. cvar value on the client is reset to the user's value after disconnecting from the server.
 - Effects for viewmodel. Allows you to set rendering effects for viewmodels, as well as skin and body.
+- Sprite management api. Allows you to display sprites on the screen.
+- Extended fov message. Allows you to set the interpolation time of the fov change.
+
+Coming soon:
 - Separate precaching for regular cs 1.6 client and NextClient.
 - Precaching hud.txt and default sprites.
 
