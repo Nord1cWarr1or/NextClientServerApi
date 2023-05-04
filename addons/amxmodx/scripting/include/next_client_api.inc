@@ -49,6 +49,8 @@ enum eNclVersion
     NCLV_NOT_NEXT_CLIENT = 0,
     NCLV_2_1_7_OR_LOWER,
     NCLV_2_1_8,
+    NCLV_2_1_9,
+    NCLV_2_1_10,
 }
 
 /**

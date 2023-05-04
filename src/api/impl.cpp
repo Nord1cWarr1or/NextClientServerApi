@@ -77,14 +77,16 @@ void CNextClientApi::OnClientConnect(int client)
     auto data = &players_[client];
     data->client_version = NextClientVersion::NOT_NEXTCLIENT;
     data->is_api_ready = false;
-    auto value = INFOKEY_VALUE(GET_INFOKEYBUFFER(INDEXENT(client)), "_ncl");
+    std::string value = INFOKEY_VALUE(GET_INFOKEYBUFFER(INDEXENT(client)), "_ncl");
 
-    if (value[0] == '1')
+    if (!value.empty() && value[0] == '1')
     {
-        if (value[1] == '8')
+        if (value == "18")
             data->client_version = NextClientVersion::V_2_1_8;
-        else if (value[1] == '9')
+        else if (value == "19")
             data->client_version = NextClientVersion::V_2_1_9;
+        else if (value == "110")
+            data->client_version = NextClientVersion::V_2_1_10;
         else
             data->client_version = NextClientVersion::V_2_1_7_OR_LOWER;
     }

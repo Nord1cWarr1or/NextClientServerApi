@@ -9,7 +9,8 @@ enum class NextClientVersion {
 	NOT_NEXTCLIENT   = 0,
     V_2_1_7_OR_LOWER = 1,
     V_2_1_8          = 2,
-    V_2_1_9          = 3
+    V_2_1_9          = 3,
+    V_2_1_10         = 4,
 };
 
 class INextClientAPI {
