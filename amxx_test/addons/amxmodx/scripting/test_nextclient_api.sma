@@ -24,7 +24,7 @@ new const HUD_SPRITE_KILL[] = "sprites/test_nextclient/hud_sprites/kill.spr"
 new const HUD_SPRITE_BLACK_HOLE[] = "sprites/test_nextclient/hud_sprites/ef_blackhole_loop.spr"
 
 public plugin_init() {
-    register_plugin("Test NCL API", "1.1.1", "Nordic Warrior");
+    register_plugin("Test NCL API", "1.1.2", "Nordic Warrior");
 
     register_clcmd("ncl_is_next_client",            "cmd_ncl_is_next_client",           ADMIN_ALL);
     register_clcmd("ncl_is_client_api_ready",       "cmd_ncl_is_client_api_ready",      ADMIN_ALL);
@@ -76,7 +76,8 @@ new const CVAR_STRING[eSandboxCvar][] = {
     "cl_bobamt_lat",            "cl_bob_lower_amt",     "cl_rollangle",
     "cl_rollspeed",             "viewmodel_lag_scale",  "viewmodel_lag_speed",
     "cl_crosshair_type",        "cl_crosshair_size",    "cl_crosshair_color",
-    "cl_crosshair_translucent", "cl_weather"
+    "cl_crosshair_translucent", "cl_weather",           "cl_min_t",
+    "cl_min_ct",                "cl_corpsestay",        "r_decals",
 };
 
 new const CVAR_VALUES[eSandboxCvar][] = {
@@ -88,7 +89,8 @@ new const CVAR_VALUES[eSandboxCvar][] = {
     "0.444",    "10",       "5",
     "300",      "6.66",     "9.99",
     "2",        "auto",     "177 177 177",
-    "1",        "3"
+    "1",        "3",        "2",
+    "2",        "17",       "0"
 };
 
 public cmd_ncl_test_sandbox_cvars(id) {

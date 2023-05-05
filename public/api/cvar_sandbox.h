@@ -31,6 +31,11 @@ enum SandboxCvar {
 	cl_crosshair_translucent,
 	// since Next Client v2.1.8
 	cl_weather,
+    // since Next Client v2.1.10
+    cl_min_t,
+    cl_min_ct,
+    cl_corpsestay,
+    r_decals,
 };
 
 class ICvarSandbox

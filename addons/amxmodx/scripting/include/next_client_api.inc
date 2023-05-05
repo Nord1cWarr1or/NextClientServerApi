@@ -42,6 +42,11 @@ enum eSandboxCvar
     SC_cl_crosshair_translucent,
     // since Next Client v2.1.8
     SC_cl_weather,
+    // since Next Client v2.1.10
+    SC_cl_min_t,
+    SC_cl_min_ct,
+    SC_cl_corpsestay,
+    SC_r_decals,
 }
 
 enum eNclVersion
