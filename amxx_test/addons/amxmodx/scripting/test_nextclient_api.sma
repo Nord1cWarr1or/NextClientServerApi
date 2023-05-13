@@ -24,7 +24,7 @@ new const HUD_SPRITE_KILL[] = "sprites/test_nextclient/hud_sprites/kill.spr"
 new const HUD_SPRITE_BLACK_HOLE[] = "sprites/test_nextclient/hud_sprites/ef_blackhole_loop.spr"
 
 public plugin_init() {
-    register_plugin("Test NCL API", "1.1.2", "Nordic Warrior");
+    register_plugin("Test NCL API", "1.2.0", "Nordic Warrior");
 
     register_clcmd("ncl_is_next_client",            "cmd_ncl_is_next_client",           ADMIN_ALL);
     register_clcmd("ncl_is_client_api_ready",       "cmd_ncl_is_client_api_ready",      ADMIN_ALL);
@@ -357,7 +357,8 @@ public cmd_ncl_hudsprite_set(id) {
         .y = 1.0,
         .spriteRect = _,
         .scaleX = _,
-        .scaleY = _
+        .scaleY = _,
+        .renderMode = kRenderNormal
     )
 
     // skip 6 channel

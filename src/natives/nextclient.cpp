@@ -66,6 +66,7 @@ cell AMX_NATIVE_CALL ncl_send_hud_sprite(AMX* amx, cell* params)
         arg_sprite_rect,
         arg_scale_x,
         arg_scale_y,
+        arg_render_mode
     };
 
     ASSERT_ARG_IS_PLAYER(arg_player);
@@ -99,6 +100,7 @@ cell AMX_NATIVE_CALL ncl_send_hud_sprite(AMX* amx, cell* params)
     };
     const auto scaleX = params[arg_scale_x];
     const auto scaleY = params[arg_scale_y];
+    const auto renderMode = params[arg_render_mode];
     NAPI()->SendHudSprite(
         player,
         channel,
@@ -114,7 +116,8 @@ cell AMX_NATIVE_CALL ncl_send_hud_sprite(AMX* amx, cell* params)
         y,
         rect,
         scaleX,
-        scaleY
+        scaleY,
+        renderMode
     );
     ASSERT_NO_NAPI_ERRORS();
     return true;
@@ -134,6 +137,7 @@ cell AMX_NATIVE_CALL ncl_send_hud_sprite_full_screen(AMX* amx, cell* params)
         arg_in_time,
         arg_hold_time,
         arg_out_time,
+        arg_render_mode
     };
 
     ASSERT_ARG_IS_PLAYER(arg_player);
@@ -156,6 +160,7 @@ cell AMX_NATIVE_CALL ncl_send_hud_sprite_full_screen(AMX* amx, cell* params)
     const auto inTime = params[arg_in_time];
     const auto holdTime = params[arg_hold_time];
     const auto outTime = params[arg_out_time];
+    const auto renderMode = params[arg_render_mode];
     NAPI()->SendHudSpriteFullScreen(
         player,
         channel,
@@ -166,7 +171,8 @@ cell AMX_NATIVE_CALL ncl_send_hud_sprite_full_screen(AMX* amx, cell* params)
         frameRate,
         inTime,
         holdTime,
-        outTime
+        outTime,
+        renderMode
     );
     ASSERT_NO_NAPI_ERRORS();
     return true;

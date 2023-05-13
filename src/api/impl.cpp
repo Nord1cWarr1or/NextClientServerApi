@@ -79,15 +79,17 @@ void CNextClientApi::OnClientConnect(int client)
     data->is_api_ready = false;
     std::string value = INFOKEY_VALUE(GET_INFOKEYBUFFER(INDEXENT(client)), "_ncl");
 
-    if (!value.empty() && value[0] == '1')
+    if (!value.empty())
     {
-        if (value == "18")
+        if (value == "20")
+            data->client_version = NextClientVersion::V_2_2_0;
+        else if (value == "18")
             data->client_version = NextClientVersion::V_2_1_8;
         else if (value == "19")
             data->client_version = NextClientVersion::V_2_1_9;
         else if (value == "110")
             data->client_version = NextClientVersion::V_2_1_10;
-        else
+        else if (value[0] == '1')
             data->client_version = NextClientVersion::V_2_1_7_OR_LOWER;
     }
 
@@ -136,7 +138,8 @@ void CNextClientApi::SendHudSprite(
     float y,
     const int spriteRect[4],
     float scaleX,
-    float scaleY
+    float scaleY,
+    int renderMode
 )
 {
     MESSAGE_BEGIN(MSG_ONE, message_HudSprite_, nullptr, INDEXENT(client));
@@ -160,6 +163,7 @@ void CNextClientApi::SendHudSprite(
     WRITE_SHORT(spriteRect[3]);
     WRITE_LONG(scaleX);
     WRITE_LONG(scaleY);
+    WRITE_BYTE(renderMode);
     MESSAGE_END();
 }
 
@@ -173,7 +177,8 @@ void CNextClientApi::SendHudSpriteFullScreen(
     float frameRate,
     float inTime,
     float holdTime,
-    float outTime
+    float outTime,
+    int renderMode
 )
 {
     MESSAGE_BEGIN(MSG_ONE, message_HudSprite_, nullptr, INDEXENT(client));
@@ -189,6 +194,7 @@ void CNextClientApi::SendHudSpriteFullScreen(
     WRITE_LONG(inTime);
     WRITE_LONG(holdTime);
     WRITE_LONG(outTime);
+    WRITE_BYTE(renderMode);
     MESSAGE_END();
 }
 

@@ -52,10 +52,11 @@ enum eSandboxCvar
 enum eNclVersion
 {
     NCLV_NOT_NEXT_CLIENT = 0,
-    NCLV_2_1_7_OR_LOWER,
-    NCLV_2_1_8,
-    NCLV_2_1_9,
-    NCLV_2_1_10,
+    NCLV_2_1_7_OR_LOWER  = 1,
+    NCLV_2_1_8           = 2,
+    NCLV_2_1_9           = 3,
+    NCLV_2_1_10          = 4,
+    NCLV_2_2_0           = 5
 }
 
 /**
@@ -269,7 +270,7 @@ const HUD_SPRITE_DEFAULT_FRAME = -1;
 const Float:HUD_SPRITE_DEFAULT_FRAME_RATE = 1.0;
 const Float:HUD_SPRITE_DEFAULT_IN_TIME = 0.0;
 const Float:HUD_SPRITE_DEFAULT_HOLD_TIME = 3.0;
-const Float:HUD_SPRITE_DEFAULT_OUT_RATE = 1.0;
+const Float:HUD_SPRITE_DEFAULT_OUT_TIME = 1.0;
 const Float:HUD_SPRITE_DEFAULT_X = -1.0;
 const Float:HUD_SPRITE_DEFAULT_Y = -1.0;
 const Float:HUD_SPRITE_DEFAULT_SCALE_X = 1.0;
@@ -295,6 +296,7 @@ const Float:HUD_SPRITE_DEFAULT_SCALE_Y = 1.0;
  * @param spriteRect     Left, top, right and bottom pixel coordinates of sprite rectangle
  * @param scaleX         Horizontal scale (from 0.0; 1.0 without scale)
  * @param scaleY         Vertical scale (from 0.0; 1.0 without scale)
+ * @param renderMode     Render mode, one of kRender const
  *
  * @return               1 on success, 0 otherwise
  * @error                If the parameters are invalid, an error is thrown.
@@ -309,12 +311,13 @@ native ncl_send_hud_sprite(
     Float:frameRate = HUD_SPRITE_DEFAULT_FRAME_RATE,
     Float:inTime = HUD_SPRITE_DEFAULT_IN_TIME,
     Float:holdTime = HUD_SPRITE_DEFAULT_HOLD_TIME,
-    Float:outTime = HUD_SPRITE_DEFAULT_OUT_RATE,
+    Float:outTime = HUD_SPRITE_DEFAULT_OUT_TIME,
     Float:x = HUD_SPRITE_DEFAULT_X,
     Float:y = HUD_SPRITE_DEFAULT_Y,
     spriteRect[4] = { 0, 0, 0, 0 },
     Float:scaleX = HUD_SPRITE_DEFAULT_SCALE_X,
-    Float:scaleY = HUD_SPRITE_DEFAULT_SCALE_Y
+    Float:scaleY = HUD_SPRITE_DEFAULT_SCALE_Y,
+    renderMode = kRenderTransAdd
 );
 
 /**
@@ -332,6 +335,7 @@ native ncl_send_hud_sprite(
  * @param inTime         Time it takes the message to fully appear (fade-in)
  * @param holdTime       Time the message stays on screen
  * @param outTime        Time it takes the message to fully disappear (fade-out)
+ * @param renderMode     Render mode, one of kRender const
  *
  * @return               1 on success, 0 otherwise
  * @error                If the parameters are invalid, an error is thrown.
@@ -346,7 +350,8 @@ native ncl_send_hud_sprite_full_screen(
     Float:frameRate = HUD_SPRITE_DEFAULT_FRAME_RATE,
     Float:inTime = HUD_SPRITE_DEFAULT_IN_TIME,
     Float:holdTime = HUD_SPRITE_DEFAULT_HOLD_TIME,
-    Float:outTime = HUD_SPRITE_DEFAULT_OUT_RATE
+    Float:outTime = HUD_SPRITE_DEFAULT_OUT_TIME,
+    renderMode = kRenderTransAdd
 );
 
 /**

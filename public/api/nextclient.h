@@ -11,6 +11,7 @@ enum class NextClientVersion {
     V_2_1_8          = 2,
     V_2_1_9          = 3,
     V_2_1_10         = 4,
+    V_2_2_0          = 5,
 };
 
 class INextClientAPI {
@@ -44,7 +45,8 @@ public:
         float y,
         const int spriteRect[4],
         float scaleX,
-        float scaleY
+        float scaleY,
+        int renderMode
     ) = 0;
 
     virtual void SendHudSpriteFullScreen(
@@ -57,7 +59,8 @@ public:
         float frameRate,
         float inTime,
         float holdTime,
-        float outTime
+        float outTime,
+        int renderMode
     ) = 0;
 
     virtual void ClearHudSprite(int client, int channel) = 0;

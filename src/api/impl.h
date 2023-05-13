@@ -88,7 +88,8 @@ public:
         float y,
         const int spriteRect[4],
         float scaleX,
-        float scaleY
+        float scaleY,
+        int renderMode
     ) override;
 
     void SendHudSpriteFullScreen(
@@ -101,7 +102,8 @@ public:
         float frameRate,
         float inTime,
         float holdTime,
-        float outTime
+        float outTime,
+        int renderMode
     ) override;
 
     void ClearHudSprite(int client, int channel) override;
