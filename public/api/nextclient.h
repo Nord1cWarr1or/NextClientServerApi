@@ -11,7 +11,9 @@ enum class NextClientVersion {
     V_2_1_8          = 2,
     V_2_1_9          = 3,
     V_2_1_10         = 4,
-    V_2_2_0          = 5,
+    V_2_1_11         = 5,
+    V_2_1_12         = 6,
+    V_2_2_0          = 7,
 };
 
 class INextClientAPI {

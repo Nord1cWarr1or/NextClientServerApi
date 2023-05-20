@@ -89,6 +89,10 @@ void CNextClientApi::OnClientConnect(int client)
             data->client_version = NextClientVersion::V_2_1_9;
         else if (value == "110")
             data->client_version = NextClientVersion::V_2_1_10;
+        else if (value == "111")
+            data->client_version = NextClientVersion::V_2_1_11;
+        else if (value == "112")
+            data->client_version = NextClientVersion::V_2_1_12;
         else if (value[0] == '1')
             data->client_version = NextClientVersion::V_2_1_7_OR_LOWER;
     }

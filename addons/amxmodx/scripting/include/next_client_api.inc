@@ -59,7 +59,9 @@ enum eNclVersion
     NCLV_2_1_8           = 2,
     NCLV_2_1_9           = 3,
     NCLV_2_1_10          = 4,
-    NCLV_2_2_0           = 5
+    NCLV_2_1_11          = 5,
+    NCLV_2_1_12          = 6,
+    NCLV_2_2_0           = 7
 }
 
 /**
