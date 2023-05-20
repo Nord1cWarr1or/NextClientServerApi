@@ -36,6 +36,9 @@ enum SandboxCvar {
     cl_min_ct,
     cl_corpsestay,
     r_decals,
+    // since Next Client v2.2.0
+    cl_yawspeed,
+    cl_pitchspeed
 };
 
 class ICvarSandbox

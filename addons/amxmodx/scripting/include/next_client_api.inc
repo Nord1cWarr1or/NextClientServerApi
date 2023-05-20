@@ -47,6 +47,9 @@ enum eSandboxCvar
     SC_cl_min_ct,
     SC_cl_corpsestay,
     SC_r_decals,
+    // since Next Client v2.2.0
+    SC_cl_yawspeed,
+    SC_cl_pitchspeed
 }
 
 enum eNclVersion
