@@ -268,7 +268,7 @@ stock ncl_precache_hudtxt(const ncl_filepath[])
     ncl_precache_client_only("sprites/hud.txt", ncl_filepath);
 }
 
-stock const MAX_HUD_SPRITE_CHANNELS = 8;
+stock const MAX_HUD_SPRITE_CHANNELS = 32;
 
 const HUD_SPRITE_DEFAULT_ALPHA = 255;
 const HUD_SPRITE_DEFAULT_FRAME = -1;
