@@ -18,6 +18,12 @@ BOOL ClientConnect(edict_t* pEntity, const char* pszName, const char* pszAddress
     RETURN_META_VALUE(MRES_IGNORED, true);
 }
 
+void ClientDisconnect(edict_t *pEntity)
+{
+    NAPIController()->OnClientDisconnect(ENTINDEX(pEntity));
+    SET_META_RESULT(MRES_IGNORED);
+}
+
 void SV_HandleClientMessage(IRehldsHook_HandleNetCommand* hookchain, IGameClient* apiClient, int8 opcode)
 {
     if (opcode == clc_stringcmd)

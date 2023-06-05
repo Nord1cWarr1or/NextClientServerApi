@@ -115,6 +115,8 @@ public:
 
 	void SetError(const std::string& text);
 	bool ReadAndClearError(std::string& text);
+
+    void OnClientDisconnect(int index);
 };
 
 void NAPI_Install();

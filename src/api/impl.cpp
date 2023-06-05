@@ -10,11 +10,7 @@ CNextClientApi::CNextClientApi()
 
 void CNextClientApi::OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax)
 {
-    for (int i = 0; i <= clientMax; i++)
-        players_[i] = PlayerData();
-
-    if (!forward_api_ready_)
-        forward_api_ready_ = MF_RegisterForward("ncl_client_api_ready", ET_IGNORE, FP_CELL, FP_DONE);
+    forward_api_ready_ = MF_RegisterForward("ncl_client_api_ready", ET_IGNORE, FP_CELL, FP_DONE);
 
     cvar_sandbox_->OnServerActivated(pEdictList, edictCount, clientMax);
     viewmodel_fx_->OnServerActivated(pEdictList, edictCount, clientMax);
@@ -45,6 +41,7 @@ bool CNextClientApi::ClientIsReady(int client)
 {
     if (players_.count(client) == 0)
         return false;
+
     return players_[client].is_api_ready;
 }
 
@@ -52,6 +49,7 @@ NextClientVersion CNextClientApi::GetNextClientVersion(int client)
 {
     if (players_.count(client) == 0)
         return NextClientVersion::NOT_NEXTCLIENT;
+
     return players_[client].client_version;
 }
 
@@ -71,34 +69,39 @@ void CNextClientApi::OnPlayerPostThink(int client)
 
 void CNextClientApi::OnClientConnect(int client)
 {
-    if (players_.count(client) == 0)
-        return;
+    PlayerData data{};
+    data.client_version = NextClientVersion::NOT_NEXTCLIENT;
+    data.is_api_ready = false;
 
-    auto data = &players_[client];
-    data->client_version = NextClientVersion::NOT_NEXTCLIENT;
-    data->is_api_ready = false;
     std::string value = INFOKEY_VALUE(GET_INFOKEYBUFFER(INDEXENT(client)), "_ncl");
 
     if (!value.empty())
     {
         if (value == "20")
-            data->client_version = NextClientVersion::V_2_2_0;
+            data.client_version = NextClientVersion::V_2_2_0;
         else if (value == "18")
-            data->client_version = NextClientVersion::V_2_1_8;
+            data.client_version = NextClientVersion::V_2_1_8;
         else if (value == "19")
-            data->client_version = NextClientVersion::V_2_1_9;
+            data.client_version = NextClientVersion::V_2_1_9;
         else if (value == "110")
-            data->client_version = NextClientVersion::V_2_1_10;
+            data.client_version = NextClientVersion::V_2_1_10;
         else if (value == "111")
-            data->client_version = NextClientVersion::V_2_1_11;
+            data.client_version = NextClientVersion::V_2_1_11;
         else if (value == "112")
-            data->client_version = NextClientVersion::V_2_1_12;
+            data.client_version = NextClientVersion::V_2_1_12;
         else if (value[0] == '1')
-            data->client_version = NextClientVersion::V_2_1_7_OR_LOWER;
+            data.client_version = NextClientVersion::V_2_1_7_OR_LOWER;
     }
+
+    players_[client] = data;
 
     private_precache_->OnClientConnect(client);
     verificator_->OnClientConnect(client);
+}
+
+void CNextClientApi::OnClientDisconnect(int index)
+{
+    players_.erase(index);
 }
 
 void CNextClientApi::OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode)
