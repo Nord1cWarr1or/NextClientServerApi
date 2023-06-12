@@ -284,10 +284,10 @@ const Float:HUD_SPRITE_DEFAULT_SCALE_Y = 1.0;
 /**
  * Displays a sprite on the client screen.
  *
- * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player fov after connecting, call this function in forward ncl_client_api_ready.
+ * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to set sprite after player connected, call this function in forward ncl_client_api_ready.
  *
  * @param id             Client index
- * @param channel        Channel to use on the client (from 0 to 7)
+ * @param channel        Channel to use on the client (from 0 to 31)
  * @param spritePath     Path to the sprite file
  * @param spriteColor    Red, green, blue components of sprite color (each component from 0 to 255)
  * @param alpha          Alpha component of sprite color (from 0 to 255)
@@ -328,7 +328,7 @@ native ncl_send_hud_sprite(
 /**
  * Displays a sprite on the client full-screen.
  *
- * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player fov after connecting, call this function in forward ncl_client_api_ready.
+ * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to set sprite after player connected, call this function in forward ncl_client_api_ready.
  *
  * @param id             Client index
  * @param channel        Channel to use on the client (from 0 to 7)
@@ -362,7 +362,7 @@ native ncl_send_hud_sprite_full_screen(
 /**
  * Clears the display a sprite on a client screen.
  *
- * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to change player fov after connecting, call this function in forward ncl_client_api_ready.
+ * @note Be careful, this function does not work in client_connect, client_putinserver, etc. If you want to set/clear sprite after player connected, call this function in forward ncl_client_api_ready.
  *
  * @param id        Client index
  * @param channel   Channel to use on the client (from 0 to 7)
