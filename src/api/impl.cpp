@@ -6,6 +6,7 @@ CNextClientApi::CNextClientApi()
     private_precache_ = std::make_unique<CPrivatePrecache>();
     viewmodel_fx_ = std::make_unique<CViewmodelFX>();
     verificator_ = std::make_unique<CVerificator>();
+    health_next_ = CHealthNext::GetInstance();
 }
 
 void CNextClientApi::OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax)
@@ -15,6 +16,7 @@ void CNextClientApi::OnServerActivated(edict_t* pEdictList, int edictCount, int 
     cvar_sandbox_->OnServerActivated(pEdictList, edictCount, clientMax);
     viewmodel_fx_->OnServerActivated(pEdictList, edictCount, clientMax);
     verificator_->OnServerActivated(pEdictList, edictCount, clientMax);
+    health_next_->OnServerActivated(pEdictList, edictCount, clientMax);
 
     verificator_->ParsePublicKeys();
 

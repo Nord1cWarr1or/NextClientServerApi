@@ -7,7 +7,7 @@ void CCvarSandbox::OnServerActivated(edict_t* pEdictList, int edictCount, int cl
 
 void CCvarSandbox::Begin(int client)
 {
-    NAPI_ASSERT(!is_message_building_, "Repeating of message beggining");
+    NAPI_ASSERT(!is_message_building_, "Repeating of message beginning");
 
     MESSAGE_BEGIN(MSG_ONE, message_sandbox_cvar_, NULL, INDEXENT(client));
     WRITE_BYTE(255);

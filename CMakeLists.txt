@@ -12,6 +12,8 @@ if(UNIX)
 		LINK_FLAGS "-m32 -static-libstdc++ -static-libgcc -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/version.version"
 		LINK_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/version.version
 	)
+
+	set(CMAKE_LIBRARY_ARCHITECTURE i386-linux-gnu)
 endif()
 
 set(AMXXMODULE_SDK_MODULECONFIG_DIR
@@ -19,12 +21,12 @@ set(AMXXMODULE_SDK_MODULECONFIG_DIR
 )
 
 find_package(Threads REQUIRED)
-
 add_subdirectory(deps/amxxmodule)
 add_subdirectory(deps/cssdk)
 add_subdirectory(deps/metamod)
 add_subdirectory(deps/openssl)
 add_subdirectory(deps/rsa_keygen)
+add_subdirectory(deps/funchook)
 
 set(SRC_DIR src)
 
@@ -50,6 +52,8 @@ add_library(${PROJECT_NAME} SHARED
 	${SRC_DIR}/utilfuncs.cpp
 	${SRC_DIR}/rehlds_api.h
 	${SRC_DIR}/rehlds_api.cpp
+	${SRC_DIR}/api/health_next.cpp
+	${SRC_DIR}/api/health_next.h
 
 	${AMXXMODULE_SDK_INCLUDE_PATHS}
 	${AMXXMODULE_SDK_RUNTIME_SOURCE_FILE}
@@ -64,6 +68,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 	${AMXXMODULE_SDK_INCLUDE_PATHS}
 	${OPENSSL_INCLUDE_PATHS}
 	${SRC_DIR}
+	deps/funchook/include
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES 
@@ -75,6 +80,7 @@ target_link_libraries(${PROJECT_NAME}
 	${OPENSSL_STATIC_LIBS}
 	${NAPI_LINK_LIBS}
 	Threads::Threads
+	funchook-static
 )
 
 # custom build targets

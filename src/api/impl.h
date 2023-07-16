@@ -7,6 +7,7 @@
 #include "private_precache.h"
 #include "verificator.h"
 #include "viewmodelfx.h"
+#include "health_next.h"
 
 #include <memory>
 #include <string>
@@ -59,6 +60,7 @@ class CNextClientApi : public INextClientAPI,
 	std::unique_ptr<CPrivatePrecache> private_precache_;
 	std::unique_ptr<CViewmodelFX> viewmodel_fx_;
 	std::unique_ptr<CVerificator> verificator_;
+	CHealthNext* health_next_;
 
 	std::string message_error_;
 

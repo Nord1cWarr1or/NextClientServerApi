@@ -60,4 +60,34 @@ namespace utils
 
         return !file.fail();
     }
+
+    funchook_t* CreateAndEnableHook(void* target_func, void* hook_func, void** trampoline_func)
+    {
+        funchook_t* hook = funchook_create();
+        if (hook == nullptr)
+        {
+            MF_Log("CHealthNext::SetupMessagesHooks: funchook_create returns null.");
+            return nullptr;
+        }
+
+        void* target_func_internal = target_func;
+        int status = funchook_prepare(hook, &target_func_internal, hook_func);
+        if (status != FUNCHOOK_ERROR_SUCCESS)
+        {
+            MF_Log("CreateAndEnableHook: funchook_prepare returns error status %d.", status);
+            funchook_destroy(hook);
+            return nullptr;
+        }
+        *trampoline_func = target_func_internal;
+
+        status = funchook_install(hook, 0);
+        if (status != FUNCHOOK_ERROR_SUCCESS)
+        {
+            MF_Log("CreateAndEnableHook: funchook_install returns error status %d.", status);
+            funchook_destroy(hook);
+            return nullptr;
+        }
+
+        return hook;
+    }
 }
