@@ -35,7 +35,7 @@ private:
     CHealthNext(CHealthNext&&) = delete;
     CHealthNext& operator=(CHealthNext&&) = delete;
 
-    void SetupMessagesHooks();
+    bool SetupMessagesHooks();
     void PF_MessageBegin_I_Hook(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed);
     void PF_MessageEnd_I_Hook();
 

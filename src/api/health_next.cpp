@@ -33,27 +33,29 @@ void CHealthNext::OnServerActivated(edict_t* pEdictList, int edictCount, int cli
     message_Health_ = GET_USER_MSG_ID(&Plugin_info, "Health", NULL);
 
     if (!hooks_installed_)
-    {
-        SetupMessagesHooks();
-        hooks_installed_ = true;
-    }
+        hooks_installed_ = SetupMessagesHooks();
 }
 
-void CHealthNext::SetupMessagesHooks()
+bool CHealthNext::SetupMessagesHooks()
 {
     message_begin_hook_ = utils::CreateAndEnableHook((void*)g_engfuncs.pfnMessageBegin, (void*)CHealthNext::PF_MessageBegin_I_HookStatic, (void**)&message_begin_trampoline_);
     if (message_begin_hook_ == nullptr)
     {
         MF_Log("Failed create hook for pfnMessageBegin, %s.", kCommonErrorString);
-        return;
+        return false;
     }
 
     message_end_hook_ = utils::CreateAndEnableHook((void*)g_engfuncs.pfnMessageEnd, (void*)CHealthNext::PF_MessageEnd_I_HookStatic, (void**)&message_end_trampoline_);
     if (message_end_hook_ == nullptr)
     {
+        funchook_destroy(message_begin_hook_);
+        message_begin_hook_ = nullptr;
+
         MF_Log("Failed create hook for pfnMessageEnd, %s.", kCommonErrorString);
-        return;
+        return false;
     }
+
+    return true;
 }
 
 void CHealthNext::PF_MessageBegin_I_Hook(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed)
