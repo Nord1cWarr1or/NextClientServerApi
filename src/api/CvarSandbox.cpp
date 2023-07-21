@@ -1,11 +1,13 @@
-#include "cvar_sandbox.h"
+#include "CvarSandbox.h"
+#include "utilfuncs.h"
+#include "asserts.h"
 
-void CCvarSandbox::OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax)
+void CvarSandbox::OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax)
 {
     message_sandbox_cvar_ = utils::RegUserMsgSafe("SandboxCvar", -1);
 }
 
-void CCvarSandbox::Begin(int client)
+void CvarSandbox::Begin(int client)
 {
     NAPI_ASSERT(!is_message_building_, "Repeating of message beginning");
 
@@ -15,7 +17,7 @@ void CCvarSandbox::Begin(int client)
     is_message_building_ = true;
 }
 
-void CCvarSandbox::End()
+void CvarSandbox::End()
 {
     NAPI_ASSERT(is_message_building_, "Ending with no started message")
 
@@ -24,7 +26,7 @@ void CCvarSandbox::End()
     is_message_building_ = false;
 }
 
-void CCvarSandbox::WriteCvar(SandboxCvar cvar, const std::string& value)
+void CvarSandbox::WriteCvar(SandboxCvar cvar, const std::string& value)
 {
     NAPI_ASSERT(is_message_building_, "Writing cvar with no started message")
 

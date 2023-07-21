@@ -1,26 +1,61 @@
 #include "main.h"
+#include "rehlds_api.h"
+#include "EventManager.h"
+#include "api/NextClientApi.h"
+#include "natives/natives.h"
+
+std::unique_ptr<NextClientApi> g_NextClientApi;
+
+INextClientAPI* NAPI()
+{
+    return g_NextClientApi.get();
+}
 
 void ServerActivate_Post(edict_t* pEdictList, int edictCount, int clientMax)
 {
-    NAPIController()->OnServerActivated(pEdictList, edictCount, clientMax);
+    if (g_NextClientApi)
+        g_NextClientApi->OnServerActivated(pEdictList, edictCount, clientMax);
+
     SET_META_RESULT(MRES_IGNORED);
 }
 
 void PlayerPostThink(edict_t* pEntity)
 {
-    NAPIController()->OnPlayerPostThink(ENTINDEX(pEntity));
+    if (g_NextClientApi)
+        g_NextClientApi->OnPlayerPostThink(ENTINDEX(pEntity));
+
     SET_META_RESULT(MRES_IGNORED);
 }
 
 BOOL ClientConnect(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128])
 {
-    NAPIController()->OnClientConnect(ENTINDEX(pEntity));
+    if (g_NextClientApi)
+        g_NextClientApi->OnClientConnect(ENTINDEX(pEntity));
+
     RETURN_META_VALUE(MRES_IGNORED, true);
 }
 
 void ClientDisconnect(edict_t *pEntity)
 {
-    NAPIController()->OnClientDisconnect(ENTINDEX(pEntity));
+    if (g_NextClientApi)
+        g_NextClientApi->OnClientDisconnect(ENTINDEX(pEntity));
+
+    SET_META_RESULT(MRES_IGNORED);
+}
+
+void MessageBegin_Post(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed)
+{
+    if (g_NextClientApi)
+        g_NextClientApi->OnMessageBeginPost(msg_dest, msg_type, pOrigin, ed);
+
+    SET_META_RESULT(MRES_IGNORED);
+}
+
+void MessageEnd_Post()
+{
+    if (g_NextClientApi)
+        g_NextClientApi->OnMessageEndPost();
+
     SET_META_RESULT(MRES_IGNORED);
 }
 
@@ -34,7 +69,8 @@ void SV_HandleClientMessage(IRehldsHook_HandleNetCommand* hookchain, IGameClient
         if (*(uint32_t*) (netMessage->data + *readcount) == NCLM_C2S_HEADER)
         {
             auto nclm_opcode = static_cast<NCLM_C2S>(MSG_ReadByte());
-            NAPIController()->OnHandleNCLMessage(apiClient->GetEdict(), nclm_opcode);
+            if (g_NextClientApi)
+                g_NextClientApi->OnHandleNCLMessage(apiClient->GetEdict(), nclm_opcode);
             *readcount = netMessage->cursize;
             return;
         }
@@ -48,15 +84,16 @@ void OnAmxxAttach()
     if (!RehldsApi_Init())
         return;
 
-    NAPI_Install();
-    AddNatives_All();
-
+    g_NextClientApi = std::make_unique<NextClientApi>();
     g_RehldsHookchains->HandleNetCommand()->registerHook(SV_HandleClientMessage);
+
+    AddNatives_All();
 
     MF_PrintSrvConsole("[%s] Successfully loaded, version %s\n", MODULE_NAME, MODULE_VERSION);
 }
 
 void OnAmxxDetach()
 {
+    g_NextClientApi = nullptr;
     g_RehldsHookchains->HandleNetCommand()->unregisterHook(SV_HandleClientMessage);
 }

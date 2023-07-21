@@ -1,3 +1,6 @@
+#include "main.h"
+#include "amxxmodule.h"
+#include "asserts.h"
 #include "natives.h"
 
 cell AMX_NATIVE_CALL ncl_is_client_api_ready(AMX* amx, cell* params)
@@ -78,10 +81,10 @@ cell AMX_NATIVE_CALL ncl_send_hud_sprite(AMX* amx, cell* params)
     }
     const auto spritePath = MF_GetAmxString(amx, params[arg_sprite_path], 0, nullptr);
     const auto spriteColor = MF_GetAmxAddr(amx, params[arg_sprite_color]);
-    const byte color[3] = {
-        static_cast<byte>(spriteColor[0]),
-        static_cast<byte>(spriteColor[1]),
-        static_cast<byte>(spriteColor[2])
+    const uint8_t color[3] = {
+        static_cast<uint8_t>(spriteColor[0]),
+        static_cast<uint8_t>(spriteColor[1]),
+        static_cast<uint8_t>(spriteColor[2])
     };
     const int alpha = params[arg_alpha];
     const int frame = params[arg_frame];
@@ -149,10 +152,10 @@ cell AMX_NATIVE_CALL ncl_send_hud_sprite_full_screen(AMX* amx, cell* params)
 	}
     const auto spritePath = MF_GetAmxString(amx, params[arg_sprite_path], 0, nullptr);
     const auto spriteColor = MF_GetAmxAddr(amx, params[arg_sprite_color]);
-    const byte color[3] = {
-        static_cast<byte>(spriteColor[0]),
-        static_cast<byte>(spriteColor[1]),
-        static_cast<byte>(spriteColor[2])
+    const uint8_t color[3] = {
+        static_cast<uint8_t>(spriteColor[0]),
+        static_cast<uint8_t>(spriteColor[1]),
+        static_cast<uint8_t>(spriteColor[2])
     };
     const int alpha = params[arg_alpha];
     const int frame = params[arg_frame];

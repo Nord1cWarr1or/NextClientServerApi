@@ -1,4 +1,6 @@
-#include "natives.h"
+#include "main.h"
+#include "amxxmodule.h"
+#include "asserts.h"
 
 cell AMX_NATIVE_CALL ncl_precache_model(AMX* amx, cell* params)
 {

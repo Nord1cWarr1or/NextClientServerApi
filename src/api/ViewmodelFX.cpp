@@ -1,11 +1,13 @@
-#include "viewmodelfx.h"
+#include "ViewmodelFX.h"
+#include "utilfuncs.h"
+#include "asserts.h"
 
-void CViewmodelFX::OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) 
+void ViewmodelFX::OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax)
 {
     message_viewmodelFX_ = utils::RegUserMsgSafe("ViewModelFx", -1);
 }
 
-void CViewmodelFX::WriteRenderMode(int rendermode)
+void ViewmodelFX::WriteRenderMode(int rendermode)
 {
     NAPI_ASSERT(is_message_building_, "Writing value with no started message");
 
@@ -20,7 +22,7 @@ void CViewmodelFX::WriteRenderMode(int rendermode)
     }
 }
 
-void CViewmodelFX::WriteRenderAmt(int renderamt)
+void ViewmodelFX::WriteRenderAmt(int renderamt)
 {
     NAPI_ASSERT(is_message_building_, "Writing value with no started message");
 
@@ -35,7 +37,7 @@ void CViewmodelFX::WriteRenderAmt(int renderamt)
     }
 }
 
-void CViewmodelFX::WriteRenderColor(int r, int g, int b)
+void ViewmodelFX::WriteRenderColor(int r, int g, int b)
 {
     NAPI_ASSERT(is_message_building_, "Writing value with no started message");
 
@@ -53,7 +55,7 @@ void CViewmodelFX::WriteRenderColor(int r, int g, int b)
     }
 }
 
-void CViewmodelFX::WriteRenderFX(int renderfx)
+void ViewmodelFX::WriteRenderFX(int renderfx)
 {
     NAPI_ASSERT(is_message_building_, "Writing value with no started message");
 
@@ -68,7 +70,7 @@ void CViewmodelFX::WriteRenderFX(int renderfx)
     }
 }
 
-void CViewmodelFX::WriteSkin(int skin)
+void ViewmodelFX::WriteSkin(int skin)
 {
     NAPI_ASSERT(is_message_building_, "Writing value with no started message");
 
@@ -83,7 +85,7 @@ void CViewmodelFX::WriteSkin(int skin)
     }
 }
 
-void CViewmodelFX::WriteBody(int body)
+void ViewmodelFX::WriteBody(int body)
 {
     NAPI_ASSERT(is_message_building_, "Writing value with no started message");
 
@@ -98,22 +100,22 @@ void CViewmodelFX::WriteBody(int body)
     }
 }
 
-void CViewmodelFX::StateSet(VFX state)
+void ViewmodelFX::StateSet(VFX state)
 {
     bit_state_set_ |= (1 << (int)state);
 }
 
-void CViewmodelFX::StateReset(VFX state)
+void ViewmodelFX::StateReset(VFX state)
 {
     bit_state_reset_ |= (1 << (int)state);
 }
 
-bool CViewmodelFX::StateIsSet(VFX state) const
+bool ViewmodelFX::StateIsSet(VFX state) const
 {
     return (bit_state_set_ & (1 << (int)state));
 }
 
-void CViewmodelFX::Begin(int client)
+void ViewmodelFX::Begin(int client)
 {
     NAPI_ASSERT(!is_message_building_, "Repeating of message beggining");
 
@@ -125,7 +127,7 @@ void CViewmodelFX::Begin(int client)
     is_message_building_ = true;
 }
 
-void CViewmodelFX::End()
+void ViewmodelFX::End()
 {
     NAPI_ASSERT(is_message_building_, "Ending with no started message");
 

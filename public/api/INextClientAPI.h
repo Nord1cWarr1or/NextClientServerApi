@@ -1,9 +1,9 @@
 #pragma once
 
 #include "const.h"
-#include "cvar_sandbox.h"
-#include "private_precache.h"
-#include "viewmodelfx.h"
+#include "ICvarSandbox.h"
+#include "IPrivatePrecache.h"
+#include "IViewmodelFX.h"
 
 enum class NextClientVersion {
 	NOT_NEXTCLIENT   = 0,
@@ -36,8 +36,8 @@ public:
         int client,
         int channel,
         const char *spritePath,
-        const byte spriteColor[3],
-        byte alpha,
+        const uint8_t priteColor[3],
+        uint8_t alpha,
         int frame,
         float frameRate,
         float inTime,
@@ -55,8 +55,8 @@ public:
         int client,
         int channel,
         const char *spritePath,
-        const byte spriteColor[3],
-        byte alpha,
+        const uint8_t spriteColor[3],
+        uint8_t alpha,
         int frame,
         float frameRate,
         float inTime,

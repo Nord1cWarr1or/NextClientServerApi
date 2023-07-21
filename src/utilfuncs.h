@@ -1,7 +1,7 @@
 #pragma once
 
-#include "main.h"
-#include <funchook.h>
+#include <string>
+#include "amxxmodule.h"
 
 namespace utils
 {
@@ -10,6 +10,4 @@ namespace utils
 
 	size_t FileSize(const std::string& path);
 	bool CRC_File(const std::string& path, CRC32_t* crc);
-
-    funchook_t* CreateAndEnableHook(void* target_func, void* hook_func, void** trampoline_func);
 }

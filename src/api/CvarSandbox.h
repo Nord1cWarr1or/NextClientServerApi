@@ -1,15 +1,17 @@
 #pragma once
 
-#include "main.h"
 #include <string>
+#include <events.h>
 
-class CCvarSandbox : public ICvarSandbox,
-					 public IEventServerActivated {
-	int message_sandbox_cvar_;
-	bool is_message_building_ {};
+class CvarSandbox : public ICvarSandbox,
+                    public IEventServerActivated
+{
+	int message_sandbox_cvar_{};
+	bool is_message_building_{};
 
 public:
-	CCvarSandbox() = default;
+	CvarSandbox() = default;
+
 	void Begin(int client) override;
 	void End() override;
 	void WriteCvar(SandboxCvar cvar, const std::string& value) override;

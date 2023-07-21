@@ -1,9 +1,10 @@
-#include "private_precache.h"
-
+#include "PrivatePrecache.h"
 #include <fstream>
 #include <cstdio>
+#include "utilfuncs.h"
+#include "main.h"
 
-CPrivatePrecache::CPrivatePrecache()
+PrivatePrecache::PrivatePrecache()
 {
     filepath_resource_list_relative_ = std::string(MF_GetLocalInfo("amxx_datadir", "addons/amxmodx/data")) + "/ncl_private_precache.txt";
     payload_resource_list_location_ = std::string("\x02ncl\x07") + filepath_resource_list_relative_;
@@ -12,7 +13,7 @@ CPrivatePrecache::CPrivatePrecache()
     DeleteResourceListFromDisk();
 }
 
-int CPrivatePrecache::PrecacheModel(const std::string& filepath, const std::string& nclFilepath)
+int PrivatePrecache::PrecacheModel(const std::string& filepath, const std::string& nclFilepath)
 {
     bool result = AppendResource(filepath, nclFilepath, true);
     if (!result)
@@ -21,7 +22,7 @@ int CPrivatePrecache::PrecacheModel(const std::string& filepath, const std::stri
     return PRECACHE_MODEL(filepath.c_str());
 }
 
-int CPrivatePrecache::PrecacheSound(const std::string& filepath, const std::string& nclFilepath)
+int PrivatePrecache::PrecacheSound(const std::string& filepath, const std::string& nclFilepath)
 {
     bool result = AppendResource("sound/" + filepath, "sound/" + nclFilepath, true);
     if (!result)
@@ -30,12 +31,12 @@ int CPrivatePrecache::PrecacheSound(const std::string& filepath, const std::stri
     return PRECACHE_SOUND(filepath.c_str());
 }
 
-bool CPrivatePrecache::PrecacheClientOnly(const std::string& filepath, const std::string& nclFilepath)
+bool PrivatePrecache::PrecacheClientOnly(const std::string& filepath, const std::string& nclFilepath)
 {
     return AppendResource(filepath, nclFilepath, false);
 }
 
-void CPrivatePrecache::OnClientConnect(int client)
+void PrivatePrecache::OnClientConnect(int client)
 {
     if (!is_resource_list_written_)
     {
@@ -53,7 +54,7 @@ void CPrivatePrecache::OnClientConnect(int client)
     MESSAGE_END();
 }
 
-bool CPrivatePrecache::AppendResource(const std::string& filepath, const std::string& nclFilepath, bool replace)
+bool PrivatePrecache::AppendResource(const std::string& filepath, const std::string& nclFilepath, bool replace)
 {
     if (map_resource_list_.count(filepath) != 0)
         return true;
@@ -76,7 +77,7 @@ bool CPrivatePrecache::AppendResource(const std::string& filepath, const std::st
     return true;
 }
 
-bool CPrivatePrecache::WriteResourceListToDisk()
+bool PrivatePrecache::WriteResourceListToDisk()
 {
     if (map_resource_list_.empty())
         return false;
@@ -93,7 +94,7 @@ bool CPrivatePrecache::WriteResourceListToDisk()
     return true;
 }
 
-void CPrivatePrecache::DeleteResourceListFromDisk()
+void PrivatePrecache::DeleteResourceListFromDisk()
 {
     std::remove(filepath_resource_list_absolute_.c_str());
     std::remove((filepath_resource_list_absolute_ + ".ztmp").c_str());

@@ -26,7 +26,7 @@
  *   to add multiple entries.
  */
 #define MODULE_NAME "Next Client API"
-#define MODULE_VERSION "1.3.1"
+#define MODULE_VERSION "1.3.2"
 #define MODULE_AUTHOR "Next21 Team"
 #define MODULE_URL "https://cs16nextclient.com"
 #define MODULE_LOGTAG "nclapi"
@@ -405,8 +405,8 @@
 // #define FN_LightStyle_Post					LightStyle_Post
 // #define FN_DecalIndex_Post					DecalIndex_Post
 // #define FN_PointContents_Post				PointContents_Post
-// #define FN_MessageBegin_Post					MessageBegin_Post
-// #define FN_MessageEnd_Post					MessageEnd_Post
+#define FN_MessageBegin_Post                    MessageBegin_Post
+#define FN_MessageEnd_Post                      MessageEnd_Post
 // #define FN_WriteByte_Post					WriteByte_Post
 // #define FN_WriteChar_Post					WriteChar_Post
 // #define FN_WriteShort_Post					WriteShort_Post

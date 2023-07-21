@@ -1,11 +1,10 @@
 #pragma once
 
-#include "events.h"
-#include "main.h"
 #include <cstring>
+#include <events.h>
 
-class CViewmodelFX : public IViewmodelFX,
-					 public IEventServerActivated {
+class ViewmodelFX : public IViewmodelFX,
+                    public IEventServerActivated {
 	enum class VFX {
 		VMFX_RENDERMODE,
 		VMFX_RENDERAMT,
@@ -15,11 +14,11 @@ class CViewmodelFX : public IViewmodelFX,
 		VMFX_BODY,
 	};
 
-	int message_viewmodelFX_;
-	int client_ {};
-	int bit_state_set_ {};
-	int bit_state_reset_ {};
-	bool is_message_building_ {};
+	int message_viewmodelFX_{};
+	int client_{};
+	int bit_state_set_{};
+	int bit_state_reset_{};
+	bool is_message_building_{};
 
 	struct VFXState {
 		int rendermode;
@@ -28,10 +27,10 @@ class CViewmodelFX : public IViewmodelFX,
 		int renderfx;
 		int skin;
 		int body;
-	} stateVFX_ {};
+	} stateVFX_{};
 
 public:
-	CViewmodelFX() = default;
+	ViewmodelFX() = default;
 
 	void Begin(int client) override;
 	void End() override;

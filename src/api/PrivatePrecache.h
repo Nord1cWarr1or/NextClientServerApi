@@ -1,15 +1,14 @@
 #pragma once
 
-#include "events.h"
-#include "main.h"
-
 #include <string>
 #include <unordered_map>
+#include <events.h>
 
 #define SVC_STUFFTEXT		9
 
-class CPrivatePrecache : public IPrivatePrecache,
-						 public IEventClientConnect {
+class PrivatePrecache : public IPrivatePrecache,
+                        public IEventClientConnect
+{
 	std::string filepath_resource_list_absolute_;
 	std::string filepath_resource_list_relative_;
 	std::string payload_resource_list_location_;
@@ -17,7 +16,7 @@ class CPrivatePrecache : public IPrivatePrecache,
 	bool is_resource_list_written_{};
 
 public:
-	CPrivatePrecache();
+	PrivatePrecache();
 
 	int PrecacheModel(const std::string& filepath, const std::string& nclFilepath) override;
 	int PrecacheSound(const std::string& filepath, const std::string& nclFilepath) override;

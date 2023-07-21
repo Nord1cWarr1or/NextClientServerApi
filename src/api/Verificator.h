@@ -1,7 +1,5 @@
 #pragma once
 
-#include "events.h"
-#include "main.h"
 #include <fstream>
 #include <map>
 #include <string>
@@ -12,16 +10,19 @@
 #include <openssl/rand.h>
 #include <openssl/rsa.h>
 
+#include <events.h>
+
 #define RSA_KEY_LENGTH 256
 
-class CVerificator : public IEventServerActivated,
-                     public IEventClientConnect
+class Verificator : public IEventServerActivated,
+                    public IEventClientConnect,
+                    public IEventHandleNCLMessage
 {
     struct PlayerData
     {
         std::string client_version;
         std::string prefered_RSA_key_version;
-        std::vector<byte> payload;
+        std::vector<uint8_t> payload;
     };
 
     std::string dirpath_public_keys_;
@@ -30,12 +31,15 @@ class CVerificator : public IEventServerActivated,
     std::map<int, PlayerData> player_data_;
 
 public:
-    CVerificator();
-
-    int ParsePublicKeys();
-    void HandleNCLMVerificationRequest(edict_t* client);
-    void HandleNCLMVerificationResponse(edict_t* client);
+    Verificator();
 
     void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) override;
     void OnClientConnect(int client) override;
+    void OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode) override;
+
+private:
+    void HandleNCLMVerificationRequest(edict_t* client);
+    void HandleNCLMVerificationResponse(edict_t* client);
+
+    int ParsePublicKeys();
 };

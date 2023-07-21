@@ -1,10 +1,5 @@
 #pragma once
 
-#include "main.h"
-#include "helpers.h"
-
-#include <string>
-
 constexpr auto MAX_HUD_SPRITES = 32;
 
 void AddNatives_NextClient();

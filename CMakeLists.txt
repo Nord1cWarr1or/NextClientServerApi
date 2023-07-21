@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(nextclientapi_amxx)
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 if(UNIX)
 	set(NAPI_TARGET_PROPS
@@ -26,49 +26,51 @@ add_subdirectory(deps/cssdk)
 add_subdirectory(deps/metamod)
 add_subdirectory(deps/openssl)
 add_subdirectory(deps/rsa_keygen)
-add_subdirectory(deps/funchook)
-
-set(SRC_DIR src)
 
 add_library(${PROJECT_NAME} SHARED
-	${SRC_DIR}/api/events.h
-	${SRC_DIR}/api/impl.h
-	${SRC_DIR}/api/impl.cpp
-	${SRC_DIR}/api/cvar_sandbox.h
-	${SRC_DIR}/api/cvar_sandbox.cpp
-	${SRC_DIR}/api/private_precache.h
-	${SRC_DIR}/api/private_precache.cpp
-	${SRC_DIR}/api/viewmodelfx.h
-	${SRC_DIR}/api/viewmodelfx.cpp
-	${SRC_DIR}/api/verificator.h
-	${SRC_DIR}/api/verificator.cpp
-	${SRC_DIR}/natives/cvar_sandbox.cpp
-	${SRC_DIR}/natives/private_precache.cpp
-	${SRC_DIR}/natives/viewmodelfx.cpp
-	${SRC_DIR}/natives/nextclient.cpp
-	${SRC_DIR}/natives/natives.cpp
-	${SRC_DIR}/main.h
-	${SRC_DIR}/main.cpp
-	${SRC_DIR}/utilfuncs.cpp
-	${SRC_DIR}/rehlds_api.h
-	${SRC_DIR}/rehlds_api.cpp
-	${SRC_DIR}/api/health_next.cpp
-	${SRC_DIR}/api/health_next.h
+	src/main.h
+	src/main.cpp
+	src/utilfuncs.cpp
+	src/rehlds_api.h
+	src/rehlds_api.cpp
+	src/api/CvarSandbox.h
+	src/api/CvarSandbox.cpp
+	src/api/PrivatePrecache.h
+	src/api/PrivatePrecache.cpp
+	src/api/ViewmodelFX.h
+	src/api/ViewmodelFX.cpp
+	src/api/Verificator.h
+	src/api/Verificator.cpp
+	src/api/HealthNext.h
+	src/api/HealthNext.cpp
+	src/api/NextClientApi.h
+	src/api/NextClientApi.cpp
+	src/EventManager.h
+	src/EventManager.cpp
+	src/natives/cvar_sandbox.cpp
+	src/natives/private_precache.cpp
+	src/natives/viewmodelfx.cpp
+	src/natives/nextclient.cpp
+	src/natives/natives.cpp
+	src/asserts.cpp
+	src/asserts.h
 
 	${AMXXMODULE_SDK_INCLUDE_PATHS}
 	${AMXXMODULE_SDK_RUNTIME_SOURCE_FILE}
 	${CSSDK_RUNTIME_SOURCE_FILES}
 )
 
-add_definitions(-DHAVE_STDINT_H)
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+	HAVE_STDINT_H
+	NOMINMAX
+)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
 	${CSSDK_INCLUDE_PATHS}
 	${METAMOD_SDK_INCLUDE_PATHS}
 	${AMXXMODULE_SDK_INCLUDE_PATHS}
 	${OPENSSL_INCLUDE_PATHS}
-	${SRC_DIR}
-	deps/funchook/include
+	src
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES 
@@ -80,7 +82,6 @@ target_link_libraries(${PROJECT_NAME}
 	${OPENSSL_STATIC_LIBS}
 	${NAPI_LINK_LIBS}
 	Threads::Threads
-	funchook-static
 )
 
 # custom build targets
