@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include "events.h"
 
 class EventManager : public IEventPlayerPostThink,
