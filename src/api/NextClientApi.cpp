@@ -15,11 +15,13 @@ NextClientApi::NextClientApi()
     viewmodel_fx_ = std::make_shared<::ViewmodelFX>();
     event_manager_->AddEventListener(viewmodel_fx_);
 
-    verificator_ = std::make_shared<Verificator>();
-    event_manager_->AddEventListener(verificator_);
-
     health_next_ = std::make_shared<HealthNext>();
     event_manager_->AddEventListener(health_next_);
+
+    nclm_protocol_ = std::make_shared<NclmProtocol>(event_manager_.get());
+
+    verificator_ = std::make_shared<Verificator>(nclm_protocol_.get());
+    event_manager_->AddEventListener(verificator_);
 }
 
 IViewmodelFX* NextClientApi::ViewmodelFX()
@@ -160,7 +162,6 @@ void NextClientApi::OnPlayerPostThink(int client)
     event_manager_->OnPlayerPostThink(client);
 }
 
-
 void NextClientApi::OnClientConnect(int client)
 {
     PlayerData data{};
@@ -214,7 +215,7 @@ void NextClientApi::OnServerActivated(edict_t* pEdictList, int edictCount, int c
 
 void NextClientApi::OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode)
 {
-    
+    nclm_protocol_->OnHandleNCLMessage(client, opcode);
 }
 
 void NextClientApi::OnMessageBeginPost(int msg_dest, int msg_type, const float* pOrigin, edict_t* ed)

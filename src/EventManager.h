@@ -10,7 +10,8 @@ class EventManager : public IEventPlayerPostThink,
                      public IEventClientPutInServer,
                      public IEventServerActivated,
                      public IEventMessageBeginPost,
-                     public IEventMessageEndPost
+                     public IEventMessageEndPost,
+                     public IEventNclmVerificationRequest, public IEventNclmVerificationResponse
 {
     std::vector<std::shared_ptr<IEventPlayerPostThink>> player_post_think_listeners_;
     std::vector<std::shared_ptr<IEventClientDisconnect>> client_disconnect_listeners_;
@@ -19,6 +20,8 @@ class EventManager : public IEventPlayerPostThink,
     std::vector<std::shared_ptr<IEventServerActivated>> server_activated_listeners_;
     std::vector<std::shared_ptr<IEventMessageBeginPost>> message_begin_post_listeners_;
     std::vector<std::shared_ptr<IEventMessageEndPost>> message_end_post_listeners_;
+    std::vector<std::shared_ptr<IEventNclmVerificationRequest>> nclm_verification_request_listeners_;
+    std::vector<std::shared_ptr<IEventNclmVerificationResponse>> nclm_verification_response_listeners_;
 
 public:
     template<typename T>
@@ -31,6 +34,8 @@ public:
         if constexpr (std::is_base_of_v<IEventServerActivated, T>) server_activated_listeners_.push_back(listener);
         if constexpr (std::is_base_of_v<IEventMessageBeginPost, T>) message_begin_post_listeners_.push_back(listener);
         if constexpr (std::is_base_of_v<IEventMessageEndPost, T>) message_end_post_listeners_.push_back(listener);
+        if constexpr (std::is_base_of_v<IEventNclmVerificationRequest, T>) nclm_verification_request_listeners_.push_back(listener);
+        if constexpr (std::is_base_of_v<IEventNclmVerificationResponse, T>) nclm_verification_response_listeners_.push_back(listener);
     }
 
     void OnPlayerPostThink(int client) override;
@@ -40,4 +45,6 @@ public:
     void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) override;
     void OnMessageBeginPost(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed) override;
     void OnMessageEndPost() override;
+    void OnNclmVerificationRequest(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) override;
+    void OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) override;
 };

@@ -1,5 +1,5 @@
 #include "main.h"
-#include "rehlds_api.h"
+#include "rehlds_api_provider.h"
 #include "EventManager.h"
 #include "api/NextClientApi.h"
 #include "natives/natives.h"

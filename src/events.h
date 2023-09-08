@@ -2,6 +2,8 @@
 
 #include "amxxmodule.h"
 #include "api/INextClientAPI.h"
+#include <vector>
+#include <string>
 
 class IEventPlayerPostThink {
 public:
@@ -28,11 +30,6 @@ public:
 	virtual void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) = 0;
 };
 
-class IEventHandleNCLMessage {
-public:
-	virtual void OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode) = 0;
-};
-
 class IEventMessageBeginPost {
 public:
     virtual void OnMessageBeginPost(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed) = 0;
@@ -41,4 +38,19 @@ public:
 class IEventMessageEndPost {
 public:
     virtual void OnMessageEndPost() = 0;
+};
+
+class IEventHandleNclMessage {
+public:
+	virtual void OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode) = 0;
+};
+
+class IEventNclmVerificationRequest {
+public:
+	virtual void OnNclmVerificationRequest(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) = 0;
+};
+
+class IEventNclmVerificationResponse {
+public:
+	virtual void OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) = 0;
 };

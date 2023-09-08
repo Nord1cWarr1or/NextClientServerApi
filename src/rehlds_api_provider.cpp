@@ -1,4 +1,4 @@
-#include "rehlds_api.h"
+#include "rehlds_api_provider.h"
 
 IRehldsApi* g_RehldsApi;
 const RehldsFuncs_t* g_RehldsFuncs;

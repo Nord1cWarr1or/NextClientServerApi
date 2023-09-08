@@ -12,6 +12,7 @@
 #include "Verificator.h"
 #include "ViewmodelFX.h"
 #include "HealthNext.h"
+#include "NclmProtocol.h"
 
 class NextClientApi : public INextClientAPI
 {
@@ -33,6 +34,7 @@ class NextClientApi : public INextClientAPI
 	std::shared_ptr<::ViewmodelFX> viewmodel_fx_;
 	std::shared_ptr<Verificator> verificator_;
     std::shared_ptr<HealthNext> health_next_;
+    std::shared_ptr<NclmProtocol> nclm_protocol_;
 
 public:
     explicit NextClientApi();

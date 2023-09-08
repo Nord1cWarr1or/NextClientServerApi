@@ -11,14 +11,14 @@
 #include <openssl/rsa.h>
 
 #include <events.h>
-#include "api/nclm_proto.h"
+#include "NclmProtocol.h"
 
 #define RSA_KEY_LENGTH 256
 
 class Verificator : public IEventServerActivated,
                     public IEventClientConnect,
-                    public IEventClientPutInServer,
-                    public IEventHandleNCLMessage
+                    public IEventNclmVerificationRequest,
+                    public IEventNclmVerificationResponse
 {
     struct PlayerData
     {
@@ -29,20 +29,17 @@ class Verificator : public IEventServerActivated,
 
     std::string dirpath_public_keys_;
     std::map<std::string, EVP_PKEY*> map_cached_pkeys_;
-
     std::map<int, PlayerData> player_data_;
 
-public:
-    Verificator();
+    NclmProtocol* protocol_;
 
+    void OnNclmVerificationRequest(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) override;
+    void OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) override;
     void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) override;
     void OnClientConnect(int client) override;
-    void OnClientPutInServer(edict_t* pEntity) override;
-    void OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode) override;
-
-private:
-    void HandleNCLMVerificationRequest(edict_t* client);
-    void HandleNCLMVerificationResponse(edict_t* client);
 
     int ParsePublicKeys();
+
+public:
+    Verificator(NclmProtocol* protocol);
 };

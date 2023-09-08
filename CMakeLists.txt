@@ -31,8 +31,9 @@ add_library(${PROJECT_NAME} SHARED
 	src/main.h
 	src/main.cpp
 	src/utilfuncs.cpp
-	src/rehlds_api.h
-	src/rehlds_api.cpp
+	src/rehlds_api_provider.h
+	src/rehlds_api_provider.cpp
+	src/SizeBufWriter.h
 	src/api/CvarSandbox.h
 	src/api/CvarSandbox.cpp
 	src/api/PrivatePrecache.h

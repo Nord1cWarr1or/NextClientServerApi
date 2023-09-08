@@ -41,3 +41,15 @@ void EventManager::OnMessageEndPost()
     for (const auto& listener : message_end_post_listeners_)
         listener->OnMessageEndPost();
 }
+
+void EventManager::OnNclmVerificationRequest(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) 
+{
+    for (const auto& listener : nclm_verification_request_listeners_)
+        listener->OnNclmVerificationRequest(client, clientVersion, rsaKeyVersion);
+}
+
+void EventManager::OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) 
+{
+    for (const auto& listener : nclm_verification_response_listeners_)
+        listener->OnNclmVerificationResponse(client, payload);
+}
