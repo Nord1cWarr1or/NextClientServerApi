@@ -11,11 +11,13 @@
 #include <openssl/rsa.h>
 
 #include <events.h>
+#include "api/nclm_proto.h"
 
 #define RSA_KEY_LENGTH 256
 
 class Verificator : public IEventServerActivated,
                     public IEventClientConnect,
+                    public IEventClientPutInServer,
                     public IEventHandleNCLMessage
 {
     struct PlayerData
@@ -35,6 +37,7 @@ public:
 
     void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) override;
     void OnClientConnect(int client) override;
+    void OnClientPutInServer(edict_t* pEntity) override;
     void OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode) override;
 
 private:

@@ -27,6 +27,14 @@ void PlayerPostThink(edict_t* pEntity)
     SET_META_RESULT(MRES_IGNORED);
 }
 
+void ClientPutInServer_Post(edict_t *pEntity)
+{
+   if (g_NextClientApi)
+        g_NextClientApi->OnClientPutInServer(pEntity);
+
+    SET_META_RESULT(MRES_IGNORED);
+}
+
 BOOL ClientConnect(edict_t* pEntity, const char* pszName, const char* pszAddress, char szRejectReason[128])
 {
     if (g_NextClientApi)
@@ -59,18 +67,24 @@ void MessageEnd_Post()
     SET_META_RESULT(MRES_IGNORED);
 }
 
+#include <iostream>
+
 void SV_HandleClientMessage(IRehldsHook_HandleNetCommand* hookchain, IGameClient* apiClient, int8 opcode)
 {
-    if (opcode == clc_stringcmd)
+    if (opcode == clc_ncl_message)
     {
         auto netMessage = g_RehldsFuncs->GetNetMessage();
         int* readcount = g_RehldsFuncs->GetMsgReadCount();
 
         if (*(uint32_t*) (netMessage->data + *readcount) == NCLM_C2S_HEADER)
         {
+            *readcount += 4;
             auto nclm_opcode = static_cast<NCLM_C2S>(MSG_ReadByte());
+            std::cout << "got nclm message, opcode " << nclm_opcode << std::endl;
+
             if (g_NextClientApi)
                 g_NextClientApi->OnHandleNCLMessage(apiClient->GetEdict(), nclm_opcode);
+                
             *readcount = netMessage->cursize;
             return;
         }

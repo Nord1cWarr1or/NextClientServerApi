@@ -18,16 +18,16 @@ void EventManager::OnClientConnect(int client)
         listener->OnClientConnect(client);
 }
 
+void EventManager::OnClientPutInServer(edict_t* pEntity)
+{
+    for (const auto& listener : client_putinserver_listeners_)
+        listener->OnClientPutInServer(pEntity);
+}
+
 void EventManager::OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax)
 {
     for (const auto& listener : server_activated_listeners_)
         listener->OnServerActivated(pEdictList, edictCount, clientMax);
-}
-
-void EventManager::OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode)
-{
-    for (const auto& listener : handle_ncl_message_listeners_)
-        listener->OnHandleNCLMessage(client, opcode);
 }
 
 void EventManager::OnMessageBeginPost(int msg_dest, int msg_type, const float* pOrigin, edict_t* ed)

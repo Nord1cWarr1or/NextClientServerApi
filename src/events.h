@@ -18,6 +18,11 @@ public:
 	virtual void OnClientConnect(int client) = 0;
 };
 
+class IEventClientPutInServer {
+public:
+	virtual void OnClientPutInServer(edict_t* pEntity) = 0;
+};
+
 class IEventServerActivated {
 public:
 	virtual void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) = 0;

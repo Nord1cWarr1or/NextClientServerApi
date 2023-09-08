@@ -1,6 +1,6 @@
 #pragma once
 
-#include "const.h"
+#include "nclm_proto.h"
 #include "ICvarSandbox.h"
 #include "IPrivatePrecache.h"
 #include "IViewmodelFX.h"

@@ -42,8 +42,8 @@ public:
 	ICvarSandbox* CvarSandbox() override;
 
 	bool ClientIsReady(int client) override;
-	NextClientVersion GetNextClientVersion(int client) override;
 	void ClientSetFOV(int client, int fov, float lerpTime) override;
+	NextClientVersion GetNextClientVersion(int client) override;
 
     void SendHudSprite(
         int client,
@@ -84,6 +84,7 @@ public:
 	void OnPlayerPostThink(int client);
 	void OnClientDisconnect(int client);
 	void OnClientConnect(int client);
+    void OnClientPutInServer(edict_t* pEntity);
 	void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax);
 	void OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode);
     void OnMessageBeginPost(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed);

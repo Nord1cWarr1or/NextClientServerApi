@@ -42,4 +42,4 @@ extern bool RehldsApi_Init();
 #define MSG_ReadShort			g_RehldsFuncs->MSG_ReadShort
 #define MSG_ReadBuf				g_RehldsFuncs->MSG_ReadBuf
 
-#define MSG_IsBadRead			g_RehldsFuncs->GetMsgBadRead
+#define MSG_IsBadRead			*g_RehldsFuncs->GetMsgBadRead

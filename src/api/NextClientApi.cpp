@@ -192,6 +192,10 @@ void NextClientApi::OnClientConnect(int client)
     event_manager_->OnClientConnect(client);
 }
 
+void NextClientApi::OnClientPutInServer(edict_t* pEntity) {
+    event_manager_->OnClientPutInServer(pEntity);
+}
+
 void NextClientApi::OnClientDisconnect(int index)
 {
     event_manager_->OnClientDisconnect(index);
@@ -210,7 +214,7 @@ void NextClientApi::OnServerActivated(edict_t* pEdictList, int edictCount, int c
 
 void NextClientApi::OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode)
 {
-    event_manager_->OnHandleNCLMessage(client, opcode);
+    
 }
 
 void NextClientApi::OnMessageBeginPost(int msg_dest, int msg_type, const float* pOrigin, edict_t* ed)

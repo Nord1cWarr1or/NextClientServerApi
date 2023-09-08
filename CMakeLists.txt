@@ -45,6 +45,8 @@ add_library(${PROJECT_NAME} SHARED
 	src/api/HealthNext.cpp
 	src/api/NextClientApi.h
 	src/api/NextClientApi.cpp
+	src/api/NclmProtocol.h
+	src/api/NclmProtocol.cpp
 	src/EventManager.h
 	src/EventManager.cpp
 	src/natives/cvar_sandbox.cpp
