@@ -10,10 +10,13 @@ void HealthNext::OnServerActivated(edict_t* pEdictList, int edictCount, int clie
 
 void HealthNext::OnMessageBeginPost(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed)
 {
+    NextClientVersion version;
+    NAPI()->GetNextClientVersion(ENTINDEX(ed), version);
+
     if (msg_type == message_Health_
         && ed != nullptr
         && ed->v.health > 255
-        && NAPI()->GetNextClientVersion(ENTINDEX(ed)) >= NextClientVersion::V_2_2_0)
+        && version >= NextClientVersion{2, 2, 0})
     {
         should_send_health_ex_ = true;
 

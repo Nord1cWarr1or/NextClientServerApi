@@ -2,7 +2,8 @@
 #include "asserts.h"
 #include <iostream>
 
-Verificator::Verificator(NclmProtocol* protocol) : protocol_(protocol)
+Verificator::Verificator(NclmProtocol* protocol, EventManager* event_manager) 
+    : protocol_(protocol), event_manager_(event_manager)
 {
     dirpath_public_keys_ = MF_BuildPathname("%s/nextclient_api/pkeys/", MF_GetLocalInfo("amxx_datadir", "addons/amxmodx/data"));
 }
@@ -77,7 +78,7 @@ void Verificator::OnNclmVerificationResponse(edict_t* client, std::vector<uint8_
     NAPI_LOG_ASSERT(payload == playerData->payload, "%s: Decrypted payload body mismatch on %s (%s)",
                     __FUNCTION__, name, rsaKeyVersion.c_str());
 
-    MF_Log("Verificated user %s has joined the game!\n", name);
+    event_manager_->OnClientVerificated(client, playerData->client_version, rsaKeyVersion);
 }
 
 int Verificator::ParsePublicKeys()

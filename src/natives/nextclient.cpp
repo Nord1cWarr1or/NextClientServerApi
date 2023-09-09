@@ -27,7 +27,57 @@ cell AMX_NATIVE_CALL ncl_is_next_client(AMX* amx, cell* params)
     };
     ASSERT_ARG_IS_PLAYER(arg_index);
 
-    cell result = (cell) NAPI()->GetNextClientVersion(params[arg_index]);
+    cell result = (cell) NAPI()->deprecated_GetNextClientVersion(params[arg_index]);
+
+    ASSERT_NO_NAPI_ERRORS();
+    return result;
+}
+
+cell AMX_NATIVE_CALL ncl_is_using_nextclient(AMX* amx, cell* params) {
+    enum args_e
+    {
+        arg_count,
+        arg_index
+    };
+    ASSERT_ARG_IS_PLAYER(arg_index);
+
+    cell result = (cell) NAPI()->ClientIsUsingNextClient(params[arg_index]);
+
+    ASSERT_NO_NAPI_ERRORS();
+    return result;
+}
+
+cell AMX_NATIVE_CALL ncl_get_nextclient_version(AMX* amx, cell* params) {
+    enum args_e
+    {
+        arg_count,
+        arg_index,
+        arg_major,
+        arg_minor,
+        arg_patch
+    };
+    ASSERT_ARG_IS_PLAYER(arg_index);
+
+    NextClientVersion version;
+    bool result = NAPI()->GetNextClientVersion(params[arg_index], version);
+
+    *MF_GetAmxAddr(amx, params[arg_major]) = version.major;
+    *MF_GetAmxAddr(amx, params[arg_minor]) = version.minor;
+    *MF_GetAmxAddr(amx, params[arg_patch]) = version.patch;
+
+    ASSERT_NO_NAPI_ERRORS();
+    return result;
+}
+
+cell AMX_NATIVE_CALL ncl_get_supported_features(AMX* amx, cell* params) {
+    enum args_e
+    {
+        arg_count,
+        arg_index
+    };
+    ASSERT_ARG_IS_PLAYER(arg_index);
+
+    cell result = (cell) NAPI()->GetSupportedFeatures(params[arg_index]);
 
     ASSERT_NO_NAPI_ERRORS();
     return result;
@@ -204,6 +254,9 @@ cell AMX_NATIVE_CALL ncl_clear_hud_sprite(AMX* amx, cell* params)
 AMX_NATIVE_INFO nativeInfoNextClient[] = {
     {"ncl_is_client_api_ready",         ncl_is_client_api_ready},
     {"ncl_is_next_client",              ncl_is_next_client},
+    {"ncl_is_using_nextclient",         ncl_is_using_nextclient},
+    {"ncl_get_nextclient_version",      ncl_get_nextclient_version},
+    {"ncl_get_supported_features",      ncl_get_supported_features},
 
     {"ncl_setfov",                      ncl_setfov},
     {"ncl_send_hud_sprite",             ncl_send_hud_sprite},

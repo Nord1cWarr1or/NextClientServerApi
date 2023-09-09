@@ -54,3 +54,8 @@ class IEventNclmVerificationResponse {
 public:
 	virtual void OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) = 0;
 };
+
+class IEventClientVerificated {
+public:
+	virtual void OnClientVerificated(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) = 0;
+};

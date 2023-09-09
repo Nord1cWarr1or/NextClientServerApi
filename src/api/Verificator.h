@@ -12,6 +12,7 @@
 
 #include <events.h>
 #include "NclmProtocol.h"
+#include "EventManager.h"
 
 class Verificator : public IEventServerActivated,
                     public IEventClientConnect,
@@ -30,6 +31,7 @@ class Verificator : public IEventServerActivated,
     std::map<int, PlayerData> player_data_;
 
     NclmProtocol* protocol_;
+    EventManager* event_manager_;
 
     void OnNclmVerificationRequest(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) override;
     void OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) override;
@@ -39,5 +41,5 @@ class Verificator : public IEventServerActivated,
     int ParsePublicKeys();
 
 public:
-    Verificator(NclmProtocol* protocol);
+    Verificator(NclmProtocol* protocol, EventManager* event_manager);
 };

@@ -1,10 +1,12 @@
 #include "NextClientApi.h"
 #include <utility>
 #include "utilfuncs.h"
+#include <sstream>
 
 NextClientApi::NextClientApi()
 {
     event_manager_ = std::make_unique<EventManager>();
+    event_manager_->AddEventListener(std::make_shared<NextClientApi*>(this));
 
     cvar_sandbox_ = std::make_shared<::CvarSandbox>();
     event_manager_->AddEventListener(cvar_sandbox_);
@@ -20,7 +22,7 @@ NextClientApi::NextClientApi()
 
     nclm_protocol_ = std::make_shared<NclmProtocol>(event_manager_.get());
 
-    verificator_ = std::make_shared<Verificator>(nclm_protocol_.get());
+    verificator_ = std::make_shared<Verificator>(nclm_protocol_.get(), event_manager_.get());
     event_manager_->AddEventListener(verificator_);
 }
 
@@ -45,14 +47,6 @@ bool NextClientApi::ClientIsReady(int client)
         return false;
 
     return players_[client].is_api_ready;
-}
-
-NextClientVersion NextClientApi::GetNextClientVersion(int client)
-{
-    if (players_.count(client) == 0)
-        return NextClientVersion::NOT_NEXTCLIENT;
-
-    return players_[client].client_version;
 }
 
 void NextClientApi::ClientSetFOV(int client, int fov, float lerpTime)
@@ -148,12 +142,17 @@ void NextClientApi::ClearHudSprite(int client, int channel)
 
 void NextClientApi::OnPlayerPostThink(int client)
 {
+    using ncl_deprecated::NextClientVersion;
+
     if (players_.count(client) == 0)
         return;
 
     auto data = &players_[client];
-    if (!data->is_api_ready && data->client_version != NextClientVersion::NOT_NEXTCLIENT)
-    {
+    if (!data->is_api_ready && (
+            data->deprecated_client_version != NextClientVersion::NOT_NEXTCLIENT
+            || data->client_version
+        )
+    ) {
         data->is_api_ready = true;
 
         MF_ExecuteForward(forward_api_ready_, client);
@@ -165,35 +164,146 @@ void NextClientApi::OnPlayerPostThink(int client)
 void NextClientApi::OnClientConnect(int client)
 {
     PlayerData data{};
-    data.client_version = NextClientVersion::NOT_NEXTCLIENT;
     data.is_api_ready = false;
+    data.is_verificated = false;
+    data.client_version = std::make_unique<NextClientVersion>();
 
     std::string value = INFOKEY_VALUE(GET_INFOKEYBUFFER(INDEXENT(client)), "_ncl");
 
     if (!value.empty())
     {
-        if (value == "20")
-            data.client_version = NextClientVersion::V_2_2_0;
-        else if (value == "18")
-            data.client_version = NextClientVersion::V_2_1_8;
-        else if (value == "19")
-            data.client_version = NextClientVersion::V_2_1_9;
-        else if (value == "110")
-            data.client_version = NextClientVersion::V_2_1_10;
-        else if (value == "111")
-            data.client_version = NextClientVersion::V_2_1_11;
-        else if (value == "112")
-            data.client_version = NextClientVersion::V_2_1_12;
+        using ncl_deprecated::NextClientVersion;
+
+        if (value == "20") {
+            *data.client_version.get() = { 2, 2, 0 };
+            data.deprecated_client_version = NextClientVersion::V_2_2_0;
+        }
+        else if (value == "18") {
+            *data.client_version.get() = { 2, 1, 8 };
+            data.deprecated_client_version = NextClientVersion::V_2_1_8;
+        }
+        else if (value == "19") {
+            *data.client_version.get() = { 2, 1, 9 };
+            data.deprecated_client_version = NextClientVersion::V_2_1_9;
+        }
+        else if (value == "110") {
+            *data.client_version.get() = { 2, 1, 10 };
+            data.deprecated_client_version = NextClientVersion::V_2_1_10;
+        }
+        else if (value == "111") {
+            *data.client_version.get() = { 2, 1, 11 };
+            data.deprecated_client_version = NextClientVersion::V_2_1_11;
+        }
+        else if (value == "112") {
+            *data.client_version.get() = { 2, 1, 12 };
+            data.deprecated_client_version = NextClientVersion::V_2_1_12;
+        }
         else if (value[0] == '1')
-            data.client_version = NextClientVersion::V_2_1_7_OR_LOWER;
+            data.deprecated_client_version = NextClientVersion::V_2_1_7_OR_LOWER;
+
+        data.is_using_nextclient = true;
     }
 
-    players_[client] = data;
+    players_[client] = std::move(data);
 
     event_manager_->OnClientConnect(client);
 }
 
-void NextClientApi::OnClientPutInServer(edict_t* pEntity) {
+ncl_deprecated::NextClientVersion NextClientApi::deprecated_GetNextClientVersion(int client)
+{
+    using ncl_deprecated::NextClientVersion;
+    
+    if (players_.count(client) == 0)
+        return NextClientVersion::NOT_NEXTCLIENT;
+
+    return players_[client].deprecated_client_version;
+}
+
+bool NextClientApi::GetNextClientVersion(int client, NextClientVersion& version) 
+{
+    if (players_.count(client) == 0)
+        return false;
+
+    auto ver = players_[client].client_version.get();
+    if(ver == nullptr)
+        return false;
+
+    version = *ver;
+
+    return true;
+}
+
+bool ParseVersion(std::string in, NextClientVersion& out) {
+    if(in.size() > 10) 
+        return false;
+
+    std::istringstream ss(in);
+    std::vector<size_t> tokens; std::string token;
+
+    for(int i = 0; i < 3 && std::getline(ss, token, '.'); i++)
+        tokens.push_back(stoi(token));
+
+    if(tokens.size() != 3)
+        return false;
+
+    out = { tokens[0], tokens[1], tokens[2] };
+    return true;
+}
+
+void NextClientApi::OnClientVerificated(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) 
+{
+    auto clientIndex = ENTINDEX(client);
+
+    if (players_.count(clientIndex) == 0)
+        return;
+
+    auto player = &players_[clientIndex];
+    player->is_verificated = true;
+    player->is_using_nextclient = true;
+
+    auto name = INFOKEY_VALUE(GET_INFOKEYBUFFER(client), "name");
+
+    if(!ParseVersion(clientVersion, *player->client_version.get()))
+        MF_Log("%s has an abnormal version of nextclient (%s)", name, clientVersion.c_str());
+
+    MF_Log("Verificated user %s has joined the game (%s, %s)!\n", name, clientVersion.c_str(), rsaKeyVersion.c_str());
+}
+
+int NextClientApi::GetSupportedFeatures(int client) {
+    if (players_.count(client) == 0)
+        return 0;
+
+    auto version = players_[client].client_version.get();
+    if(version == nullptr)
+        return 0;
+
+    int features = 0;
+
+    if(*version >= NextClientVersion{2, 1, 6})
+        features |= (FEATURE_CVARS_SANDBOX|FEATURE_VIEWMODEL_FX);
+
+    if(*version >= NextClientVersion{2, 3, 0})
+        features |= FEATURE_VERIFICATION;
+
+    return features;
+}
+
+NextClientUsing NextClientApi::ClientIsUsingNextClient(int client) {
+    if (players_.count(client) == 0)
+        return NextClientUsing::NOT_USING;
+
+    auto player = &players_[client];
+    if(player->is_verificated) 
+        return NextClientUsing::USING_VERIFICATED;
+
+    if(player->is_using_nextclient)
+        return NextClientUsing::DECLARE_USING;
+
+    return NextClientUsing::NOT_USING;
+}
+
+void NextClientApi::OnClientPutInServer(edict_t* pEntity) 
+{
     event_manager_->OnClientPutInServer(pEntity);
 }
 

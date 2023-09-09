@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 #include <events.h>
 #include <EventManager.h>
@@ -14,11 +15,14 @@
 #include "HealthNext.h"
 #include "NclmProtocol.h"
 
-class NextClientApi : public INextClientAPI
+class NextClientApi : public INextClientAPI, public IEventClientVerificated
 {
     struct PlayerData {
-        NextClientVersion client_version;
+        ncl_deprecated::NextClientVersion deprecated_client_version;
+        std::unique_ptr<NextClientVersion> client_version;
+        bool is_using_nextclient;
         bool is_api_ready;
+        bool is_verificated;
     };
 
 	std::unique_ptr<EventManager> event_manager_;
@@ -45,7 +49,11 @@ public:
 
 	bool ClientIsReady(int client) override;
 	void ClientSetFOV(int client, int fov, float lerpTime) override;
-	NextClientVersion GetNextClientVersion(int client) override;
+
+	ncl_deprecated::NextClientVersion deprecated_GetNextClientVersion(int client) override;
+    NextClientUsing ClientIsUsingNextClient(int client) override;
+    bool GetNextClientVersion(int client, NextClientVersion& version) override;
+    int GetSupportedFeatures(int client) override;
 
     void SendHudSprite(
         int client,
@@ -91,4 +99,6 @@ public:
 	void OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode);
     void OnMessageBeginPost(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed);
     void OnMessageEndPost();
+
+    void OnClientVerificated(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) override; 
 };

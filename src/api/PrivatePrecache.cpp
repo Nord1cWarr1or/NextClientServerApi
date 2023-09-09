@@ -46,7 +46,10 @@ void PrivatePrecache::OnClientConnect(int client)
             return;
     }
 
-    if (NAPI()->GetNextClientVersion(client) < NextClientVersion::V_2_1_8)
+    NextClientVersion version;
+    NAPI()->GetNextClientVersion(client, version);
+
+    if (version < NextClientVersion{2, 1, 8})
         return;
 
     MESSAGE_BEGIN(MSG_ONE, SVC_STUFFTEXT, NULL, INDEXENT(client));

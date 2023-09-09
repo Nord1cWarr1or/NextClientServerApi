@@ -42,6 +42,11 @@ void EventManager::OnMessageEndPost()
         listener->OnMessageEndPost();
 }
 
+void EventManager::OnClientVerificated(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) {
+    for (const auto& listener : client_verificated_listeners_)
+        listener->OnClientVerificated(client, clientVersion, rsaKeyVersion);
+}
+
 void EventManager::OnNclmVerificationRequest(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) 
 {
     for (const auto& listener : nclm_verification_request_listeners_)

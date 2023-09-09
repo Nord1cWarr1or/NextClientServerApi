@@ -54,14 +54,28 @@ enum eSandboxCvar
 
 enum eNclVersion
 {
-    NCLV_NOT_NEXT_CLIENT = 0,
-    NCLV_2_1_7_OR_LOWER  = 1,
-    NCLV_2_1_8           = 2,
-    NCLV_2_1_9           = 3,
-    NCLV_2_1_10          = 4,
-    NCLV_2_1_11          = 5,
-    NCLV_2_1_12          = 6,
-    NCLV_2_2_0           = 7
+    NCLV_NOT_NEXT_CLIENT,
+    NCLV_2_1_7_OR_LOWER,
+    NCLV_2_1_8,
+    NCLV_2_1_9,
+    NCLV_2_1_10,
+    NCLV_2_1_11,
+    NCLV_2_1_12,
+    NCLV_2_2_0,
+    NCLV_2_3_0_OR_HIGHER
+}
+
+enum eNclUsing {
+    NCL_NOT_USING,
+    NCL_DECLARE_USING,
+    NCL_USING_VERIFICATED
+}
+
+enum eFeaturesFlags (<<= 1) {
+    NCL_FEATURE_CVARS_SANDBOX = 0,
+    NCL_FEATURE_VIEWMODEL_FX = 1,
+    NCL_FEATURE_PRIVATE_PRECACHE,
+    NCL_FEATURE_VERIFICATION
 }
 
 /**
@@ -87,11 +101,53 @@ native bool:ncl_is_client_api_ready(id);
  *
  * @note Unreliable player identification! Use only to check features availability.
  *
+ * @deprecated  This native will no longer allow you to get the exact version 
+ *              of nextclient higher than v2.3.0 and won't allow session verification
+ *              use ncl_is_using_nextclient() instead
+ *
  * @param id    Client index
  *
  * @return      Next Client version
  */
+#pragma deprecated Use ncl_is_using_nextclient() instead
 native eNclVersion:ncl_is_next_client(id);
+
+/**
+ * Checks if a player using Next Client. 
+ *
+ * @param id    Client index
+ *
+ * @return      Member of eNclUsing enum
+ *                  NCL_NOT_USING - the player doesn't using nextclient
+ *                  NCL_DECLARE_USING - the player has _ncl tag in setinfo what 
+ *                      usually nextclient implicitly does, but we can't rule out
+ *                      that it was forged by the player
+ *                  NCL_USING_VERIFICATED - the module is verified that the player
+ *                      using nextclient. From that moment, the player can be trusted
+ *                      and, for example, granted privileges
+ */
+native eNclUsing:ncl_is_using_nextclient(id);
+
+/**
+ * Gets the specific version of nextclient 
+ *
+ * @param id        Client index
+ * @param major     Major version
+ * @param minor     Minor version
+ * @param patch     Patch version
+ *
+ * @return          True if the player using nextclient v2.1.8 and higher, false otherwise
+ */
+native bool:ncl_get_nextclient_version(id, &major = 0, &minor = 0, &patch = 0);
+
+/**
+ * Checks which features of nextclient are supported by the player
+ *
+ * @param id        Client index
+ *
+ * @return          Member of eFeaturesFlags enum
+ */
+native eFeaturesFlags:ncl_get_supported_features(id);
 
 /**
  * Marks the beginning of a sandbox cvar message.
