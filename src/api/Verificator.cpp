@@ -21,30 +21,23 @@ void Verificator::OnClientConnect(int client)
         return;
 
     player_data_[client].payload.clear();
-
-    auto cl = INDEXENT(client);
-
-    std::cout << "Sending onconnect NCLM_S2C::IS_SERVER_SUPPORT_NEXTCLIENT to client " 
-        << INFOKEY_VALUE(GET_INFOKEYBUFFER(cl), "name") << std::endl;
-
-    protocol_->SendIsServerSupportNextclient(cl);
+    
+    protocol_->SendIsServerSupportNextclient(INDEXENT(client));
 }
 
 void Verificator::OnNclmVerificationRequest(
     edict_t* client, std::string clientVersion, std::string rsaKeyVersion
 ) {
-    std::cout << "OnNclmVerificationRequest: " << clientVersion << " " << rsaKeyVersion << std::endl;
-
     int clientIndex = ENTINDEX(client);
     if (map_cached_pkeys_.count(rsaKeyVersion) == 0 || player_data_.count(clientIndex) == 0)
         return;
 
     auto playerData = &player_data_[clientIndex];
-    auto payload = playerData->payload;
-    if (!payload.empty())
+    auto payload = &playerData->payload;
+    if (!payload->empty())
         return;
 
-    payload.assign(NCLM_VERIF_PAYLOAD_SIZE, 0x00);
+    payload->assign(NCLM_VERIF_PAYLOAD_SIZE, 0x00);
     playerData->client_version = clientVersion;
     playerData->prefered_RSA_key_version = rsaKeyVersion;
 
@@ -53,27 +46,24 @@ void Verificator::OnNclmVerificationRequest(
     res = EVP_PKEY_encrypt_init(ctx);
     NAPI_LOG_ASSERT(res > 0, "Cannot initialize encrypt context (code %d)", res);
 
-    uint8_t out[RSA_KEY_LENGTH];
-    size_t keySizeFromFile, keySizeWritten;
+    size_t outLen;
+    std::vector<uint8_t> out(NCLM_VERIF_ENCRYPTED_PAYLOAD_SIZE);
 
-    res = EVP_PKEY_encrypt(ctx, NULL, &keySizeFromFile, payload.data(), payload.size());
+    RAND_bytes(payload->data(), payload->size());
+
+    res = EVP_PKEY_encrypt(ctx, NULL, &outLen, payload->data(), payload->size());
     NAPI_LOG_ASSERT(res > 0, "Cannot perform encrypt operation (code %d)", res);
-    NAPI_LOG_ASSERT(keySizeFromFile == RSA_KEY_LENGTH, "'%s' key length does not match (%d, but need %d)",
-                    rsaKeyVersion.c_str(), keySizeFromFile, RSA_KEY_LENGTH);
+    NAPI_LOG_ASSERT(outLen == NCLM_VERIF_ENCRYPTED_PAYLOAD_SIZE, "'%s' key length does not match (%d, but need %d)",
+                    rsaKeyVersion.c_str(), outLen, NCLM_VERIF_ENCRYPTED_PAYLOAD_SIZE);
 
-    RAND_bytes(payload.data(), payload.size());
-
-    res = EVP_PKEY_encrypt(ctx, out, &keySizeWritten, payload.data(), payload.size());
+    res = EVP_PKEY_encrypt(ctx, out.data(), &outLen, payload->data(), payload->size());
     NAPI_LOG_ASSERT(res > 0, "Cannot perform encrypt operation 2 (code %d)", res);
 
-    auto name = INFOKEY_VALUE(GET_INFOKEYBUFFER(client), "name");
-    std::cout << "Sending NCLM_S2C::VERIFICATION_PAYLOAD to " << name << std::endl;
-
-    protocol_->SendVerificationPayload(client, payload);
+    protocol_->SendVerificationPayload(client, out);
 }
 
 void Verificator::OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) {
-   int clientIndex = ENTINDEX(client);
+    int clientIndex = ENTINDEX(client);
     if (player_data_.count(clientIndex) == 0)
         return;
 

@@ -13,8 +13,6 @@
 #include <events.h>
 #include "NclmProtocol.h"
 
-#define RSA_KEY_LENGTH 256
-
 class Verificator : public IEventServerActivated,
                     public IEventClientConnect,
                     public IEventNclmVerificationRequest,

@@ -67,8 +67,6 @@ void MessageEnd_Post()
     SET_META_RESULT(MRES_IGNORED);
 }
 
-#include <iostream>
-
 void SV_HandleClientMessage(IRehldsHook_HandleNetCommand* hookchain, IGameClient* apiClient, int8 opcode)
 {
     if (opcode == clc_ncl_message)
@@ -80,7 +78,6 @@ void SV_HandleClientMessage(IRehldsHook_HandleNetCommand* hookchain, IGameClient
         {
             *readcount += 4;
             auto nclm_opcode = static_cast<NCLM_C2S>(MSG_ReadByte());
-            std::cout << "got nclm message, opcode " << nclm_opcode << std::endl;
 
             if (g_NextClientApi)
                 g_NextClientApi->OnHandleNCLMessage(apiClient->GetEdict(), nclm_opcode);

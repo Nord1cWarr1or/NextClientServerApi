@@ -6,9 +6,25 @@
 class SizeBufWriter {
 	sizebuf_t* output_buf_;
 	sizebuf_t temp_buf_;
+	size_t maxsize_;
 	std::vector<uint8_t> temp_buf_data_;
 
 protected:
+	std::vector<uint8_t> GetTempBufCurSizeSlice() {
+		return std::vector<uint8_t>(
+			temp_buf_data_.begin(), temp_buf_data_.begin() + temp_buf_.cursize
+		);
+	}
+
+	void ReplaceTempBufWithSlice(std::vector<uint8_t>& slice) {
+		if(slice.size() > maxsize_) MF_Log("%s: overflow");
+
+		temp_buf_data_.assign(slice.begin(), slice.end());
+		temp_buf_data_.resize(maxsize_);
+
+		temp_buf_.cursize = slice.size();
+	}
+
 	sizebuf_t* GetTempSizeBuf() {
 		return &temp_buf_;
 	}	
@@ -17,21 +33,9 @@ protected:
 		return output_buf_;
 	}
 
-	std::vector<uint8_t>* GetTempStlBuffer() {
-		return &temp_buf_data_;
-	}
-
-	void SyncTempStlBufferWithTempSizeBuf() {
-		temp_buf_.cursize = GetTempStlBuffer()->size();
-		if(temp_buf_.cursize > temp_buf_.maxsize) {
-			MF_Log("%s: overflow, ignoring sizebuf maxsize", __FUNCTION__);
-			temp_buf_.maxsize = temp_buf_.cursize;
-		}
-	}
-
 public:
 	SizeBufWriter(sizebuf_t* output_buf, size_t maxsize)
-		: output_buf_(output_buf) {
+		: output_buf_(output_buf), maxsize_(maxsize) {
 		temp_buf_data_.resize(maxsize);
 
 		temp_buf_.buffername = "SizeBufWriter::temp_buf_";
@@ -62,7 +66,7 @@ public:
 		return this;
 	}
 
-	void Send() {
+	virtual void Send() {
 		g_RehldsFuncs->MSG_WriteBuf(output_buf_, temp_buf_.cursize, temp_buf_.data);
 	}
 };
