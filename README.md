@@ -14,9 +14,22 @@ Coming soon:
 - Separate precaching for regular cs 1.6 client and NextClient.
 - Precaching hud.txt and default sprites.
 
-> ⚠️ **PLEASE DO NOT USE THE API TO GRANT PRIVILEGES** ⚠️ <br />
-With the current implementation of the NextСlient authentication we cannot guarantee that `ncl_is_next_client`, `ncl_client_api_ready`, or `ncl_is_client_api_ready` will only work on genuine NextClients. Even a normal client without modifications can introduce itself as NextClient. Use these natives and forwards only to use existing API features like the cvars sandbox, viewmodel effects, etc.<br /><br />
-In the near future, we will provide a reliable authentication method for NextClient, which can be trusted and used to grant game privileges or other things related to trust.
+> 💎 **USING OF THE API TO GRANT PRIVILEGES** <br />
+Since `NextClientServerApi 1.4.0` we introduced a verification method for players playing with nextclient by using `ncl_is_using_nextclient` native and some [RSA public keys](https://github.com/Next21Team/NextClientServerApi/tree/main/addons/amxmodx/data/nextclient_api/pkeys) which should be installed on the server to make verification work.<br />
+The verification process is carried out only by nextclient since version 2.3.0, where support for the new client-server protocol was introduced. For earlier versions, it is unfortunately impossible to reliably determine whether a player uses nextclient.<br />
+Here is an example of using verification to provide access flags for players playing with updated nextclient:
+```c++
+#include <amxmodx>
+#include <next_client_api>
+
+const VIP_FLAGS[] = "f"; // the vip flags we are providing
+
+public ncl_client_api_ready(id) {
+	// Check that the module has verified nextclient
+	if(ncl_is_using_nextclient(id) == NCL_USING_VERIFICATED)
+		set_user_flags(id, VIP_FLAGS);
+}
+```
 
 # NextClient specific cvars
 
