@@ -27,7 +27,7 @@ const VIP_FLAGS[] = "f"; // the vip flags we are providing
 public ncl_client_api_ready(id) {
 	// Check that the module has verified nextclient
 	if(ncl_is_using_nextclient(id) == NCL_USING_VERIFICATED)
-		set_user_flags(id, VIP_FLAGS);
+		set_user_flags(id, read_flags(VIP_FLAGS));
 }
 ```
 
