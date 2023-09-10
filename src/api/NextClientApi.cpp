@@ -282,6 +282,12 @@ int NextClientApi::GetSupportedFeatures(int client) {
     if(*version >= NextClientVersion{2, 1, 6})
         features |= (FEATURE_CVARS_SANDBOX|FEATURE_VIEWMODEL_FX);
 
+    if(*version >= NextClientVersion{2, 1, 9})
+        features |= NCL_FEATURE_HUD_SPRITE;
+
+   if(*version >= NextClientVersion{2, 2, 0})
+        features |= NCL_FEATURE_HUD_SPRITE_RENDERMODE;
+
     if(*version >= NextClientVersion{2, 3, 0})
         features |= FEATURE_VERIFICATION;
 
