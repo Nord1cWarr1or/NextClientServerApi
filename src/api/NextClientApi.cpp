@@ -6,7 +6,7 @@
 NextClientApi::NextClientApi()
 {
     event_manager_ = std::make_unique<EventManager>();
-    event_manager_->AddEventListener(std::make_shared<NextClientApi*>(this));
+    event_manager_->AddEventListener(std::shared_ptr<NextClientApi>(this));
 
     cvar_sandbox_ = std::make_shared<::CvarSandbox>();
     event_manager_->AddEventListener(cvar_sandbox_);
