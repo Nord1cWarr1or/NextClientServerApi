@@ -7,6 +7,7 @@
 
 #include <events.h>
 #include <EventManager.h>
+#include <stddef.h>
 
 #include "CvarSandbox.h"
 #include "PrivatePrecache.h"

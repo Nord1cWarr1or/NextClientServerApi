@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <stddef.h>
 #include "rehlds_api_provider.h"
 
 class SizeBufWriter {

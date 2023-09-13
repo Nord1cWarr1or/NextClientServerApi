@@ -5,6 +5,7 @@
 #include "IPrivatePrecache.h"
 #include "IViewmodelFX.h"
 #include "IDeprecatedAPI.h"
+#include <stddef.h>
 
 #define BIT(n)  (1<<(n))
 

@@ -3,6 +3,7 @@
 #include "api/nclm_proto.h"
 #include "rehlds_api_provider.h"
 #include "asserts.h"
+#include <stddef.h>
 #include <string>
 #include <map>
 

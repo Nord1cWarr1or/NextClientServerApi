@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <stddef.h>
 
 #include <openssl/evp.h>
 #include <openssl/pem.h>

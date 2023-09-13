@@ -4,6 +4,8 @@
 #define SVC_NCL_MESSAGE						57			// SVC_SENDCVARVALUE
 #define NCLM_C2S_HEADER						0x6D6C636E 	// nclm
 
+#include <stddef.h>
+
 constexpr size_t RSA_KEY_LENGTH =			256;
 constexpr size_t NCLM_VERIF_PAYLOAD_SIZE =	196;
 constexpr size_t NCLM_VERIF_ENCRYPTED_PAYLOAD_SIZE = ((NCLM_VERIF_PAYLOAD_SIZE / RSA_KEY_LENGTH) + 1) * RSA_KEY_LENGTH;
