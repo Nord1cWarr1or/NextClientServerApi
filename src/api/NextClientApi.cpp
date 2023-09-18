@@ -24,6 +24,9 @@ NextClientApi::NextClientApi()
 
     verificator_ = std::make_shared<Verificator>(nclm_protocol_.get(), event_manager_.get());
     event_manager_->AddEventListener(verificator_);
+
+    deathmsg_wpn_icon = std::make_shared<::DeathMsgWpnIcon>();
+    event_manager_->AddEventListener(deathmsg_wpn_icon);
 }
 
 IViewmodelFX* NextClientApi::ViewmodelFX()
@@ -39,6 +42,10 @@ IPrivatePrecache* NextClientApi::PrivatePrecache()
 ICvarSandbox* NextClientApi::CvarSandbox()
 {
     return cvar_sandbox_.get();
+}
+
+IDeathMsgWpnIcon* NextClientApi::DeathMsgWpnIcon() {
+    return deathmsg_wpn_icon.get();
 }
 
 bool NextClientApi::ClientIsReady(int client)
@@ -156,6 +163,11 @@ void NextClientApi::OnPlayerPostThink(int client)
         data->is_api_ready = true;
 
         MF_ExecuteForward(forward_api_ready_, client);
+    }
+
+    if(data->is_first_frame) {
+        event_manager_->OnClientFirstFrame(client);
+        data->is_first_frame = false;
     }
 
     event_manager_->OnPlayerPostThink(client);
@@ -283,13 +295,13 @@ int NextClientApi::GetSupportedFeatures(int client) {
         features |= (FEATURE_CVARS_SANDBOX|FEATURE_VIEWMODEL_FX);
 
     if(*version >= NextClientVersion{2, 1, 9})
-        features |= NCL_FEATURE_HUD_SPRITE;
+        features |= FEATURE_HUD_SPRITE;
 
    if(*version >= NextClientVersion{2, 2, 0})
-        features |= NCL_FEATURE_HUD_SPRITE_RENDERMODE;
+        features |= FEATURE_HUD_SPRITE_RENDERMODE;
 
     if(*version >= NextClientVersion{2, 3, 0})
-        features |= FEATURE_VERIFICATION;
+        features |= (FEATURE_VERIFICATION|FEATURE_DEATHMSG_WPN_ICON);
 
     return features;
 }
@@ -310,6 +322,10 @@ NextClientUsing NextClientApi::ClientIsUsingNextClient(int client) {
 
 void NextClientApi::OnClientPutInServer(edict_t* pEntity) 
 {
+    int client = ENTINDEX(pEntity);
+    if(players_.count(client) == 0) return;
+
+    players_[client].is_first_frame = true;
     event_manager_->OnClientPutInServer(pEntity);
 }
 

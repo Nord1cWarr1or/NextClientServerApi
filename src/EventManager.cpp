@@ -18,6 +18,12 @@ void EventManager::OnClientConnect(int client)
         listener->OnClientConnect(client);
 }
 
+void EventManager::OnClientFirstFrame(int client)
+{
+    for (const auto& listener : client_first_frame_listeners_)
+        listener->OnClientFirstFrame(client);
+}
+
 void EventManager::OnClientPutInServer(edict_t* pEntity)
 {
     for (const auto& listener : client_putinserver_listeners_)

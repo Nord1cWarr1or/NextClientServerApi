@@ -37,7 +37,7 @@ void HealthNext::OnMessageEndPost()
         should_send_health_ex_ = false;
 
         MESSAGE_BEGIN(msg_save_dest_, message_HealthNEx_, msg_save_origin_, msg_save_ed_);
-        WRITE_LONG(std::min(msg_save_hp_, 999)); // hotfix: we limit it to 999, because as it turned out at the moment the client cannot display more than 999 correctly
+        WRITE_LONG(msg_save_hp_);
         MESSAGE_END();
     }
 }

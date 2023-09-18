@@ -20,6 +20,11 @@ public:
 	virtual void OnClientConnect(int client) = 0;
 };
 
+class IEventClientFirstFrame {
+public:
+	virtual void OnClientFirstFrame(int client) = 0;
+};
+
 class IEventClientPutInServer {
 public:
 	virtual void OnClientPutInServer(edict_t* pEntity) = 0;

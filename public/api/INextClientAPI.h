@@ -5,6 +5,7 @@
 #include "IPrivatePrecache.h"
 #include "IViewmodelFX.h"
 #include "IDeprecatedAPI.h"
+#include "IDeathMsgWpnIcon.h"
 #include <stddef.h>
 
 #define BIT(n)  (1<<(n))
@@ -20,8 +21,9 @@ enum NextClientFeatures {
     FEATURE_VIEWMODEL_FX = BIT(1),
     FEATURE_PRIVATE_PRECACHE = BIT(2),
     FEATURE_VERIFICATION = BIT(3),
-    NCL_FEATURE_HUD_SPRITE = BIT(4),
-    NCL_FEATURE_HUD_SPRITE_RENDERMODE = BIT(5)
+    FEATURE_HUD_SPRITE = BIT(4),
+    FEATURE_HUD_SPRITE_RENDERMODE = BIT(5),
+    FEATURE_DEATHMSG_WPN_ICON = BIT(5)
 };
 
 struct NextClientVersion {
@@ -65,6 +67,8 @@ public:
     virtual IPrivatePrecache *PrivatePrecache() = 0;
 
     virtual ICvarSandbox *CvarSandbox() = 0;
+
+    virtual IDeathMsgWpnIcon *DeathMsgWpnIcon() = 0;
 
     virtual bool ClientIsReady(int client) = 0;
 

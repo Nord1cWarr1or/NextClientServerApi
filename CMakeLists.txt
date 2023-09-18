@@ -48,9 +48,12 @@ add_library(${PROJECT_NAME} SHARED
 	src/api/NextClientApi.cpp
 	src/api/NclmProtocol.h
 	src/api/NclmProtocol.cpp
+	src/api/DeathMsgWpnIcon.h
+	src/api/DeathMsgWpnIcon.cpp
 	src/EventManager.h
 	src/EventManager.cpp
 	src/natives/cvar_sandbox.cpp
+	src/natives/death_notice_wpn_icon.cpp
 	src/natives/private_precache.cpp
 	src/natives/viewmodelfx.cpp
 	src/natives/nextclient.cpp

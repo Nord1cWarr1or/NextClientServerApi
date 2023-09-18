@@ -72,12 +72,13 @@ enum eNclUsing {
 }
 
 enum eFeaturesFlags (<<= 1) {
-    NCL_FEATURE_CVARS_SANDBOX = 0,
-    NCL_FEATURE_VIEWMODEL_FX = 1,
+    NCL_FEATURE_CVARS_SANDBOX = 1,
+    NCL_FEATURE_VIEWMODEL_FX,
     NCL_FEATURE_PRIVATE_PRECACHE,
     NCL_FEATURE_VERIFICATION,
     NCL_FEATURE_HUD_SPRITE,
-    NCL_FEATURE_HUD_SPRITE_RENDERMODE
+    NCL_FEATURE_HUD_SPRITE_RENDERMODE,
+    NCL_FEATURE_DEATHMSG_WPN_ICON
 }
 
 /**
@@ -429,3 +430,21 @@ native ncl_send_hud_sprite_full_screen(
  * @error                If the parameters are invalid, an error is thrown.
  */
 native ncl_clear_hud_sprite(id, channel);
+
+/**
+ * Overrides death message weapon icon for the next message to be sent by the server
+ * Specified sprite will be adjusted in scale to match death notice box. A width of the sprite is not limited
+ *
+ * @note                Best practice: call this function only before before the player's death event occurs
+ *                      For example: with Ham_Killed in pre 
+ *
+ * @param sprite_path   Path to the sprite file
+ * @param frame         Frame in the sprite
+ * @param rendermode    Rendermode for the sprite
+ * @param color         Red, green, blue components of sprite color (each component from 0 to 255)
+ * @param alpha         Alpha component of sprite color (from 0 to 255)
+ *
+ * @noreturn
+ * @error               If the parameters are invalid, an error is thrown.
+ */
+native ncl_set_wpn_icon_for_next_deathmsg(const sprite_path[], frame = 0, rendermode = kRenderTransAdd, color[] = { 255, 255, 255 }, alpha = 255, recipient_id = 0);

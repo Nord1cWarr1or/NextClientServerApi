@@ -15,6 +15,7 @@
 #include "ViewmodelFX.h"
 #include "HealthNext.h"
 #include "NclmProtocol.h"
+#include "DeathMsgWpnIcon.h"
 
 class NextClientApi : public INextClientAPI, public IEventClientVerificated
 {
@@ -24,6 +25,7 @@ class NextClientApi : public INextClientAPI, public IEventClientVerificated
         bool is_using_nextclient;
         bool is_api_ready;
         bool is_verificated;
+        bool is_first_frame;
     };
 
 	std::unique_ptr<EventManager> event_manager_;
@@ -40,6 +42,7 @@ class NextClientApi : public INextClientAPI, public IEventClientVerificated
 	std::shared_ptr<Verificator> verificator_;
     std::shared_ptr<HealthNext> health_next_;
     std::shared_ptr<NclmProtocol> nclm_protocol_;
+    std::shared_ptr<::DeathMsgWpnIcon> deathmsg_wpn_icon;
 
 public:
     explicit NextClientApi();
@@ -47,6 +50,7 @@ public:
 	IViewmodelFX* ViewmodelFX() override;
 	IPrivatePrecache* PrivatePrecache() override;
 	ICvarSandbox* CvarSandbox() override;
+    IDeathMsgWpnIcon* DeathMsgWpnIcon() override;
 
 	bool ClientIsReady(int client) override;
 	void ClientSetFOV(int client, int fov, float lerpTime) override;

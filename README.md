@@ -9,6 +9,7 @@ See API functions in [next_client_api.inc](https://github.com/Next21Team/NextCli
 - Effects for viewmodel. Allows you to set rendering effects for viewmodels, as well as skin and body.
 - Sprite management api. Allows you to display sprites on the screen.
 - Extended fov message. Allows you to set the interpolation time of the fov change.
+- Override of deathmsg weapon sprites. Allows you to customize weapon icons in kill feed.
 
 Coming soon:
 - Separate precaching for regular cs 1.6 client and NextClient.
@@ -16,7 +17,7 @@ Coming soon:
 
 > 💎 **USING OF THE API TO GRANT PRIVILEGES** <br />
 Since `NextClientServerApi 1.4.0` we introduced a verification method for players playing with nextclient by using `ncl_is_using_nextclient` native and some [RSA public keys](https://github.com/Next21Team/NextClientServerApi/tree/main/addons/amxmodx/data/nextclient_api/pkeys) which should be installed on the server to make verification work.<br />
-The verification process is carried out only by nextclient since version 2.3.0, where support for the new client-server protocol was introduced. For earlier versions, it is unfortunately impossible to reliably determine whether a player uses nextclient.<br />
+The verification process is carried out only by nextclient since version `2.3.0`, where support for the new client-server protocol was introduced. For earlier versions, it is unfortunately impossible to reliably determine whether a player uses nextclient.<br />
 Here is an example of using verification to provide access flags for players playing with updated nextclient:
 ```c++
 #include <amxmodx>
