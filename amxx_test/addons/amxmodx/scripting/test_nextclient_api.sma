@@ -24,10 +24,12 @@ new const HUD_SPRITE_KILL[] = "sprites/test_nextclient/hud_sprites/kill.spr"
 new const HUD_SPRITE_BLACK_HOLE[] = "sprites/test_nextclient/hud_sprites/ef_blackhole_loop.spr"
 
 public plugin_init() {
-    register_plugin("Test NCL API", "1.2.0", "Nordic Warrior");
+    register_plugin("Test NCL API", "1.3.0", "Nordic Warrior");
 
-    register_clcmd("ncl_is_next_client",            "cmd_ncl_is_next_client",           ADMIN_ALL);
     register_clcmd("ncl_is_client_api_ready",       "cmd_ncl_is_client_api_ready",      ADMIN_ALL);
+    register_clcmd("ncl_is_using_nextclient",       "cmd_ncl_is_using_nextclient",      ADMIN_ALL);
+    register_clcmd("ncl_get_nextclient_version",    "cmd_ncl_get_nextclient_version",   ADMIN_ALL);
+    register_clcmd("ncl_get_supported_features",    "cmd_ncl_get_supported_features",   ADMIN_ALL);
     register_clcmd("ncl_test_sandbox_cvars",        "cmd_ncl_test_sandbox_cvars",       ADMIN_ALL);
     register_clcmd("ncl_test_viewmodelfx_skin",     "cmd_ncl_test_viewmodelfx_skin",    ADMIN_ALL);
     register_clcmd("ncl_test_viewmodelfx_body",     "cmd_ncl_test_viewmodelfx_body",    ADMIN_ALL);
@@ -51,17 +53,109 @@ public ncl_client_api_ready(id) {
 
 /* <== NATIVES ==> */
 
-public cmd_ncl_is_next_client(id) {
-    log_to_file(LOG_FILE, "NATIVE <ncl_is_next_client> testing called by player: %n", id);
-    log_to_file(LOG_FILE, "Result: Is player NextClient? %s.", ncl_is_next_client(id) > NCLV_NOT_NEXT_CLIENT ? "Yes" : "No");
+public cmd_ncl_is_client_api_ready(id) {
+    log_to_file(LOG_FILE, "NATIVE <ncl_is_client_api_ready> testing called by player: %n", id);
+    log_to_file(LOG_FILE, "Result: API ready? %s.", ncl_is_client_api_ready(id)  ? "Yes" : "No");
     return PLUGIN_HANDLED;
 }
 
 /* <=======> */
 
-public cmd_ncl_is_client_api_ready(id) {
-    log_to_file(LOG_FILE, "NATIVE <ncl_is_client_api_ready> testing called by player: %n", id);
-    log_to_file(LOG_FILE, "Result: API ready? %s.", ncl_is_client_api_ready(id)  ? "Yes" : "No");
+public cmd_ncl_is_using_nextclient(id) {
+    log_to_file(LOG_FILE, "NATIVE <ncl_is_using_nextclient> testing called by player: %n", id);
+
+    new result[32];
+    new eNclUsing:is_using_next_client = ncl_is_using_nextclient(id);
+
+    if (is_using_next_client == NCL_NOT_USING) { 
+        result = "NCL_NOT_USING";
+    } else if (is_using_next_client == NCL_DECLARE_USING) {
+        result = "NCL_DECLARE_USING";
+    } else if (is_using_next_client == NCL_USING_VERIFICATED) {
+        result = "NCL_USING_VERIFICATED";
+    } else {
+        result = "UNEXPECTED RESULT"
+    }
+
+    log_to_file(LOG_FILE, "Result: Is player using NextClient = %s", result);
+    return PLUGIN_HANDLED;
+}
+
+/* <=======> */
+
+public cmd_ncl_get_nextclient_version(id) {
+    log_to_file(LOG_FILE, "NATIVE <ncl_get_nextclient_version> testing called by player: %n", id);
+
+    new major_version, minor_version, patch_version;
+    ncl_get_nextclient_version(id, major_version, minor_version, patch_version);
+
+    log_to_file(LOG_FILE, "Result: NextClient version = %i.%i.%i", major_version, minor_version, patch_version);
+    return PLUGIN_HANDLED;
+}
+
+/* <=======> */
+
+public cmd_ncl_get_supported_features(id) {
+    log_to_file(LOG_FILE, "NATIVE <ncl_get_supported_features> testing called by player: %n", id);
+
+    new eFeaturesFlags:bitsum = ncl_get_supported_features(id);
+    new result[256];
+
+    if (bitsum & NCL_FEATURE_CVARS_SANDBOX) {
+        add(result, charsmax(result), "NCL_FEATURE_CVARS_SANDBOX");
+        bitsum &= ~NCL_FEATURE_CVARS_SANDBOX;
+
+        if (bitsum > 0) {
+            add(result, charsmax(result), " | ");
+        }
+    }
+
+    if (bitsum & NCL_FEATURE_VIEWMODEL_FX) {
+        add(result, charsmax(result), "NCL_FEATURE_VIEWMODEL_FX");
+        bitsum &= ~NCL_FEATURE_VIEWMODEL_FX;
+
+        if (bitsum > 0) {
+            add(result, charsmax(result), " | ");
+        }
+    }
+
+    if (bitsum & NCL_FEATURE_PRIVATE_PRECACHE) {
+        add(result, charsmax(result), "NCL_FEATURE_PRIVATE_PRECACHE");
+        bitsum &= ~NCL_FEATURE_PRIVATE_PRECACHE;
+
+        if (bitsum > 0) {
+            add(result, charsmax(result), " | ");
+        }
+    }
+
+    if (bitsum & NCL_FEATURE_VERIFICATION) {
+        add(result, charsmax(result), "NCL_FEATURE_VERIFICATION");
+        bitsum &= ~NCL_FEATURE_VERIFICATION;
+
+        if (bitsum > 0) {
+            add(result, charsmax(result), " | ");
+        }
+    }
+
+    if (bitsum & NCL_FEATURE_HUD_SPRITE) {
+        add(result, charsmax(result), "NCL_FEATURE_HUD_SPRITE");
+        bitsum &= ~NCL_FEATURE_HUD_SPRITE;
+
+        if (bitsum > 0) {
+            add(result, charsmax(result), " | ");
+        }
+    }
+
+    if (bitsum & NCL_FEATURE_HUD_SPRITE_RENDERMODE) {
+        add(result, charsmax(result), "NCL_FEATURE_HUD_SPRITE_RENDERMODE");
+        bitsum &= ~NCL_FEATURE_HUD_SPRITE_RENDERMODE;
+
+        if (bitsum > 0) {
+            add(result, charsmax(result), " | ");
+        }
+    }
+
+    log_to_file(LOG_FILE, "Result: %s", result);
     return PLUGIN_HANDLED;
 }
 
@@ -99,12 +193,12 @@ public cmd_ncl_test_sandbox_cvars(id) {
     log_to_file(LOG_FILE, "SANDBOX CVAR testing called by player: %n", id);
 
     ncl_sandbox_cvar_begin(id);
-    for(new eSandboxCvar:i; i < eSandboxCvar; i++) {
+    for (new eSandboxCvar:i; i < eSandboxCvar; i++) {
         ncl_write_sandbox_cvar(i, CVAR_VALUES[any:i]);
     }
     ncl_sandbox_cvar_end();
 
-    for(new eSandboxCvar:i; i < eSandboxCvar; i++) {
+    for (new eSandboxCvar:i; i < eSandboxCvar; i++) {
         query_client_cvar(id, CVAR_STRING[i], "checkCvarValue");
     }
 
@@ -115,11 +209,11 @@ public checkCvarValue(id, const cvar[], const value[], const param[]) {
     static any:successfulTest;
     static any:testsPassed;
 
-    for(new eSandboxCvar:i; i < eSandboxCvar; i++) {
-        if(strcmp(cvar, CVAR_STRING[i]) == 0) {
+    for (new eSandboxCvar:i; i < eSandboxCvar; i++) {
+        if (strcmp(cvar, CVAR_STRING[i]) == 0) {
             log_to_file(LOG_FILE, "CVAR <%s> EXPECTED VALUE: %s ACTUAL VALUE: %s.", cvar, CVAR_VALUES[i], value);
 
-            if(strcmp(value, CVAR_VALUES[i]) == 0) {
+            if (strcmp(value, CVAR_VALUES[i]) == 0) {
                 successfulTest++;
             }
         }
@@ -127,7 +221,7 @@ public checkCvarValue(id, const cvar[], const value[], const param[]) {
 
     testsPassed++;
 
-    if(successfulTest == eSandboxCvar && testsPassed == eSandboxCvar) {
+    if (successfulTest == eSandboxCvar && testsPassed == eSandboxCvar) {
         log_to_file(LOG_FILE, "<SANDBOX CVAR testing was SUCCESSFUL>", id);
         successfulTest = 0;
         testsPassed = 0;
@@ -136,7 +230,7 @@ public checkCvarValue(id, const cvar[], const value[], const param[]) {
         cmd_ncl_restore_cvars_values(id);
         #endif
     }
-    else if(successfulTest != eSandboxCvar && testsPassed == eSandboxCvar) {
+    else if (successfulTest != eSandboxCvar && testsPassed == eSandboxCvar) {
         log_to_file(LOG_FILE, "[!] SANDBOX CVAR testing FAILED [!]", id);
         successfulTest = 0;
         testsPassed = 0;
@@ -151,7 +245,7 @@ public cmd_ncl_restore_cvars_values(id) {
     log_to_file(LOG_FILE, "CVARS from SANDBOX are restored for player: %n", id);
 
     ncl_sandbox_cvar_begin(id);
-    for(new eSandboxCvar:i; i < eSandboxCvar; i++) {
+    for (new eSandboxCvar:i; i < eSandboxCvar; i++) {
         ncl_write_sandbox_cvar(i, "");
     }
     ncl_sandbox_cvar_end();
@@ -233,6 +327,7 @@ public cmd_ncl_restore_viewmodelfx(id) {
 }
 
 /* <=======> */
+
 const Float:FOV_TIME = 2.0;
 
 public cmd_ncl_setfov(id) {
@@ -240,10 +335,18 @@ public cmd_ncl_setfov(id) {
     log_to_file(LOG_FILE, "* You should manually check a FOV changing.");
 
     ncl_setfov(id, 120, FOV_TIME);
-    set_task(FOV_TIME, "restoreFOV", id);
+    set_task(FOV_TIME, "restore_fov", id);
 
     return PLUGIN_HANDLED;
 }
+
+public restore_fov(id) {
+    log_to_file(LOG_FILE, "FOV automatically restored to 90 for player: %n", id);
+
+    ncl_setfov(id, 90, FOV_TIME);
+}
+
+/* <=======> */
 
 public cmd_ncl_hudsprite_set(id) {
     log_to_file(LOG_FILE, "NATIVE <ncl_send_hud_sprite> testing called by player: %n", id);
@@ -382,6 +485,8 @@ public cmd_ncl_hudsprite_set(id) {
     return PLUGIN_HANDLED;
 }
 
+/* <=======> */
+
 public cmd_ncl_hudsprite_clear(id) {
     log_to_file(LOG_FILE, "NATIVE <ncl_clear_hud_sprite> testing called by player: %n", id);
 
@@ -390,12 +495,6 @@ public cmd_ncl_hudsprite_clear(id) {
     }
 
     return PLUGIN_HANDLED;
-}
-
-public restoreFOV(id) {
-    log_to_file(LOG_FILE, "FOV automatically restored to 90 for player: %n", id);
-
-    ncl_setfov(id, 90, FOV_TIME);
 }
 
 /* <=== END NATIVES ===> */
@@ -475,8 +574,8 @@ public test_ncl_precache_client_only() {
     ncl_precache_client_only("sprites/radar640.spr",        "sprites/test_nextclient/radar640.spr"          ); 
     ncl_precache_client_only("sprites/radaropaque640.spr",  "sprites/test_nextclient/radaropaque640.spr"    );
 
-    for(new WeaponIdType:weaponID = WEAPON_P228; weaponID <= WEAPON_P90; weaponID++) {
-        if(weaponID == WEAPON_GLOCK) {
+    for (new WeaponIdType:weaponID = WEAPON_P228; weaponID <= WEAPON_P90; weaponID++) {
+        if (weaponID == WEAPON_GLOCK) {
             continue;
         }
 
@@ -504,7 +603,7 @@ public test_ncl_precache_and_replace_custom_model() {
 }
 
 public RG_CBasePlayer_Spawn_post(id) {
-    if(!is_user_alive(id)) {
+    if (!is_user_alive(id)) {
         return;
     }
 
@@ -555,8 +654,8 @@ public test_ncl_precache_and_replace_custom_sound() {
 }
 
 public sendSound() {
-    for(new player = 1; player <= MaxClients; player++) {
-        if(!is_user_connected(player)) {
+    for (new player = 1; player <= MaxClients; player++) {
+        if (!is_user_connected(player)) {
             continue;
         }
 
