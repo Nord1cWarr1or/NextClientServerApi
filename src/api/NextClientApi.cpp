@@ -155,11 +155,7 @@ void NextClientApi::OnPlayerPostThink(int client)
         return;
 
     auto data = &players_[client];
-    if (!data->is_api_ready && (
-            data->deprecated_client_version != NextClientVersion::NOT_NEXTCLIENT
-            || data->client_version
-        )
-    ) {
+    if (!data->is_api_ready && data->is_using_nextclient) {
         data->is_api_ready = true;
 
         MF_ExecuteForward(forward_api_ready_, client);
