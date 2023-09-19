@@ -105,7 +105,7 @@ public cmd_ncl_get_supported_features(id) {
         add(result, charsmax(result), "NCL_FEATURE_CVARS_SANDBOX");
         bitsum &= ~NCL_FEATURE_CVARS_SANDBOX;
 
-        if (bitsum > 0) {
+        if (bitsum > any:0) {
             add(result, charsmax(result), " | ");
         }
     }
@@ -114,7 +114,7 @@ public cmd_ncl_get_supported_features(id) {
         add(result, charsmax(result), "NCL_FEATURE_VIEWMODEL_FX");
         bitsum &= ~NCL_FEATURE_VIEWMODEL_FX;
 
-        if (bitsum > 0) {
+        if (bitsum > any:0) {
             add(result, charsmax(result), " | ");
         }
     }
@@ -123,7 +123,7 @@ public cmd_ncl_get_supported_features(id) {
         add(result, charsmax(result), "NCL_FEATURE_PRIVATE_PRECACHE");
         bitsum &= ~NCL_FEATURE_PRIVATE_PRECACHE;
 
-        if (bitsum > 0) {
+        if (bitsum > any:0) {
             add(result, charsmax(result), " | ");
         }
     }
@@ -132,7 +132,7 @@ public cmd_ncl_get_supported_features(id) {
         add(result, charsmax(result), "NCL_FEATURE_VERIFICATION");
         bitsum &= ~NCL_FEATURE_VERIFICATION;
 
-        if (bitsum > 0) {
+        if (bitsum > any:0) {
             add(result, charsmax(result), " | ");
         }
     }
@@ -141,7 +141,7 @@ public cmd_ncl_get_supported_features(id) {
         add(result, charsmax(result), "NCL_FEATURE_HUD_SPRITE");
         bitsum &= ~NCL_FEATURE_HUD_SPRITE;
 
-        if (bitsum > 0) {
+        if (bitsum > any:0) {
             add(result, charsmax(result), " | ");
         }
     }
@@ -150,7 +150,7 @@ public cmd_ncl_get_supported_features(id) {
         add(result, charsmax(result), "NCL_FEATURE_HUD_SPRITE_RENDERMODE");
         bitsum &= ~NCL_FEATURE_HUD_SPRITE_RENDERMODE;
 
-        if (bitsum > 0) {
+        if (bitsum > any:0) {
             add(result, charsmax(result), " | ");
         }
     }
