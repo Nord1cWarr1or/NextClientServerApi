@@ -12,7 +12,7 @@ public:
 	NclmSizeBufWriter(sizebuf_t* output_buf, size_t maxsize)
 		: SizeBufWriter(output_buf, maxsize) {
 		WriteByte(SVC_NCL_MESSAGE);
-		WriteLong(NCLM_C2S_HEADER);
+		WriteLong(NCLM_HEADER);
 	}
 
 	std::map<uint8_t, uint8_t> escaping_symbols_ = {
@@ -54,19 +54,19 @@ void NclmProtocol::OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode) {
 }
 
 void NclmProtocol::OnVerificationRequest(edict_t* client) {
-	std::string clientVersion = MSG_ReadString();
 	std::string rsaKeyVersion = MSG_ReadString();
 
 	auto name = INFOKEY_VALUE(GET_INFOKEYBUFFER(client), "name");
 	NAPI_LOG_ASSERT(!MSG_IsBadRead(), "%s: badread on %s", __FUNCTION__, name);
 
-	event_manager_->OnNclmVerificationRequest(client, clientVersion, rsaKeyVersion);
+	event_manager_->OnNclmVerificationRequest(client, rsaKeyVersion);
 }
 
 void NclmProtocol::OnVerificationResponse(edict_t* client) {
 	std::vector<uint8_t> payload;
 
 	payload.assign(NCLM_VERIF_PAYLOAD_SIZE, 0x00);
+	std::string clientVersion = MSG_ReadString();
 	auto written = MSG_ReadBuf(payload.size(), payload.data());
 
 	auto name = INFOKEY_VALUE(GET_INFOKEYBUFFER(client), "name");
@@ -75,7 +75,7 @@ void NclmProtocol::OnVerificationResponse(edict_t* client) {
 	NAPI_LOG_ASSERT(!MSG_IsBadRead(), "%s: badread on %s (%d/%d/%d)", 
 		__FUNCTION__, name, readcount, readcount + NCLM_VERIF_PAYLOAD_SIZE, netMessage->cursize);
 
-	event_manager_->OnNclmVerificationResponse(client, payload);
+	event_manager_->OnNclmVerificationResponse(client, clientVersion, payload);
 }
 
 sizebuf_t* NclmProtocol::GetClientReliableChannel(edict_t* client) {
@@ -86,12 +86,6 @@ sizebuf_t* NclmProtocol::GetClientReliableChannel(edict_t* client) {
 sizebuf_t* NclmProtocol::GetClientUnrealibleChannel(edict_t* client) {
 	auto cl = g_RehldsApi->GetServerStatic()->GetClient(ENTINDEX(client) - 1);
 	return cl->GetDatagram();
-}
-
-void NclmProtocol::SendIsServerSupportNextclient(edict_t* client) {
-	NclmSizeBufWriter message(GetClientReliableChannel(client), 0x32);
-
-	message.WriteByte(NCLM_S2C::IS_SERVER_SUPPORT_NEXTCLIENT)->Send();
 }
 
 void NclmProtocol::SendVerificationPayload(edict_t* client, std::vector<uint8_t> payload) {

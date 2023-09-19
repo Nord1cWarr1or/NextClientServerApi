@@ -18,6 +18,5 @@ public:
 	NclmProtocol(EventManager* event_manager);
 	void OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode) override;
 
-	void SendIsServerSupportNextclient(edict_t* client);
 	void SendVerificationPayload(edict_t* client, std::vector<uint8_t> payload);
 };

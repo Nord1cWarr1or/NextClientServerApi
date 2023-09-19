@@ -22,13 +22,9 @@ void Verificator::OnClientConnect(int client)
         return;
 
     player_data_[client].payload.clear();
-    
-    protocol_->SendIsServerSupportNextclient(INDEXENT(client));
 }
 
-void Verificator::OnNclmVerificationRequest(
-    edict_t* client, std::string clientVersion, std::string rsaKeyVersion
-) {
+void Verificator::OnNclmVerificationRequest(edict_t* client, std::string rsaKeyVersion) {
     int clientIndex = ENTINDEX(client);
     if (map_cached_pkeys_.count(rsaKeyVersion) == 0 || player_data_.count(clientIndex) == 0)
         return;
@@ -39,7 +35,6 @@ void Verificator::OnNclmVerificationRequest(
         return;
 
     payload->assign(NCLM_VERIF_PAYLOAD_SIZE, 0x00);
-    playerData->client_version = clientVersion;
     playerData->prefered_RSA_key_version = rsaKeyVersion;
 
     int res;
@@ -63,7 +58,7 @@ void Verificator::OnNclmVerificationRequest(
     protocol_->SendVerificationPayload(client, out);
 }
 
-void Verificator::OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) {
+void Verificator::OnNclmVerificationResponse(edict_t* client, std::string clientVersion, std::vector<uint8_t> payload) {
     int clientIndex = ENTINDEX(client);
     if (player_data_.count(clientIndex) == 0)
         return;
@@ -78,7 +73,7 @@ void Verificator::OnNclmVerificationResponse(edict_t* client, std::vector<uint8_
     NAPI_LOG_ASSERT(payload == playerData->payload, "%s: Decrypted payload body mismatch on %s (%s)",
                     __FUNCTION__, name, rsaKeyVersion.c_str());
 
-    event_manager_->OnClientVerificated(client, playerData->client_version, rsaKeyVersion);
+    event_manager_->OnClientVerificated(client, clientVersion, rsaKeyVersion);
 }
 
 int Verificator::ParsePublicKeys()

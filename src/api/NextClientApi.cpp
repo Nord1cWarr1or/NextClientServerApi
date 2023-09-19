@@ -1,7 +1,8 @@
 #include "NextClientApi.h"
-#include <utility>
 #include "utilfuncs.h"
+#include <utility>
 #include <sstream>
+#include <stdio.h>
 
 NextClientApi::NextClientApi()
 {
@@ -245,16 +246,12 @@ bool ParseVersion(std::string in, NextClientVersion& out) {
     if(in.size() > 10) 
         return false;
 
-    std::istringstream ss(in);
-    std::vector<size_t> tokens; std::string token;
-
-    for(int i = 0; i < 3 && std::getline(ss, token, '.'); i++)
-        tokens.push_back(stoi(token));
-
-    if(tokens.size() != 3)
+    size_t major, minor, patch;
+    int num = sscanf(in.c_str(), "%d.%d.%d", &major, &minor, &patch);
+    if(num != 3)
         return false;
 
-    out = { tokens[0], tokens[1], tokens[2] };
+    out = { major, minor, patch };
     return true;
 }
 
