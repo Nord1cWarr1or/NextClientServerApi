@@ -42,7 +42,7 @@ struct NextClientVersion {
     }
 
     const inline bool operator>=(const NextClientVersion& other) const {
-        return *this > other || *this == other;
+        return major >= other.major && minor >= other.minor && patch >= other.patch;
     }
 
     const inline bool operator<(const NextClientVersion& other) const {
@@ -50,7 +50,7 @@ struct NextClientVersion {
     }
 
     const inline bool operator<=(const NextClientVersion& other) const {
-        return *this < other || *this == other;
+        return major <= other.major && minor <= other.minor && patch <= other.patch;
     }
 
     const inline bool operator==(const NextClientVersion& other) const {
