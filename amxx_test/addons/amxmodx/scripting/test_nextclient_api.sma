@@ -26,6 +26,8 @@ new const HUD_SPRITE_BLACK_HOLE[] = "sprites/test_nextclient/hud_sprites/ef_blac
 public plugin_init() {
     register_plugin("Test NCL API", "1.3.0", "Nordic Warrior");
 
+    // Cmds for testing natives
+    // look at next_client_api.inc
     register_clcmd("ncl_is_client_api_ready",       "cmd_ncl_is_client_api_ready",      ADMIN_ALL);
     register_clcmd("ncl_is_using_nextclient",       "cmd_ncl_is_using_nextclient",      ADMIN_ALL);
     register_clcmd("ncl_get_nextclient_version",    "cmd_ncl_get_nextclient_version",   ADMIN_ALL);
@@ -39,6 +41,7 @@ public plugin_init() {
     register_clcmd("ncl_hudsprite_set",             "cmd_ncl_hudsprite_set",            ADMIN_ALL);
     register_clcmd("ncl_hudsprite_clear",           "cmd_ncl_hudsprite_clear",          ADMIN_ALL);
 
+    // Other cmds
     register_clcmd("ncl_restore_cvars_values", "cmd_ncl_restore_cvars_values", ADMIN_ALL);
 }
 
