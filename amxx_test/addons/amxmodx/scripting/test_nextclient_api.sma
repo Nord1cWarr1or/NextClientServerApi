@@ -353,6 +353,7 @@ public restore_fov(id) {
 
 public cmd_ncl_hudsprite_set(id) {
     log_to_file(LOG_FILE, "NATIVE <ncl_send_hud_sprite> testing called by player: %n", id);
+    log_to_file(LOG_FILE, "* You should manually check sprites on screen in game.");
 
     // left-top
     ncl_send_hud_sprite(
@@ -364,7 +365,7 @@ public cmd_ncl_hudsprite_set(id) {
         .frame = _,
         .frameRate = _,
         .inTime = _,
-        .holdTime = 2.0,
+        .holdTime = 5.0,
         .outTime = 1.0,
         .x = 0.0,
         .y = 0.0,
@@ -383,7 +384,7 @@ public cmd_ncl_hudsprite_set(id) {
         .frame = _,
         .frameRate = _,
         .inTime = 3.0,
-        .holdTime = 3.0,
+        .holdTime = 6.0,
         .outTime = 3.0,
         .x = 0.0,
         .y = -1.0,
@@ -492,6 +493,7 @@ public cmd_ncl_hudsprite_set(id) {
 
 public cmd_ncl_hudsprite_clear(id) {
     log_to_file(LOG_FILE, "NATIVE <ncl_clear_hud_sprite> testing called by player: %n", id);
+    log_to_file(LOG_FILE, "* You should manually check clearing sprites on screen in game.");
 
     for (new i = 0; i < MAX_HUD_SPRITE_CHANNELS; ++i) {
        ncl_clear_hud_sprite(id, i);
@@ -508,8 +510,8 @@ public plugin_precache() {
     precache_model(TEST_SKIN_MODEL);
     precache_model(TEST_BODY_MODEL);
 
-    precache_model(HUD_SPRITE_KILL)
-    precache_model(HUD_SPRITE_BLACK_HOLE)
+    precache_model(HUD_SPRITE_KILL);
+    precache_model(HUD_SPRITE_BLACK_HOLE);
 
 #if defined TEST_PRECACHE_AND_REPLACE_DEFAULT_MODELS
     test_ncl_precache_and_replace_default_model();
