@@ -23,7 +23,7 @@ enum NextClientFeatures {
     FEATURE_VERIFICATION = BIT(3),
     FEATURE_HUD_SPRITE = BIT(4),
     FEATURE_HUD_SPRITE_RENDERMODE = BIT(5),
-    FEATURE_DEATHMSG_WPN_ICON = BIT(5)
+    FEATURE_DEATHMSG_WPN_ICON = BIT(6)
 };
 
 struct NextClientVersion {
@@ -38,23 +38,36 @@ struct NextClientVersion {
     }
 
     const inline bool operator>(const NextClientVersion& other) const {
-        return major > other.major && minor > other.minor && patch > other.patch;
+        return compare(other) > 0;
+    }
+
+    const inline bool operator<(const NextClientVersion& other) const {
+        return compare(other) < 0;
+    }
+
+    const inline bool operator==(const NextClientVersion& other) const {
+        return compare(other) == 0;
     }
 
     const inline bool operator>=(const NextClientVersion& other) const {
         return *this > other || *this == other;
     }
 
-    const inline bool operator<(const NextClientVersion& other) const {
-        return major < other.major && minor < other.minor && patch < other.patch;
-    }
-
     const inline bool operator<=(const NextClientVersion& other) const {
         return *this < other || *this == other;
     }
 
-    const inline bool operator==(const NextClientVersion& other) const {
-        return major == other.major && minor == other.minor && patch == other.patch;
+    const inline int compare(const NextClientVersion& other) const {
+        auto v_this = &major;
+        auto v_other = &other.major;
+
+        for(int i = 0; i < 3; i++) {
+            if(v_this[i] > v_other[i])
+                return 1;
+            else if(v_this[i] < v_other[i])
+                return -1;
+        }
+        return 0;
     }
 };
 

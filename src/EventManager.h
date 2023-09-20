@@ -53,6 +53,6 @@ public:
     void OnMessageBeginPost(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed) override;
     void OnMessageEndPost() override;
     void OnClientVerificated(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) override;
-    void OnNclmVerificationRequest(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) override;
-    void OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) override;
+    void OnNclmVerificationRequest(edict_t* client, std::string rsaKeyVersion) override;
+    void OnNclmVerificationResponse(edict_t* client, std::string clientVersion, std::vector<uint8_t> payload) override;
 };

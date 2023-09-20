@@ -22,7 +22,6 @@ class Verificator : public IEventServerActivated,
 {
     struct PlayerData
     {
-        std::string client_version;
         std::string prefered_RSA_key_version;
         std::vector<uint8_t> payload;
     };
@@ -34,8 +33,8 @@ class Verificator : public IEventServerActivated,
     NclmProtocol* protocol_;
     EventManager* event_manager_;
 
-    void OnNclmVerificationRequest(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) override;
-    void OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) override;
+    void OnNclmVerificationRequest(edict_t* client, std::string rsaKeyVersion) override;
+    void OnNclmVerificationResponse(edict_t* client, std::string clientVersion, std::vector<uint8_t> payload) override;
     void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) override;
     void OnClientConnect(int client) override;
 

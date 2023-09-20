@@ -53,14 +53,14 @@ void EventManager::OnClientVerificated(edict_t* client, std::string clientVersio
         listener->OnClientVerificated(client, clientVersion, rsaKeyVersion);
 }
 
-void EventManager::OnNclmVerificationRequest(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) 
+void EventManager::OnNclmVerificationRequest(edict_t* client, std::string rsaKeyVersion) 
 {
     for (const auto& listener : nclm_verification_request_listeners_)
-        listener->OnNclmVerificationRequest(client, clientVersion, rsaKeyVersion);
+        listener->OnNclmVerificationRequest(client, rsaKeyVersion);
 }
 
-void EventManager::OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) 
+void EventManager::OnNclmVerificationResponse(edict_t* client, std::string clientVersion, std::vector<uint8_t> payload) 
 {
     for (const auto& listener : nclm_verification_response_listeners_)
-        listener->OnNclmVerificationResponse(client, payload);
+        listener->OnNclmVerificationResponse(client, clientVersion, payload);
 }
