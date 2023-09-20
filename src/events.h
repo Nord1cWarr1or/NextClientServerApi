@@ -52,12 +52,12 @@ public:
 
 class IEventNclmVerificationRequest {
 public:
-	virtual void OnNclmVerificationRequest(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) = 0;
+	virtual void OnNclmVerificationRequest(edict_t* client, std::string rsaKeyVersion) = 0;
 };
 
 class IEventNclmVerificationResponse {
 public:
-	virtual void OnNclmVerificationResponse(edict_t* client, std::vector<uint8_t> payload) = 0;
+	virtual void OnNclmVerificationResponse(edict_t* client, std::string clientVersion, std::vector<uint8_t> payload) = 0;
 };
 
 class IEventClientVerificated {
