@@ -47,7 +47,10 @@ public plugin_init() {
     register_clcmd("ncl_hudsprite_clear",           "cmd_ncl_hudsprite_clear",          ADMIN_ALL);
 
     // Other cmds
+    // For ncl_test_sandbox_cvars() if AUTO_RESTORE_CVAR_VALUES is disabled
     register_clcmd("ncl_restore_cvars_values", "cmd_ncl_restore_cvars_values", ADMIN_ALL);
+    // For testing HUD limit health
+    register_clcmd("ncl_add_health", "cmd_ncl_add_health", ADMIN_ALL);
 }
 
 /* <== FORWARDS ==> */
@@ -674,3 +677,15 @@ public sendSound() {
 }
 
 /* <=== END PRECACHE ===> */
+
+/* <== OTHER FUNCS ==> */
+
+public cmd_ncl_add_health(id) {
+    if (!is_user_alive(id)) {
+        return;
+    }
+
+    set_entvar(id, var_health, 99999999.0);
+}
+
+/* <=== END OTHER FUNCS ===> */
