@@ -71,7 +71,7 @@ public cmd_ncl_is_client_api_ready(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -88,7 +88,7 @@ public cmd_ncl_is_using_nextclient(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -119,7 +119,7 @@ public cmd_ncl_get_nextclient_version(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -140,7 +140,7 @@ public cmd_ncl_get_supported_features(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -243,7 +243,7 @@ public cmd_ncl_test_sandbox_cvars(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -304,7 +304,7 @@ public cmd_ncl_restore_cvars_values(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -330,7 +330,7 @@ public cmd_ncl_test_viewmodelfx_skin(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -359,7 +359,7 @@ public cmd_ncl_test_viewmodelfx_body(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -385,7 +385,7 @@ public cmd_ncl_test_viewmodelfx_render(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -410,7 +410,7 @@ public cmd_ncl_restore_viewmodelfx(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -438,7 +438,7 @@ public cmd_ncl_setfov(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -465,7 +465,7 @@ public cmd_ncl_hudsprite_set(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -614,7 +614,7 @@ public cmd_ncl_hudsprite_clear(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
@@ -804,15 +804,16 @@ public cmd_ncl_add_health(id) {
 
         if (id == 0) {
             log_amx("Player with userid #%i not found.", read_argv_int(1));
-            return;
+            return PLUGIN_HANDLED;
         }
     }
 
     if (!is_user_alive(id)) {
-        return;
+        return PLUGIN_HANDLED;
     }
 
     set_entvar(id, var_health, 99999999.0);
+    return PLUGIN_HANDLED;
 }
 
 /* <=== END OTHER FUNCS ===> */
