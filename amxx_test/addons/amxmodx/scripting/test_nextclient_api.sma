@@ -7,6 +7,10 @@
 
 new LOG_FILE[] = "test_nextclient_api.log";
 
+// Automated testing of natives where no human visual control is needed
+// It is done in the ncl_client_api_ready() forward.
+// #define AUTOTESTS
+
 // Uncomment this if you do not want to check the values of the sandbox CVars yourself
 #define AUTO_RESTORE_CVAR_VALUES
 
@@ -58,6 +62,11 @@ public plugin_init() {
 
 public ncl_client_api_ready(id) {
     log_to_file(LOG_FILE, "FORWARD <ncl_client_api_ready> called for player: %n", id);
+
+    #if defined AUTOTESTS
+    start_autotests(id);
+    #endif
+
     return PLUGIN_HANDLED;
 }
 
@@ -107,7 +116,7 @@ public cmd_ncl_is_using_nextclient(id) {
         result = "UNEXPECTED RESULT"
     }
 
-    log_to_file(LOG_FILE, "Result: Is player using NextClient = %s", result);
+    log_to_file(LOG_FILE, "Result: %s", result);
     return PLUGIN_HANDLED;
 }
 
@@ -796,7 +805,7 @@ public sendSound() {
 
 /* <=== END PRECACHE ===> */
 
-/* <== OTHER FUNCS ==> */
+/* <== OTHER TEST FUNCS ==> */
 
 public cmd_ncl_add_health(id) {
     if (id == 0) {
@@ -814,6 +823,16 @@ public cmd_ncl_add_health(id) {
 
     set_entvar(id, var_health, 99999999.0);
     return PLUGIN_HANDLED;
+}
+
+/* <=======> */
+
+public start_autotests(id) {
+    cmd_ncl_is_client_api_ready(id);
+    cmd_ncl_is_using_nextclient(id);
+    cmd_ncl_get_nextclient_version(id);
+    cmd_ncl_get_supported_features(id);
+    cmd_ncl_test_sandbox_cvars(id);
 }
 
 /* <=== END OTHER FUNCS ===> */
