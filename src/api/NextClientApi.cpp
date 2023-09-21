@@ -352,3 +352,7 @@ void NextClientApi::OnMessageEndPost()
 {
     event_manager_->OnMessageEndPost();
 }
+
+void NextClientApi::OnSendServerInfo(edict_t* client) {
+    event_manager_->OnSendServerInfo(client);
+}

@@ -104,6 +104,7 @@ public:
 	void OnHandleNCLMessage(edict_t* client, NCLM_C2S opcode);
     void OnMessageBeginPost(int msg_dest, int msg_type, const float *pOrigin, edict_t *ed);
     void OnMessageEndPost();
+    void OnSendServerInfo(edict_t* client);
 
     void OnClientVerificated(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) override; 
 };

@@ -13,7 +13,8 @@ class EventManager : public IEventPlayerPostThink,
                      public IEventMessageBeginPost,
                      public IEventMessageEndPost,
                      public IEventClientVerificated,
-                     public IEventNclmVerificationRequest, public IEventNclmVerificationResponse
+                     public IEventNclmVerificationRequest, public IEventNclmVerificationResponse,
+                     public IEventSendServerinfo
 {
     std::vector<std::shared_ptr<IEventPlayerPostThink>> player_post_think_listeners_;
     std::vector<std::shared_ptr<IEventClientDisconnect>> client_disconnect_listeners_;
@@ -26,6 +27,7 @@ class EventManager : public IEventPlayerPostThink,
     std::vector<std::shared_ptr<IEventClientVerificated>> client_verificated_listeners_;
     std::vector<std::shared_ptr<IEventNclmVerificationRequest>> nclm_verification_request_listeners_;
     std::vector<std::shared_ptr<IEventNclmVerificationResponse>> nclm_verification_response_listeners_;
+    std::vector<std::shared_ptr<IEventSendServerinfo>> send_server_info_listeners_;
 
 public:
     template<typename T>
@@ -42,6 +44,7 @@ public:
         if constexpr (std::is_base_of_v<IEventClientVerificated, T>) client_verificated_listeners_.push_back(listener);
         if constexpr (std::is_base_of_v<IEventNclmVerificationRequest, T>) nclm_verification_request_listeners_.push_back(listener);
         if constexpr (std::is_base_of_v<IEventNclmVerificationResponse, T>) nclm_verification_response_listeners_.push_back(listener);
+        if constexpr (std::is_base_of_v<IEventSendServerinfo, T>) send_server_info_listeners_.push_back(listener);
     }
 
     void OnPlayerPostThink(int client) override;
@@ -55,4 +58,5 @@ public:
     void OnClientVerificated(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) override;
     void OnNclmVerificationRequest(edict_t* client, std::string rsaKeyVersion) override;
     void OnNclmVerificationResponse(edict_t* client, std::string clientVersion, std::vector<uint8_t> payload) override;
+    void OnSendServerInfo(edict_t* client) override;
 };

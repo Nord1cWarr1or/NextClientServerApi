@@ -16,14 +16,16 @@
 #include "EventManager.h"
 
 class Verificator : public IEventServerActivated,
-                    public IEventClientConnect,
+                    public IEventClientDisconnect,
                     public IEventNclmVerificationRequest,
-                    public IEventNclmVerificationResponse
+                    public IEventNclmVerificationResponse,
+                    public IEventSendServerinfo
 {
     struct PlayerData
     {
         std::string prefered_RSA_key_version;
         std::vector<uint8_t> payload;
+        std::vector<uint8_t> encrypted_payload;
     };
 
     std::string dirpath_public_keys_;
@@ -36,7 +38,8 @@ class Verificator : public IEventServerActivated,
     void OnNclmVerificationRequest(edict_t* client, std::string rsaKeyVersion) override;
     void OnNclmVerificationResponse(edict_t* client, std::string clientVersion, std::vector<uint8_t> payload) override;
     void OnServerActivated(edict_t* pEdictList, int edictCount, int clientMax) override;
-    void OnClientConnect(int client) override;
+    void OnClientDisconnect(int client) override;
+    void OnSendServerInfo(edict_t* client) override;
 
     int ParsePublicKeys();
 
