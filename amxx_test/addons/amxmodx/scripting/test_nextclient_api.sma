@@ -48,8 +48,8 @@ public plugin_init() {
     register_concmd("ncl_test_viewmodelfx_render",   "cmd_ncl_test_viewmodelfx_render",  ADMIN_ALL);
     register_concmd("ncl_restore_viewmodelfx",       "cmd_ncl_restore_viewmodelfx",      ADMIN_ALL);
     register_concmd("ncl_setfov",                    "cmd_ncl_setfov",                   ADMIN_ALL);
-    register_concmd("ncl_hudsprite_set",             "cmd_ncl_hudsprite_set",            ADMIN_ALL);
-    register_concmd("ncl_hudsprite_clear",           "cmd_ncl_hudsprite_clear",          ADMIN_ALL);
+    register_concmd("ncl_hudsprite_set",             "cmd_ncl_hudsprite_set",            ADMIN_ALL); // ncl_send_hud_sprite(), ncl_send_hud_sprite_full_screen()
+    register_concmd("ncl_hudsprite_clear",           "cmd_ncl_hudsprite_clear",          ADMIN_ALL); // ncl_clear_hud_sprite()
 
     // Other cmds
     // For ncl_test_sandbox_cvars() if AUTO_RESTORE_CVAR_VALUES is disabled
