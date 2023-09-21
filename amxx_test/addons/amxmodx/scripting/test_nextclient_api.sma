@@ -212,6 +212,15 @@ public cmd_ncl_get_supported_features(id) {
         }
     }
 
+    if (bitsum & NCL_FEATURE_DEATHMSG_WPN_ICON) {
+        add(result, charsmax(result), "NCL_FEATURE_DEATHMSG_WPN_ICON");
+        bitsum &= ~NCL_FEATURE_DEATHMSG_WPN_ICON;
+
+        if (bitsum > any:0) {
+            add(result, charsmax(result), " | ");
+        }
+    }
+
     log_to_file(LOG_FILE, "Result: %s", result);
     return PLUGIN_HANDLED;
 }
@@ -820,6 +829,9 @@ public cmd_ncl_add_health(id) {
     if (!is_user_alive(id)) {
         return PLUGIN_HANDLED;
     }
+
+    log_to_file(LOG_FILE, "Testing HUD limit health for player: %n", id);
+    log_to_file(LOG_FILE, "* You should manually check a visual health in game.");
 
     set_entvar(id, var_health, 99999999.0);
     return PLUGIN_HANDLED;
