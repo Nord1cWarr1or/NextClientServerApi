@@ -64,3 +64,8 @@ void EventManager::OnNclmVerificationResponse(edict_t* client, std::string clien
     for (const auto& listener : nclm_verification_response_listeners_)
         listener->OnNclmVerificationResponse(client, clientVersion, payload);
 }
+
+void EventManager::OnSendServerInfo(edict_t* client) {
+    for (const auto& listener : send_server_info_listeners_)
+        listener->OnSendServerInfo(client); 
+}

@@ -1,6 +1,5 @@
 #include "Verificator.h"
 #include "asserts.h"
-#include <iostream>
 
 Verificator::Verificator(NclmProtocol* protocol, EventManager* event_manager) 
     : protocol_(protocol), event_manager_(event_manager)
@@ -16,7 +15,7 @@ void Verificator::OnServerActivated(edict_t* pEdictList, int edictCount, int cli
     ParsePublicKeys();
 }
 
-void Verificator::OnClientConnect(int client)
+void Verificator::OnClientDisconnect(int client)
 {
     if (player_data_.count(client) == 0)
         return;
@@ -43,7 +42,8 @@ void Verificator::OnNclmVerificationRequest(edict_t* client, std::string rsaKeyV
     NAPI_LOG_ASSERT(res > 0, "Cannot initialize encrypt context (code %d)", res);
 
     size_t outLen;
-    std::vector<uint8_t> out(NCLM_VERIF_ENCRYPTED_PAYLOAD_SIZE);
+    auto out = &playerData->encrypted_payload;
+    out->assign(NCLM_VERIF_ENCRYPTED_PAYLOAD_SIZE, 0x00);
 
     RAND_bytes(payload->data(), payload->size());
 
@@ -52,10 +52,20 @@ void Verificator::OnNclmVerificationRequest(edict_t* client, std::string rsaKeyV
     NAPI_LOG_ASSERT(outLen == NCLM_VERIF_ENCRYPTED_PAYLOAD_SIZE, "'%s' key length does not match (%d, but need %d)",
                     rsaKeyVersion.c_str(), outLen, NCLM_VERIF_ENCRYPTED_PAYLOAD_SIZE);
 
-    res = EVP_PKEY_encrypt(ctx, out.data(), &outLen, payload->data(), payload->size());
+    res = EVP_PKEY_encrypt(ctx, out->data(), &outLen, payload->data(), payload->size());
     NAPI_LOG_ASSERT(res > 0, "Cannot perform encrypt operation 2 (code %d)", res);
+}
 
-    protocol_->SendVerificationPayload(client, out);
+void Verificator::OnSendServerInfo(edict_t* client) {
+    int clientIndex = ENTINDEX(client);
+    if(player_data_.count(clientIndex) == 0)
+        return;
+
+    auto payload = &player_data_[clientIndex].encrypted_payload;
+    if(!payload->empty()) {
+        protocol_->SendVerificationPayload(client, *payload);
+        payload->clear();
+    }
 }
 
 void Verificator::OnNclmVerificationResponse(edict_t* client, std::string clientVersion, std::vector<uint8_t> payload) {

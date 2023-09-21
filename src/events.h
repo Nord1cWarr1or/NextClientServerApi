@@ -64,3 +64,8 @@ class IEventClientVerificated {
 public:
 	virtual void OnClientVerificated(edict_t* client, std::string clientVersion, std::string rsaKeyVersion) = 0;
 };
+
+class IEventSendServerinfo {
+public:
+	virtual void OnSendServerInfo(edict_t* client) = 0;
+};

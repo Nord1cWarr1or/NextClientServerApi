@@ -2,7 +2,7 @@
 
 #define clc_ncl_message						3			// clc_stringcmd
 #define SVC_NCL_MESSAGE						57			// SVC_SENDCVARVALUE
-#define NCLM_HEADER							0x6D6C636E 	// nclm
+#define NCLM_HEADER							0x616C636E 	// ncla
 
 #include <stddef.h>
 

@@ -89,6 +89,13 @@ void SV_HandleClientMessage(IRehldsHook_HandleNetCommand* hookchain, IGameClient
     hookchain->callNext(apiClient, opcode);
 }
 
+void SV_SendServerinfo(IRehldsHook_SV_SendServerinfo* hookchain, sizebuf_t *msg, IGameClient* apiClient) {
+    if (g_NextClientApi)
+        g_NextClientApi->OnSendServerInfo(apiClient->GetEdict());
+
+    hookchain->callNext(msg, apiClient);
+}
+
 void OnAmxxAttach()
 {
     if (!RehldsApi_Init())
@@ -96,6 +103,7 @@ void OnAmxxAttach()
 
     g_NextClientApi = std::make_unique<NextClientApi>();
     g_RehldsHookchains->HandleNetCommand()->registerHook(SV_HandleClientMessage);
+    g_RehldsHookchains->SV_SendServerinfo()->registerHook(SV_SendServerinfo);
 
     AddNatives_All();
 
