@@ -1,4 +1,5 @@
 #include <amxmodx>
+#include <amxmisc>
 #include <fakemeta>
 #include <reapi>
 
@@ -33,24 +34,24 @@ public plugin_init() {
 
     // Cmds for testing natives
     // look at next_client_api.inc
-    register_clcmd("ncl_is_client_api_ready",       "cmd_ncl_is_client_api_ready",      ADMIN_ALL);
-    register_clcmd("ncl_is_using_nextclient",       "cmd_ncl_is_using_nextclient",      ADMIN_ALL);
-    register_clcmd("ncl_get_nextclient_version",    "cmd_ncl_get_nextclient_version",   ADMIN_ALL);
-    register_clcmd("ncl_get_supported_features",    "cmd_ncl_get_supported_features",   ADMIN_ALL);
-    register_clcmd("ncl_test_sandbox_cvars",        "cmd_ncl_test_sandbox_cvars",       ADMIN_ALL);
-    register_clcmd("ncl_test_viewmodelfx_skin",     "cmd_ncl_test_viewmodelfx_skin",    ADMIN_ALL);
-    register_clcmd("ncl_test_viewmodelfx_body",     "cmd_ncl_test_viewmodelfx_body",    ADMIN_ALL);
-    register_clcmd("ncl_test_viewmodelfx_render",   "cmd_ncl_test_viewmodelfx_render",  ADMIN_ALL);
-    register_clcmd("ncl_restore_viewmodelfx",       "cmd_ncl_restore_viewmodelfx",      ADMIN_ALL);
-    register_clcmd("ncl_setfov",                    "cmd_ncl_setfov",                   ADMIN_ALL);
-    register_clcmd("ncl_hudsprite_set",             "cmd_ncl_hudsprite_set",            ADMIN_ALL);
-    register_clcmd("ncl_hudsprite_clear",           "cmd_ncl_hudsprite_clear",          ADMIN_ALL);
+    register_concmd("ncl_is_client_api_ready",       "cmd_ncl_is_client_api_ready",      ADMIN_ALL);
+    register_concmd("ncl_is_using_nextclient",       "cmd_ncl_is_using_nextclient",      ADMIN_ALL);
+    register_concmd("ncl_get_nextclient_version",    "cmd_ncl_get_nextclient_version",   ADMIN_ALL);
+    register_concmd("ncl_get_supported_features",    "cmd_ncl_get_supported_features",   ADMIN_ALL);
+    register_concmd("ncl_test_sandbox_cvars",        "cmd_ncl_test_sandbox_cvars",       ADMIN_ALL);
+    register_concmd("ncl_test_viewmodelfx_skin",     "cmd_ncl_test_viewmodelfx_skin",    ADMIN_ALL);
+    register_concmd("ncl_test_viewmodelfx_body",     "cmd_ncl_test_viewmodelfx_body",    ADMIN_ALL);
+    register_concmd("ncl_test_viewmodelfx_render",   "cmd_ncl_test_viewmodelfx_render",  ADMIN_ALL);
+    register_concmd("ncl_restore_viewmodelfx",       "cmd_ncl_restore_viewmodelfx",      ADMIN_ALL);
+    register_concmd("ncl_setfov",                    "cmd_ncl_setfov",                   ADMIN_ALL);
+    register_concmd("ncl_hudsprite_set",             "cmd_ncl_hudsprite_set",            ADMIN_ALL);
+    register_concmd("ncl_hudsprite_clear",           "cmd_ncl_hudsprite_clear",          ADMIN_ALL);
 
     // Other cmds
     // For ncl_test_sandbox_cvars() if AUTO_RESTORE_CVAR_VALUES is disabled
-    register_clcmd("ncl_restore_cvars_values", "cmd_ncl_restore_cvars_values", ADMIN_ALL);
+    register_concmd("ncl_restore_cvars_values", "cmd_ncl_restore_cvars_values", ADMIN_ALL);
     // For testing HUD limit health
-    register_clcmd("ncl_add_health", "cmd_ncl_add_health", ADMIN_ALL);
+    register_concmd("ncl_add_health", "cmd_ncl_add_health", ADMIN_ALL);
 }
 
 /* <== FORWARDS ==> */
@@ -65,7 +66,16 @@ public ncl_client_api_ready(id) {
 /* <== NATIVES ==> */
 
 public cmd_ncl_is_client_api_ready(id) {
-    log_to_file(LOG_FILE, "NATIVE <ncl_is_client_api_ready> testing called by player: %n", id);
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
+    log_to_file(LOG_FILE, "NATIVE <ncl_is_client_api_ready> testing called for player: %n", id);
     log_to_file(LOG_FILE, "Result: API ready? %s.", ncl_is_client_api_ready(id)  ? "Yes" : "No");
     return PLUGIN_HANDLED;
 }
@@ -73,7 +83,16 @@ public cmd_ncl_is_client_api_ready(id) {
 /* <=======> */
 
 public cmd_ncl_is_using_nextclient(id) {
-    log_to_file(LOG_FILE, "NATIVE <ncl_is_using_nextclient> testing called by player: %n", id);
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
+    log_to_file(LOG_FILE, "NATIVE <ncl_is_using_nextclient> testing called for player: %n", id);
 
     new result[32];
     new eNclUsing:is_using_next_client = ncl_is_using_nextclient(id);
@@ -95,7 +114,16 @@ public cmd_ncl_is_using_nextclient(id) {
 /* <=======> */
 
 public cmd_ncl_get_nextclient_version(id) {
-    log_to_file(LOG_FILE, "NATIVE <ncl_get_nextclient_version> testing called by player: %n", id);
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
+    log_to_file(LOG_FILE, "NATIVE <ncl_get_nextclient_version> testing called for player: %n", id);
 
     new major_version, minor_version, patch_version;
     ncl_get_nextclient_version(id, major_version, minor_version, patch_version);
@@ -107,7 +135,16 @@ public cmd_ncl_get_nextclient_version(id) {
 /* <=======> */
 
 public cmd_ncl_get_supported_features(id) {
-    log_to_file(LOG_FILE, "NATIVE <ncl_get_supported_features> testing called by player: %n", id);
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
+    log_to_file(LOG_FILE, "NATIVE <ncl_get_supported_features> testing called for player: %n", id);
 
     new eFeaturesFlags:bitsum = ncl_get_supported_features(id);
     new result[256];
@@ -201,7 +238,16 @@ new const CVAR_VALUES[eSandboxCvar][] = {
 };
 
 public cmd_ncl_test_sandbox_cvars(id) {
-    log_to_file(LOG_FILE, "SANDBOX CVAR testing called by player: %n", id);
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
+    log_to_file(LOG_FILE, "SANDBOX CVAR testing called for player: %n", id);
 
     ncl_sandbox_cvar_begin(id);
     for (new eSandboxCvar:i; i < eSandboxCvar; i++) {
@@ -253,6 +299,15 @@ public checkCvarValue(id, const cvar[], const value[], const param[]) {
 }
 
 public cmd_ncl_restore_cvars_values(id) {
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
     log_to_file(LOG_FILE, "CVARS from SANDBOX are restored for player: %n", id);
 
     ncl_sandbox_cvar_begin(id);
@@ -270,7 +325,16 @@ new const TEST_SKIN_MODEL[] = "models/v_ak47_with_skins.mdl";
 const SKIN = 1;
 
 public cmd_ncl_test_viewmodelfx_skin(id) {
-    log_to_file(LOG_FILE, "NATIVE <ncl_write_renderbody> testing called by player: %n", id);
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
+    log_to_file(LOG_FILE, "NATIVE <ncl_write_renderbody> testing called for player: %n", id);
     log_to_file(LOG_FILE, "* You should manually check a skin changing of view model. If you see not a standart model, the test was successful.");
 
     rg_give_item(id, "weapon_ak47");
@@ -290,7 +354,16 @@ new const TEST_BODY_MODEL[] = "models/v_m4a1_with_body.mdl";
 const BODY = 7;
 
 public cmd_ncl_test_viewmodelfx_body(id) {
-    log_to_file(LOG_FILE, "NATIVE <ncl_write_renderbody> testing called by player: %n", id);
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
+    log_to_file(LOG_FILE, "NATIVE <ncl_write_renderbody> testing called for player: %n", id);
     log_to_file(LOG_FILE, "* You should manually check a body changing of view model. If you see not a standart model, the test was successful.");
 
     rg_give_item(id, "weapon_m4a1");
@@ -307,7 +380,16 @@ public cmd_ncl_test_viewmodelfx_body(id) {
 /* <=======> */
 
 public cmd_ncl_test_viewmodelfx_render(id) {
-    log_to_file(LOG_FILE, "NATIVES <ncl_write_renderfx, ncl_write_rendercolor, ncl_write_rendermode, ncl_write_renderamt> testing called by player: %n", id);
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
+    log_to_file(LOG_FILE, "NATIVES <ncl_write_renderfx, ncl_write_rendercolor, ncl_write_rendermode, ncl_write_renderamt> testing called for player: %n", id);
     log_to_file(LOG_FILE, "* You should manually check the glowing of view model.");
 
     ncl_viewmodelfx_begin(id);
@@ -323,6 +405,15 @@ public cmd_ncl_test_viewmodelfx_render(id) {
 /* <=======> */
 
 public cmd_ncl_restore_viewmodelfx(id) {
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
     log_to_file(LOG_FILE, "All viewmodelfx have been reset for player: %n", id);
 
     ncl_viewmodelfx_begin(id);
@@ -342,7 +433,16 @@ public cmd_ncl_restore_viewmodelfx(id) {
 const Float:FOV_TIME = 2.0;
 
 public cmd_ncl_setfov(id) {
-    log_to_file(LOG_FILE, "NATIVE <ncl_setfov> testing called by player: %n", id);
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
+    log_to_file(LOG_FILE, "NATIVE <ncl_setfov> testing called for player: %n", id);
     log_to_file(LOG_FILE, "* You should manually check a FOV changing.");
 
     ncl_setfov(id, 120, FOV_TIME);
@@ -360,7 +460,16 @@ public restore_fov(id) {
 /* <=======> */
 
 public cmd_ncl_hudsprite_set(id) {
-    log_to_file(LOG_FILE, "NATIVE <ncl_send_hud_sprite> testing called by player: %n", id);
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
+    log_to_file(LOG_FILE, "NATIVE <ncl_send_hud_sprite> testing called for player: %n", id);
     log_to_file(LOG_FILE, "* You should manually check sprites on screen in game.");
 
     // left-top
@@ -500,7 +609,16 @@ public cmd_ncl_hudsprite_set(id) {
 /* <=======> */
 
 public cmd_ncl_hudsprite_clear(id) {
-    log_to_file(LOG_FILE, "NATIVE <ncl_clear_hud_sprite> testing called by player: %n", id);
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
+    log_to_file(LOG_FILE, "NATIVE <ncl_clear_hud_sprite> testing called for player: %n", id);
     log_to_file(LOG_FILE, "* You should manually check clearing sprites on screen in game.");
 
     for (new i = 0; i < MAX_HUD_SPRITE_CHANNELS; ++i) {
@@ -663,7 +781,7 @@ public test_ncl_precache_and_replace_custom_sound() {
     
     ncl_precache_sound("test_nextclient/sound_for_all.wav", "test_nextclient/sound_for_nextclient.wav");
 
-    set_task(1.0, "sendSound", .flags = "b");
+    set_task_ex(3.0, "sendSound", .flags = SetTask_Repeat);
 }
 
 public sendSound() {
@@ -681,6 +799,15 @@ public sendSound() {
 /* <== OTHER FUNCS ==> */
 
 public cmd_ncl_add_health(id) {
+    if (id == 0) {
+        id = find_player_ex(FindPlayer_MatchUserId, read_argv_int(1));
+
+        if (id == 0) {
+            log_amx("Player with userid #%i not found.", read_argv_int(1));
+            return;
+        }
+    }
+
     if (!is_user_alive(id)) {
         return;
     }
